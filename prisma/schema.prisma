@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  clerkId String @unique
+  habits Habit[]
+  streak Int @default(0)
+  zenithPoints Int @default(5)
+  plan Plan @default(FREE)
+}
+enum Plan {
+  FREE
+  PREMIUM
+}
+
+model Habit {
+  id Int @id @default(autoincrement())
+  title String
+  description String?
+  category Category
+  frequency String
+  daysPerWeek Int?
+  completedDates String[]
+  streak Int @default(0)
+  longestStreak Int @default(0)
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Frequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+enum Category {
+  PHYSICAL_HEALTH
+  MENTAL_HEALTH
+  PERSONAL_GROWTH
+  SOCIAL_RELATIONSHIPS
+  SPIRITUALITY
+  PRODUCTIVITY
+  CREATIVITY
+}
