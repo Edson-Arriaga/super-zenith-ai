@@ -8,10 +8,9 @@ export async function createHabit(data : AddHabitFormData){
     await prisma.habit.create({
         data: {
             ...data,
-            daysPerWeek: data.daysPerWeek ? +data.daysPerWeek : null,
             userId: 1
         }
     })
 
-    return 'Bien'
+    return 'Habito Creado Correctamente'
 }
