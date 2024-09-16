@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -6,14 +6,14 @@ import { Habit } from "@prisma/client";
 import { CgAdd } from "react-icons/cg";
 import { CiFilter } from "react-icons/ci";
 import HabitCard from "@/components/HabitCard";
-import { getHabits } from "@/actions/get-habits.";
 import Confetti from "react-confetti";
+import { motion } from "framer-motion";
+import { getHabits } from "@/actions/get-habits";
 
 export default function HabitTrackerPage() {
-    
     const [habits, setHabits] = useState<Habit[]>([]);
-    const [refetch, setRefetch] = useState(false)
-    const [isConfettiActive, setIsConfettiActive] = useState(false)
+    const [refetch, setRefetch] = useState(false);
+    const [isConfettiActive, setIsConfettiActive] = useState(false);
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -21,11 +21,11 @@ export default function HabitTrackerPage() {
         }, 4500);
         
         return () => clearTimeout(timeout);
-    }, [isConfettiActive])
+    }, [isConfettiActive]);
 
     useEffect(() => {
         async function fetchHabits() {
-            const habits = await getHabits()
+            const habits = await getHabits();
             setHabits(habits);
         }
         fetchHabits();
@@ -59,8 +59,19 @@ export default function HabitTrackerPage() {
                 
                 <section className="mt-10">
                     <ul className="grid md:grid-cols-2 gap-14">
-                        {habits.map(habit => (
-                            <HabitCard key={habit.id} habit={habit} setRefetch={setRefetch} setIsConfettiActive={setIsConfettiActive}/>
+                        {habits.map((habit, index) => (
+                            <motion.li
+                                key={habit.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.1, duration: 0.5 }}
+                            >
+                                <HabitCard 
+                                    habit={habit} 
+                                    setRefetch={setRefetch} 
+                                    setIsConfettiActive={setIsConfettiActive} 
+                                />
+                            </motion.li>
                         ))}
                     </ul>
                 </section>
@@ -72,7 +83,5 @@ export default function HabitTrackerPage() {
                 </div>
             )}
         </div>
-    )    
+    );
 }
-
-

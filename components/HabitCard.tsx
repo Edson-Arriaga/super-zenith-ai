@@ -12,7 +12,6 @@ import { CircularProgressbarWithChildren, buildStyles } from "react-circular-pro
 import 'react-circular-progressbar/dist/styles.css';
 import { categoryIcons } from "@/src/dictionaries/categoryIcons";
 import { deleteHabit } from "@/actions/delete-habit";
-import Image from "next/image";
 
 type HabitCardProps = {
     habit: Habit, 
@@ -58,7 +57,7 @@ export default function HabitCard({habit, setRefetch, setIsConfettiActive} : Hab
     }
 
     return (
-        <div className={`${(isCompleted || !isPlannedToday) && 'opacity-50 scale-95 hover:scale-100'} text-white bg-gradient-to-b from-zenith-dark-purple to-transparent p-5 rounded-lg transition-all ease hover:scale-[1.05]`}>
+        <div className={`${(isCompleted || !isPlannedToday) && 'opacity-50 scale-95 hover:scale-[0.98]'} text-white bg-gradient-to-b from-zenith-dark-purple to-transparent p-5 rounded-lg transition-all ease hover:scale-[1.03]`}>
             <div className="flex gap-3 items-center">
                 <h1 className="flex-grow capitalize text-2xl font-black">{habit.title}</h1>
                 <button 
