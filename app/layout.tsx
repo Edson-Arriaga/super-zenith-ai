@@ -4,6 +4,7 @@ import { LiaCalendarCheck } from "react-icons/lia";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import "./globals.css";
+import { ClerkProvider, UserButton } from "@clerk/nextjs";
 
 const nunito = Nunito({
   weight: ['300', '500', '700'], 
@@ -21,13 +22,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" className="overflow-x-hidden" >
+        <html lang="en" className="overflow-x-hidden">
+          <ClerkProvider>
             <body className={`${nunito.className} antialiased flex`}>
                 <div className="bg"><img src="/images/svg/logo.svg" alt="" /></div>
                 <div className="bg bg1"><img src="/images/svg/logo.svg" alt="" /></div>
                 <div className="bg bg2"><img src="/images/svg/logo.svg" alt="" /></div>
-                <aside className="bg-zenith-yellow w-16 h-screen fixed flex items-center justify-center">
-                  <LiaCalendarCheck className="w-10 h-10" />
+                <aside className="bg-zenith-yellow w-16 h-screen fixed py-2 text-center">
+                  <UserButton appearance={{elements: { rootBox: "w-12 h-12", avatarBox: "w-12 h-12"}}}/>
+                  <nav className="flex flex-col justify-between items-center mt-16">
+                    <LiaCalendarCheck className="w-12 h-12 hover:scale-105 hover:cursor-pointer" />
+                  </nav>
+                  <img src="images/logo.png" alt="Zenith Logo" />
                 </aside>
                 
                 <div className="flex-grow ml-16">
@@ -39,6 +45,7 @@ export default function RootLayout({
                     rtl
                 />
             </body>
+          </ClerkProvider>
         </html>
     );
 }
