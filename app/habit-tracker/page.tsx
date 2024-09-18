@@ -9,8 +9,11 @@ import HabitCard from "@/components/HabitCard";
 import Confetti from "react-confetti";
 import { motion } from "framer-motion";
 import { getHabits } from "@/actions/get-habits";
+import { useUser } from "@clerk/nextjs";
 
 export default function HabitTrackerPage() {
+    const {user} = useUser()
+
     const [habits, setHabits] = useState<Habit[]>([]);
     const [refetch, setRefetch] = useState(false);
     const [isConfettiActive, setIsConfettiActive] = useState(false);
@@ -22,10 +25,11 @@ export default function HabitTrackerPage() {
         
         return () => clearTimeout(timeout);
     }, [isConfettiActive]);
-
+    
     useEffect(() => {
         async function fetchHabits() {
-            const habits = await getHabits();
+            if(!user) return console.log("error")
+            const habits = await getHabits(user.id);
             setHabits(habits);
         }
         fetchHabits();

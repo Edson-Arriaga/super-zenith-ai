@@ -4,17 +4,23 @@ import { createHabit } from "@/actions/create-habit"
 import ErrorMessage from "@/components/ErrorMessage"
 import { categories } from "@/src/data/categories"
 import { AddHabitFormData } from "@/src/schema"
+import { useUser } from "@clerk/nextjs"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
+import { toast } from "react-toastify"
 
 export default function CreateHabitPage() {
 
     const [frecuency, setFrecuency] = useState('')
     const { register, handleSubmit , formState: {errors}} = useForm<AddHabitFormData>()
+    const {user} = useUser()
     
     async function handleCreateHabitForm(data : AddHabitFormData){
-        const response = await createHabit(data)
-        console.log(response)
+        
+        if(!user) return "error"
+    
+        const response = await createHabit(data, user.id)
+        toast.success(response)
     }
 
     return (

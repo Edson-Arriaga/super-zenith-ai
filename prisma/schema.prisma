@@ -1,4 +1,4 @@
-generator client {
+generator client { 
   provider = "prisma-client-js"
 }
 
@@ -39,8 +39,8 @@ model Habit {
 enum Frequency {
   DAILY
   WEEKLY
-  MONTHLY
 }
+
 enum Category {
   PHYSICAL_HEALTH
   MENTAL_HEALTH
