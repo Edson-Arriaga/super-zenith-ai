@@ -95,7 +95,7 @@ export default function CreateHabitPage() {
                 {frecuency === 'WEEKLY' && (
                     <div className="grid grid-cols-5 place-items-center">
                         {weeklyDaysCheckBoxes.map(weekDay => (
-                            <div className="flex gap-2">
+                            <div key={weekDay.value} className="flex gap-2">
                                 <label className="text-zenith-yellow font-black" htmlFor={weekDay.day}>{weekDay.day}</label>
                                 <input 
                                     id={weekDay.day}

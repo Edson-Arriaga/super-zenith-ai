@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import { PiListChecksBold  } from "react-icons/pi";
-import { ImCalendar } from "react-icons/im";
 import { HiCalendarDays } from "react-icons/hi2";
 import { BiSolidMedal } from "react-icons/bi";
 import { ToastContainer } from "react-toastify";
