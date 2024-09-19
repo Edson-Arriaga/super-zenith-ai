@@ -1,11 +1,15 @@
 "use server";
 
 import prisma from "@/src/lib/prisma";
+import { currentUser } from "@clerk/nextjs/server";
 
-export async function getHabits(clerkId: string) {
+export async function getHabits() {
+
+    const clerkUser = await currentUser()
+
     const user = await prisma.user.findUnique(
         {
-            where: { clerkId }
+            where: { clerkId: clerkUser?.id }
         }
     )
 
@@ -37,6 +41,6 @@ export async function getHabits(clerkId: string) {
 
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
-    console.log(habits)
+
     return habits;
 }

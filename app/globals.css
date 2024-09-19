@@ -8,12 +8,9 @@
   --zenith-light-purple: #7434ca;
   --zenith-purple: #4b02aa;
   --zenith-dark-purple: #28094f;
-
-  /* --zenith-yellow: #ffd640;
-  --zenith-purple: #5b1baf;
-  --zenith-light-purple: #42216d; */
 }
 
+/* Toastify */
 .Toastify__toast-theme--light, .Toastify__toast-theme--dark{
   background: var(--zenith-light-purple) !important
 }
@@ -32,7 +29,7 @@
   background: var(--zenith-yellow) !important;
 }
 
-
+/* Main Backgroung */
 .bg {
   animation:slide 10s ease-in-out infinite alternate;
   background-image: linear-gradient(-60deg, var(--zenith-purple) 50%, var(--zenith-dark-purple) 50%);
@@ -61,4 +58,9 @@
   100% {
     transform:translateX(25%);
   }
+}
+
+/* aside decoration */
+.aside-decor{
+  clip-path: polygon(43% 35%, 20% 51%, 44% 68%, 19% 80%, 40% 100%, 0 100%, 0 0, 41% 0, 20% 23%);
 }

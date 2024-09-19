@@ -3,8 +3,8 @@
 import { createHabit } from "@/actions/create-habit"
 import ErrorMessage from "@/components/ErrorMessage"
 import { categories } from "@/src/data/categories"
+import { weeklyDaysCheckBoxes } from "@/src/dictionaries/weeklyDaysCheckBoxes"
 import { AddHabitFormData } from "@/src/schema"
-import { useUser } from "@clerk/nextjs"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "react-toastify"
@@ -13,14 +13,11 @@ export default function CreateHabitPage() {
 
     const [frecuency, setFrecuency] = useState('')
     const { register, handleSubmit , formState: {errors}} = useForm<AddHabitFormData>()
-    const {user} = useUser()
     
     async function handleCreateHabitForm(data : AddHabitFormData){
-        
-        if(!user) return "error"
-    
-        const response = await createHabit(data, user.id)
+        const response = await createHabit(data)
         toast.success(response)
+        window.location.href = 'habit-tracker'
     }
 
     return (
@@ -81,7 +78,6 @@ export default function CreateHabitPage() {
                         <option className="bg-zenith-yellow text-zenith-purple" value="" disabled>-- Frecuencia --</option>
                         <option className="bg-zenith-yellow text-zenith-purple" value="DAILY">Diario</option>
                         <option className="bg-zenith-yellow text-zenith-purple" value="WEEKLY">Semanal</option>
-                        <option className="bg-zenith-yellow text-zenith-purple" value="MONTHLY">Mensual</option>
                     </select>
 
                     {errors.frequency && (
@@ -89,25 +85,25 @@ export default function CreateHabitPage() {
                     )}
                     
                     {frecuency === 'WEEKLY' && (
-                        <select
-                            defaultValue=""
-                            className="bg-white/20 rounded-lg w-full p-2 border border-white/50 text-white placeholder:text-gray-400"
-                            {...register('daysPerWeek', {
-                                required: 'Selecciona la frecuencia a la semana'
-                            })}
-                        >   
-                            <option className="bg-zenith-yellow text-zenith-purple" value="" disabled>-- Veces a la semana --</option>
-                            <option className="bg-zenith-yellow text-zenith-purple" value="1">1</option>
-                            <option className="bg-zenith-yellow text-zenith-purple" value="2">2</option>
-                            <option className="bg-zenith-yellow text-zenith-purple" value="3">3</option>
-                            <option className="bg-zenith-yellow text-zenith-purple" value="4">4</option>
-                            <option className="bg-zenith-yellow text-zenith-purple" value="5">5</option>
-                            <option className="bg-zenith-yellow text-zenith-purple" value="6">6</option>
-                        </select>
+                        <div className="grid grid-cols-5 place-items-center">
+                            {weeklyDaysCheckBoxes.map(weekDay => (
+                                <div className="flex gap-2">
+                                    <label className="text-zenith-yellow font-black" htmlFor={weekDay.day}>{weekDay.day}</label>
+                                    <input 
+                                        id={weekDay.day}
+                                        type="checkbox"
+                                        {...register('weeklyDays', {
+                                            required: 'Selecciona la frecuencia a la semana'
+                                        })}
+                                        value={weekDay.value}
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     )}
 
-                    {errors.daysPerWeek && (
-                        <ErrorMessage>{errors.daysPerWeek.message}</ErrorMessage>
+                    {errors.weeklyDays && (
+                        <ErrorMessage>{errors.weeklyDays.message}</ErrorMessage>
                     )}
 
                     <button

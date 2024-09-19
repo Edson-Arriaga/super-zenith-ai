@@ -2,12 +2,15 @@
 
 import prisma from "@/src/lib/prisma"
 import { AddHabitFormData } from "@/src/schema"
+import { currentUser } from "@clerk/nextjs/server"
 
-export async function createHabit(data : AddHabitFormData, clerkId: string){
+export async function createHabit(data : AddHabitFormData){
     
+    const clerkUser = await currentUser()
+
     const user = await prisma.user.findUnique(
         {
-            where: { clerkId }
+            where: { clerkId: clerkUser?.id }
         }
     )
 
@@ -18,6 +21,7 @@ export async function createHabit(data : AddHabitFormData, clerkId: string){
     await prisma.habit.create({
         data: {
             ...data,
+            weeklyDays: data.weeklyDays?.map(day => +day),
             userId: user.id
         }
     })

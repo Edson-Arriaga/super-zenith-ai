@@ -12,8 +12,6 @@ import { getHabits } from "@/actions/get-habits";
 import { useUser } from "@clerk/nextjs";
 
 export default function HabitTrackerPage() {
-    const {user} = useUser()
-
     const [habits, setHabits] = useState<Habit[]>([]);
     const [refetch, setRefetch] = useState(false);
     const [isConfettiActive, setIsConfettiActive] = useState(false);
@@ -22,14 +20,13 @@ export default function HabitTrackerPage() {
         const timeout = setTimeout(() => {
             setIsConfettiActive(false);
         }, 4500);
-        
+
         return () => clearTimeout(timeout);
     }, [isConfettiActive]);
-    
+
     useEffect(() => {
         async function fetchHabits() {
-            if(!user) return console.log("error")
-            const habits = await getHabits(user.id);
+            const habits = await getHabits();
             setHabits(habits);
         }
         fetchHabits();
@@ -53,14 +50,14 @@ export default function HabitTrackerPage() {
                     <button
                         className="bg-zenith-light-purple px-8 capitalize rounded-lg text-white shadow-sm border-2 border-zenith-yellow"
                         type="button"
-                    >  
+                    >
                         <div className="flex items-center gap-1">
                             <CiFilter className="h-6 w-6" />
                             <p className="text-lg">filtrar</p>
                         </div>
                     </button>
                 </section>
-                
+
                 <section className="mt-10">
                     <ul className="grid md:grid-cols-2 gap-14">
                         {habits.map((habit, index) => (
@@ -70,10 +67,10 @@ export default function HabitTrackerPage() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.1, duration: 0.5 }}
                             >
-                                <HabitCard 
-                                    habit={habit} 
-                                    setRefetch={setRefetch} 
-                                    setIsConfettiActive={setIsConfettiActive} 
+                                <HabitCard
+                                    habit={habit}
+                                    setRefetch={setRefetch}
+                                    setIsConfettiActive={setIsConfettiActive}
                                 />
                             </motion.li>
                         ))}
