@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
-import { LiaCalendarCheck } from "react-icons/lia";
+import { PiListChecksBold  } from "react-icons/pi";
+import { ImCalendar } from "react-icons/im";
+import { HiCalendarDays } from "react-icons/hi2";
+import { BiSolidMedal } from "react-icons/bi";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import "./globals.css";
-import { ClerkProvider, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { ClerkProvider, SignedIn, UserButton } from "@clerk/nextjs";
+import Link from "next/link";
 
 const nunito = Nunito({
   weight: ['300', '500', '700'], 
@@ -28,24 +32,26 @@ export default function RootLayout({
                 <div className="bg"></div>
                 <div className="bg bg1"></div>
                 <div className="bg bg2"></div>
-                <aside className="bg-zenith-yellow w-16 h-screen fixed py-2 flex flex-col items-center">
-                  <div className="h-full w-full absolute bg-zenith-yellow aside-decor top-0 -right-12"></div>
-                  {/* <SignedOut>
-                    <div className="w-12">
-                      <img src="/images/zenith-logo.png" alt="Zenith Logo" />
-                    </div>
-                  </SignedOut> */}
+                <aside className="bg-zenith-dark-purple bg-opacity-50 w-16 h-screen fixed flex flex-col items-center shadow-2xl shadow-black drop-shadow-2xl py-5">
+                  <div className="h-full w-10 absolute aside-decor top-0 -right-10 -z-10 shadow-sm shadow-black drop-shadow-2xl bg-gradient-to-r from-zenith-dark-purple"></div>
                   <SignedIn>
                     
-                  
-                  <UserButton appearance={{elements: { rootBox: "w-12 h-12", avatarBox: "w-12 h-12"}}}/>
-                  <nav className="flex flex-col justify-evenly items-center h-full">
-                    <LiaCalendarCheck className="w-12 h-12 hover:scale-105 hover:cursor-pointer" />
-                    <LiaCalendarCheck className="w-12 h-12 hover:scale-105 hover:cursor-pointer" />
-                    <LiaCalendarCheck className="w-12 h-12 hover:scale-105 hover:cursor-pointer" />
-                  </nav>
-                  
-                    <div className="w-12 mt-auto">
+                    <div className="shadow-inner shadow-black ml-9 p-2 rounded-full grid hover:bg-zenith-purple transition-colors"> 
+                      <UserButton appearance={{elements: { rootBox: "w-14 h-14", avatarBox: "w-14 h-14"}}}/>
+                    </div>
+                    <nav className="flex flex-col justify-evenly items-center h-full">
+                      <Link href='/habit-tracker'>
+                          <HiCalendarDays className="w-14 h-14 ml-8 hover:scale-105 hover:cursor-pointer text-zenith-yellow shadow-inner shadow-black p-1 rounded-lg hover:bg-zenith-purple transition-colors" />
+                      </Link>
+                      <Link href='/habit-tracker'>
+                          <PiListChecksBold className="w-14 h-14 ml-8 hover:scale-105 hover:cursor-pointer text-zenith-yellow shadow-inner shadow-black p-1 rounded-lg hover:bg-zenith-purple transition-colors" />
+                      </Link>
+                      <Link href='/habit-tracker'>
+                          <BiSolidMedal className="w-14 h-14 ml-8 hover:scale-105 hover:cursor-pointer text-zenith-yellow shadow-inner shadow-black p-1 rounded-lg hover:bg-zenith-purple transition-colors" />
+                      </Link>
+                    </nav>
+                    
+                    <div className="w-16 h-16 shadow-inner shadow-black ml-9 p-2 rounded-full hover:bg-zenith-purple transition-colors">
                       <img src="/images/zenith-logo.png" alt="Zenith Logo" />
                     </div>
                   </SignedIn>

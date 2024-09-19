@@ -13,7 +13,9 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        "zenith-light-yellow": "var(--zenith-light-yellow)",
         "zenith-yellow": "var(--zenith-yellow)",
+        "zenith-dark-yellow": "var(--zenith-dark-yellow)",
         "zenith-light-purple": "var(--zenith-light-purple)",
         "zenith-purple": "var(--zenith-purple)",
         "zenith-dark-purple": "var(--zenith-dark-purple)",

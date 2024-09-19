@@ -3,7 +3,10 @@
 @tailwind utilities;
 
 :root {
+
+  --zenith-light-yellow: #ffdd61;
   --zenith-yellow: #fcc919;
+  --zenith-dark-yellow: #af901d;
   
   --zenith-light-purple: #7434ca;
   --zenith-purple: #4b02aa;
@@ -62,5 +65,5 @@
 
 /* aside decoration */
 .aside-decor{
-  clip-path: polygon(43% 35%, 20% 51%, 44% 68%, 19% 80%, 40% 100%, 0 100%, 0 0, 41% 0, 20% 23%);
+  clip-path: polygon(75% 18%, 100% 29%, 72% 48%, 100% 64%, 72% 81%, 100% 100%, 0 100%, 0 0, 100% 0);
 }

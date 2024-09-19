@@ -6,12 +6,7 @@ export default async function InitialPage() {
     return (
         <main className="h-screen">
             <div className="flex items-center mx-20 pt-10">
-                <div className="relative">
-                    <img src="/images/zenith-full-logo.png" alt="sdf" />
-                </div>
-                {/* <div className="w-96">
-                    <img src="images/zenith-logo.png" alt="" />
-                </div> */}
+                <img src="/images/zenith-full-logo.png" alt="sdf" />
             </div>
             
             <div className="flex justify-center gap-32 mt-28">

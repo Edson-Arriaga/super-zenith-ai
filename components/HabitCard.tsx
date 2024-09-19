@@ -57,7 +57,7 @@ export default function HabitCard({habit, setRefetch, setIsConfettiActive} : Hab
     }
 
     return (
-        <div className={`${(isCompleted || !isPlannedToday) && 'opacity-50 scale-95 hover:scale-[0.98]'} text-white bg-gradient-to-b from-zenith-dark-purple to-transparent p-5 rounded-lg transition-all ease hover:scale-[1.03]`}>
+        <div className={`${(isCompleted || !isPlannedToday) && 'opacity-50 scale-95 hover:scale-[0.98]'} text-white bg-gradient-to-b from-zenith-dark-purple p-5 rounded-lg transition-all ease hover:scale-[1.03]`}>
             <div className="flex gap-3 items-center">
                 <h1 className="flex-grow capitalize text-2xl font-black">{habit.title}</h1>
                 <button 

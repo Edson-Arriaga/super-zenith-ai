@@ -10,11 +10,18 @@ import Confetti from "react-confetti";
 import { motion } from "framer-motion";
 import { getHabits } from "@/actions/get-habits";
 import { useUser } from "@clerk/nextjs";
+import PageTitle from "@/components/PageTitle";
+import AppButton from "@/components/AppButton";
+import Loading from "@/components/Loading";
 
 export default function HabitTrackerPage() {
-    const [habits, setHabits] = useState<Habit[]>([]);
-    const [refetch, setRefetch] = useState(false);
-    const [isConfettiActive, setIsConfettiActive] = useState(false);
+    const [habits, setHabits] = useState<Habit[]>([])
+    const [refetch, setRefetch] = useState(false)
+    const [isConfettiActive, setIsConfettiActive] = useState(false)
+    
+    const {isLoaded} = useUser()
+
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -26,36 +33,37 @@ export default function HabitTrackerPage() {
 
     useEffect(() => {
         async function fetchHabits() {
-            const habits = await getHabits();
-            setHabits(habits);
+            setIsLoading(true)
+            const habits = await getHabits()
+            setHabits(habits)
+            setIsLoading(false)
         }
-        fetchHabits();
-    }, [refetch]);
-
+        fetchHabits()
+    }, [refetch])
+    
+    if (isLoading || !isLoaded) {
+        return <Loading />
+    }
+    
     return (
         <div className="mx-5">
-            <h1 className="text-zenith-yellow uppercase text-center font-bold text-5xl py-5">Habit Tracker</h1>
+            <PageTitle>Habit Tracker</PageTitle>
             <main className="max-w-5xl mx-auto">
-                <section className="flex justify-between gap-5 cap max-w-3xl mx-auto">
-                    <Link
-                        href={'/create-habit'}
-                        className="flex-grow capitalize text-zenith-purple bg-zenith-yellow py-2 rounded-lg text-center hover:bg-yellow-500 transition-colors"
-                        type="button"
-                    >
-                        <div className="flex items-center justify-center gap-1">
-                            <CgAdd className="w-6 h-6" />
-                            <p className="font-black text-lg">crear nuevo hábito</p>
-                        </div>
-                    </Link>
-                    <button
-                        className="bg-zenith-light-purple px-8 capitalize rounded-lg text-white shadow-sm border-2 border-zenith-yellow"
-                        type="button"
-                    >
-                        <div className="flex items-center gap-1">
+                <section className="flex justify-between gap-5 max-w-3xl mx-auto">
+                    <AppButton type="button" className="flex-grow">
+                        <Link href={'/create-habit'}>
+                            <div className="flex items-center justify-center gap-1">
+                                <CgAdd className="w-6 h-6" />
+                                <p>crear nuevo hábito</p>
+                            </div>
+                        </Link>
+                    </AppButton>
+                    <AppButton type="button">
+                        <div className="flex items-center gap-1 justify-center">
                             <CiFilter className="h-6 w-6" />
-                            <p className="text-lg">filtrar</p>
+                            <p>filtrar</p>
                         </div>
-                    </button>
+                    </AppButton>
                 </section>
 
                 <section className="mt-10">
