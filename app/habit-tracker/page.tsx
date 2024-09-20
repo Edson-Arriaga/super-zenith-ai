@@ -50,14 +50,13 @@ export default function HabitTrackerPage() {
             <PageTitle>Habit Tracker</PageTitle>
             <main className="max-w-5xl mx-auto">
                 <section className="flex justify-between gap-5 max-w-3xl mx-auto">
-                    <AppButton type="button" className="flex-grow">
-                        <Link href={'/create-habit'}>
+                        <AppButton type="button" href="/create-habit">
                             <div className="flex items-center justify-center gap-1">
                                 <CgAdd className="w-6 h-6" />
                                 <p>crear nuevo hábito</p>
                             </div>
-                        </Link>
-                    </AppButton>
+                        </AppButton>
+
                     <AppButton type="button">
                         <div className="flex items-center gap-1 justify-center">
                             <CiFilter className="h-6 w-6" />

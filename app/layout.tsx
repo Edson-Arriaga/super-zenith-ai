@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import "./globals.css";
 import { ClerkProvider, SignedIn, UserButton } from "@clerk/nextjs";
+import { esES } from '@clerk/localizations'
 import Link from "next/link";
 
 const nunito = Nunito({
@@ -24,9 +25,24 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+    
     return (
-        <html lang="en" className="overflow-x-hidden">
-          <ClerkProvider>
+        <ClerkProvider localization={esES} appearance={{
+          variables: {
+            colorPrimary: "#fcc919",
+            colorText: "#fcc919",
+            colorBackground: "#28094f"
+          },
+          elements: {
+            navbarItem: {
+              color: "#fcc919", // Color del texto para ítems no seleccionados
+            },
+            navbarItem__active: {
+              color: "#fcc919", // Color del texto para ítems seleccionados (activos)
+            },
+          }
+        }}>
+          <html lang="en" className="overflow-x-hidden">
             <body className={`${nunito.className} antialiased flex`}>
                 <div className="bg"></div>
                 <div className="bg bg1"></div>
@@ -65,7 +81,7 @@ export default function RootLayout({
                     rtl
                 />
             </body>
-          </ClerkProvider>
-        </html>
+          </html>
+        </ClerkProvider>
     );
 }

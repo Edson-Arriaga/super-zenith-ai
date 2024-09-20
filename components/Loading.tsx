@@ -32,7 +32,7 @@ export default function Component() {
   }, [])
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-purple-900 p-4">
+    <div className="flex flex-col items-center justify-center h-screen bg-zenith-dark-purple p-4">
       <div className="relative w-64 h-64 mb-8">
         {[1, 2, 3].map((index) => (
           <motion.div

@@ -6,7 +6,7 @@
 
   --zenith-light-yellow: #ffdd61;
   --zenith-yellow: #fcc919;
-  --zenith-dark-yellow: #af901d;
+  --zenith-dark-yellow: #a48512;
   
   --zenith-light-purple: #7434ca;
   --zenith-purple: #4b02aa;
@@ -66,4 +66,42 @@
 /* aside decoration */
 .aside-decor{
   clip-path: polygon(75% 18%, 100% 29%, 72% 48%, 100% 64%, 72% 81%, 100% 100%, 0 100%, 0 0, 100% 0);
+}
+
+/* Clerk */
+
+.cl-button{
+  color: var(--zenith-yellow);
+}
+
+.cl-button:hover{
+  color: var(--zenith-dark-yellow);
+}
+
+.cl-badge{
+  color: var(--zenith-dark-purple);
+  font-weight: 600;
+  background: var(--zenith-dark-yellow);
+}
+
+.cl-formButtonPrimary, .cl-socialButtonsBlockButton{
+  background-color: var(--zenith-yellow);
+  padding: 14px;
+}
+
+.cl-formButtonPrimary span, .cl-socialButtonsBlockButton span{
+  color: var(--zenith-purple);
+  font-size: 1.1rem;
+  font-weight: 900;
+}
+
+.cl-formButtonPrimary:hover, .cl-socialButtonsBlockButton:hover{
+  background-color: var(--zenith-dark-yellow);
+}
+
+.cl-input{
+  padding: 24px 5px;
+  background: var(--zenith-dark-purple);
+  color: var(--zenith-yellow);
+  outline: 1px solid var(--zenith-dark-yellow);
 }
