@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { Habit } from "@prisma/client";
 import { CgAdd } from "react-icons/cg";
 import { CiFilter } from "react-icons/ci";
