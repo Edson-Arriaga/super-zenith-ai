@@ -47,8 +47,8 @@ export default function RootLayout({
                 <div className="bg"></div>
                 <div className="bg bg1"></div>
                 <div className="bg bg2"></div>
-                <aside className="bg-zenith-dark-purple bg-opacity-50 w-16 h-screen fixed flex flex-col items-center shadow-2xl shadow-black drop-shadow-2xl py-5">
-                  <div className="h-full w-10 absolute aside-decor top-0 -right-10 -z-10 shadow-sm shadow-black drop-shadow-2xl bg-gradient-to-r from-zenith-dark-purple"></div>
+                <aside className="bg-zenith-dark-purple bg-opacity-50 w-16 h-screen fixed flex flex-col items-center py-5">
+                  <div className="h-full w-10 absolute aside-decor top-0 -right-10 -z-10 bg-gradient-to-r from-zenith-dark-purple"></div>
                   <SignedIn>
                     
                     <div className="shadow-inner shadow-black ml-9 p-2 rounded-full grid hover:bg-zenith-purple transition-colors"> 

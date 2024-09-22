@@ -21,7 +21,7 @@ export async function createHabit(data : AddHabitFormData){
     await prisma.habit.create({
         data: {
             ...data,
-            weeklyDays: data.weeklyDays?.map(day => +day),
+            weeklyDays: data.weeklyDays ? data.weeklyDays.map(day => +day) : undefined,
             userId: user.id
         }
     })

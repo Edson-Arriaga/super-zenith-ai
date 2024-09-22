@@ -3,21 +3,26 @@ import Link from "next/link"
 type AppButtonProps = {
     children: React.ReactNode
     type: "submit" | "reset" | "button" | undefined
-    href?: string
+    href?: string,
+    onClick: () => any
 }
 
-export default function AppButton({children, type, href} : AppButtonProps) {
+export default function AppButton({children, type, href, onClick} : AppButtonProps) {
+    
+    const buttonStyle = 'w-full capitalize text-zenith-yellow py-3 rounded-lg text-center hover:scale-[1.025] border-t-2 border-b-2 border-r-1 border-l-1 border-zenith-yellow transition-all font-black text-lg bg-gradient-to-b from-zenith-dark-purple'
+    
     return (
         <>
             {href ? (
                 <Link 
-                    className={`w-full capitalize text-zenith-yellow py-3 rounded-lg text-center hover:scale-[1.025] border-b-4 border-r-2 border-l-2 border-zenith-yellow transition-all font-black text-lg`}
+                    className={`${buttonStyle}`}
                     href={href}
                 >{children}</Link>
             ) : (
                 <button
                     type={type}
-                    className={`w-full capitalize text-zenith-yellow py-3 rounded-lg text-center hover:scale-[1.025] border-b-4 border-r-2 border-l-2 border-zenith-yellow transition-all font-black text-lg`}
+                    className={buttonStyle}
+                    onClick={onClick}
                 >{children}</button>
             )}
         </>

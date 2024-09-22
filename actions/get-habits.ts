@@ -4,17 +4,14 @@ import prisma from "@/src/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
 
 export async function getHabits() {
+    const clerkUser = await currentUser();
 
-    const clerkUser = await currentUser()
-
-    const user = await prisma.user.findUnique(
-        {
-            where: { clerkId: clerkUser?.id }
-        }
-    )
+    const user = await prisma.user.findUnique({
+        where: { clerkId: clerkUser?.id }
+    });
 
     if (!user) {
-        throw new Error('Usuario no encontrado')
+        throw new Error('Usuario no encontrado');
     }
 
     const habits = await prisma.habit.findMany({
@@ -23,20 +20,56 @@ export async function getHabits() {
         }
     });
 
-    const weekDay = new Date().getDay()
-    const today = new Date().toLocaleDateString('en-CA')
+    const weekDay = new Date().getDay();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Establecer la hora a medianoche para comparaciones precisas
+    const todayString = today.toLocaleDateString('en-CA');
+
+    // Actualizar cada hábito con los días fallidos
+    await Promise.all(habits.map(async (habit) => {
+        let failedDays = [];
+
+        // Calcular hasta el día anterior
+        const startDate = new Date(habit.createdAt);
+        const endDate = new Date(today);
+        endDate.setDate(endDate.getDate() - 1); // Día anterior
+
+        for (let date = startDate; date <= endDate; date.setDate(date.getDate() + 1)) {
+            const dateString = date.toISOString().split('T')[0];
+
+            // Verificar si el día está planificado
+            const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(date.getDay()));
+
+            if (isPlanned && (!habit.completedDates.includes(dateString)) && (failedDays.length < Math.floor(habit.plannedDays * 0.05))) {
+                failedDays.push(dateString);
+            }
+        }
+
+        let forcedRestart = habit.forcedRestart
+        if(failedDays.length >= Math.floor(habit.plannedDays * 0.05)){
+            forcedRestart = true
+        }
+
+
+        if (failedDays.length !== habit.failedDays.length || forcedRestart !== habit.forcedRestart) {
+            await prisma.habit.update({
+                where: { id: habit.id },
+                data: { failedDays, forcedRestart }
+            });
+        }
+    }));
 
     habits.sort((a, b) => {
-        const isPlannedTodayA = a.frequency === 'DAILY' || a.weeklyDays.includes(weekDay)
-        const isPlannedTodayB = b.frequency === 'DAILY' || b.weeklyDays.includes(weekDay)
+        const isPlannedTodayA = a.frequency === 'DAILY' || a.weeklyDays.includes(weekDay);
+        const isPlannedTodayB = b.frequency === 'DAILY' || b.weeklyDays.includes(weekDay);
 
-        const isCompletedA = a.completedDates.includes(today);
-        const isCompletedB = b.completedDates.includes(today);
+        const isCompletedA = a.completedDates.includes(todayString);
+        const isCompletedB = b.completedDates.includes(todayString);
 
-        if(isPlannedTodayA && !isPlannedTodayB) return -1
-        if(!isPlannedTodayA && isPlannedTodayB) return 1
+        if (isPlannedTodayA && !isPlannedTodayB) return -1;
+        if (!isPlannedTodayA && isPlannedTodayB) return 1;
 
-        if (!isCompletedA && isCompletedB) return -1
+        if (!isCompletedA && isCompletedB) return -1;
         if (isCompletedA && !isCompletedB) return 1;
 
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();

@@ -2,7 +2,8 @@ import { toast } from "react-toastify";
 import { GoTrash } from "react-icons/go";
 import { RxCross2 } from "react-icons/rx";
 import { IoMdCheckmark } from "react-icons/io";
-import { PiCalendarCheckLight } from "react-icons/pi";
+import { RiErrorWarningLine } from "react-icons/ri";
+import { CgMenuGridO } from "react-icons/cg";
 import { Habit } from "@prisma/client";
 import MonthCalendar from "./MonthCalendar";
 import { updateDatesCompleted } from "@/actions/update-day-mompleted";
@@ -12,6 +13,7 @@ import { CircularProgressbarWithChildren, buildStyles } from "react-circular-pro
 import 'react-circular-progressbar/dist/styles.css';
 import { categoryIcons } from "@/src/dictionaries/categoryIcons";
 import { deleteHabit } from "@/actions/delete-habit";
+import WarningResetHabit from "./WarningResetHabit";
 
 type HabitCardProps = {
     habit: Habit, 
@@ -30,7 +32,7 @@ export default function HabitCard({habit, setRefetch, setIsConfettiActive} : Hab
     const [isCalendarActive, setIsCalendarActive] = useState(false)
 
     const updateDatesHandleClick = async () => {
-        const response = await updateDatesCompleted(habit.id, habit.completedDates, today)
+        const response = await updateDatesCompleted(habit.id, habit, today)
         toast.success(response.message, {
             icon: () => (
                 <div className="scale-150">
@@ -89,21 +91,24 @@ export default function HabitCard({habit, setRefetch, setIsConfettiActive} : Hab
                         className="px-4 py-2 bg-white/15 hover:bg-white/40 transition-colors rounded-lg"
                         onClick={() => setIsCalendarActive(prev => !prev)}
                     >
-                        <PiCalendarCheckLight className="w-5 h-5"/>
+                        <CgMenuGridO className="w-5 h-5"/>
                 </button>
             </div>
                     
             <div className="w-36 mx-auto pb-5 flex-grow">
-                <CircularProgressbarWithChildren value={habit.completedDates.length} maxValue={66} styles={buildStyles({pathColor: '#fcc919', trailColor: '#7433ca'})}>
+                <CircularProgressbarWithChildren value={habit.completedDates.length} maxValue={66} styles={buildStyles({pathColor: '#fcc919', trailColor: '#28094f'})}>
                     <img width={40} height={40} src="/images/zenith-logo.png" alt="Logo Zenith" />
                     <div className="mt-2 text-sm">
-                        <strong>{habit.completedDates.length} / 66</strong> días
+                        <strong>{habit.completedDates.length} / {habit.plannedDays}</strong> días
                     </div>
                 </CircularProgressbarWithChildren>
             </div>
         
-
-            <MonthCalendar habit={habit} isCalendarActive={isCalendarActive} />
+            {habit.forcedRestart ? (
+                <WarningResetHabit habitId={habit.id} setRefetch={setRefetch} />
+            ) : (
+                <MonthCalendar habit={habit} />
+            )}
         </div>
     )
 }
