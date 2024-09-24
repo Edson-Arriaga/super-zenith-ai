@@ -19,53 +19,55 @@ export async function getHabits() {
             userId: user.id
         }
     });
-
-    const weekDay = new Date().getDay();
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Establecer la hora a medianoche para comparaciones precisas
-    const todayString = today.toLocaleDateString('en-CA');
-
-    // Actualizar cada hábito con los días fallidos
+    
     await Promise.all(habits.map(async (habit) => {
-        let failedDays = [];
+        if(!habit.completed){ 
+            let failedDays = [];
+            // Day before today until Created At 
+            const startDate = new Date();
+            startDate.setDate(startDate.getDate() - 1);
 
-        // Calcular hasta el día anterior
-        const startDate = new Date(habit.createdAt);
-        const endDate = new Date(today);
-        endDate.setDate(endDate.getDate() - 1); // Día anterior
+            const endDate = new Date(habit.createdAt)
+            let dateAux = new Date(startDate)
 
-        for (let date = startDate; date <= endDate; date.setDate(date.getDate() + 1)) {
-            const dateString = date.toISOString().split('T')[0];
+            while(dateAux >= endDate) {
+                const isoDateString = dateAux.toISOString().split('T')[0];
 
-            // Verificar si el día está planificado
-            const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(date.getDay()));
+                const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(dateAux.getDay()));
 
-            if (isPlanned && (!habit.completedDates.includes(dateString)) && (failedDays.length < Math.floor(habit.plannedDays * 0.05))) {
-                failedDays.push(dateString);
+                if (isPlanned && (!habit.completedDates.includes(isoDateString)) && (failedDays.length < Math.floor(habit.plannedDays * 0.05))) {
+                    failedDays.push(isoDateString);
+                }
+
+                dateAux.setDate(dateAux.getDate() - 1);
+            }
+
+            let forcedRestart = habit.forcedRestart
+            if(failedDays.length >= Math.floor(habit.plannedDays * 0.05)){
+                forcedRestart = true
+            }
+
+
+            if ((failedDays.length !== habit.failedDays.length || forcedRestart !== habit.forcedRestart)) {
+                await prisma.habit.update({
+                    where: { id: habit.id },
+                    data: { failedDays, forcedRestart }
+                });
             }
         }
-
-        let forcedRestart = habit.forcedRestart
-        if(failedDays.length >= Math.floor(habit.plannedDays * 0.05)){
-            forcedRestart = true
-        }
-
-
-        if (failedDays.length !== habit.failedDays.length || forcedRestart !== habit.forcedRestart) {
-            await prisma.habit.update({
-                where: { id: habit.id },
-                data: { failedDays, forcedRestart }
-            });
-        }
     }));
+
+    //SORT HABITS
+    const isoTodayString = new Date().toISOString().split('T')[0]
+    const weekDay = new Date().getDay();
 
     habits.sort((a, b) => {
         const isPlannedTodayA = a.frequency === 'DAILY' || a.weeklyDays.includes(weekDay);
         const isPlannedTodayB = b.frequency === 'DAILY' || b.weeklyDays.includes(weekDay);
 
-        const isCompletedA = a.completedDates.includes(todayString);
-        const isCompletedB = b.completedDates.includes(todayString);
-
+        const isCompletedA = a.completedDates.includes(isoTodayString);
+        const isCompletedB = b.completedDates.includes(isoTodayString);
+        
         if (isPlannedTodayA && !isPlannedTodayB) return -1;
         if (!isPlannedTodayA && isPlannedTodayB) return 1;
 

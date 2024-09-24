@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 :root {
-
   --zenith-light-yellow: #ffdd61;
   --zenith-yellow: #fcc919;
   --zenith-dark-yellow: #a48512;
@@ -32,41 +31,14 @@
   background: var(--zenith-yellow) !important;
 }
 
-/* Main Backgroung */
-.bg {
-  animation:slide 10s ease-in-out infinite alternate;
-  background-image: linear-gradient(-60deg, var(--zenith-purple) 50%, var(--zenith-dark-purple) 50%);
-  bottom:0;
-  left:-50%;
-  opacity:.5;
-  position:fixed;
-  right:-50%;
-  top:0;
-  z-index:-1;
+.bg-main {
+  position: relative;
+  overflow: hidden;
+  background: #28094f; /* Gradiente morado profundo */
+  background-attachment: fixed;
 }
 
-.bg2 {
-  animation-direction:alternate-reverse;
-  animation-duration: 16s;
-}
 
-.bg3 {
-  animation-duration: 20s;
-}
-
-@keyframes slide {
-  0% {
-    transform:translateX(-25%);
-  }
-  100% {
-    transform:translateX(25%);
-  }
-}
-
-/* aside decoration */
-.aside-decor{
-  clip-path: polygon(75% 18%, 100% 29%, 72% 48%, 100% 64%, 72% 81%, 100% 100%, 0 100%, 0 0, 100% 0);
-}
 
 /* Clerk */
 

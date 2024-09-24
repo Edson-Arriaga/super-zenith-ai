@@ -12,19 +12,17 @@ type WarningResetHabitProps = {
 
 export default function WarningResetHabit({habitId, setRefetch} : WarningResetHabitProps) {
     
-    const newDate = new Date();
-    newDate.setHours(0, 0, 0, 0);  
-    const localDate = newDate.toISOString();
+    const utcDate = new Date().toISOString();
 
     const handleResetHabitClick = async () => {
-        const response = await resetHabit(habitId, localDate) 
+        const response = await resetHabit(habitId, utcDate) 
         toast.success(response.message)
         setRefetch(prev => !prev)
     }
     
     return (
-        <div className="bg-white/5 rounded-lg p-4 backdrop-blur-sm flex flex-col gap-5 items-center py-10">
-            <p className="text-red-200 font-black text-xl text-center">Haz superado el rango máximo de fallos para este hábito (5%)</p>
+        <div className="bg-white/5 rounded-lg p-4 backdrop-blur-sm flex flex-col gap-5 items-center py-12">
+            <p className="text-zenith-yellow font-black text-xl text-center">Haz superado el rango máximo de fallos para este hábito (5%)</p>
             <RiErrorWarningLine className="w-20 h-20 text-zenith-yellow" />
             <AppButton 
                 type="button"

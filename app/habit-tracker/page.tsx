@@ -45,16 +45,16 @@ export default function HabitTrackerPage() {
     }
     
     return (
-        <div className="mx-5">
+        <div className="mx-auto px-5 lg:px-10">
             <PageTitle>Habit Tracker</PageTitle>
             <main className="max-w-5xl mx-auto">
-                <section className="flex justify-between gap-5 max-w-3xl mx-auto">
-                        <AppButton type="button" href="/create-habit">
-                            <div className="flex items-center justify-center gap-1">
-                                <CgAdd className="w-6 h-6" />
-                                <p>crear nuevo hábito</p>
-                            </div>
-                        </AppButton>
+                <section className="flex flex-col lg:flex-row justify-between gap-5 max-w-3xl mx-auto">
+                    <AppButton type="button" href="/create-habit">
+                        <div className="flex items-center justify-center gap-1">
+                            <CgAdd className="w-6 h-6" />
+                            <p>crear nuevo hábito</p>
+                        </div>
+                    </AppButton>
 
                     <AppButton type="button">
                         <div className="flex items-center gap-1 justify-center">
@@ -65,7 +65,7 @@ export default function HabitTrackerPage() {
                 </section>
 
                 <section className="mt-10">
-                    <ul className="grid md:grid-cols-2 gap-14">
+                    <ul className="grid lg:grid-cols-2 gap-14">
                         {habits.map((habit, index) => (
                             <motion.li
                                 key={habit.id}

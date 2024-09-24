@@ -1,17 +1,29 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export default async function InitialPage() {
     
     return (
-        <main className="h-screen">
+        <main className="h-screen flex flex-col">
             <div className="flex items-center mx-20 pt-10">
-                <img src="/images/zenith-full-logo.png" alt="sdf" />
+                <Image
+                    width={2100}
+                    height={650}
+                    src="/images/zenith-full-logo.png" 
+                    alt="Full Zenith Logo"
+                    quality={100}
+                />
             </div>
             
             <div className="flex justify-center gap-32 mt-28">
                 <div className="relative hover:scale-105 transition-transform">
-                    <div className="absolute w-28 -top-[125px]">
-                        <img src="images/zenith-logo.png" alt="" />
+                    <div className="absolute w-32 h-32 left-1 -top-[150px]">
+                        <Image
+                            width={1248}
+                            height={1292}
+                            src="/images/zenith-logo.png" 
+                            alt="Zenith Logo" 
+                        />
                     </div>
                     <Link 
                         href={'/sign-in'}

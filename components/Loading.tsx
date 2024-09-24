@@ -92,13 +92,13 @@ export default function Component() {
               ease: "linear",
             }}
           >
-            <Image
-              src="/images/zenith-logo.png"
-              alt="Ícono de hábito"
-              width={120}
-              height={120}
-              className="text-yellow-400"
-            />
+            <div className="relative w-36 h-36">
+              <Image
+                src="/images/zenith-logo.png"
+                alt="Zenith Logo"
+                fill
+              />
+            </div>
           </motion.div>
         </motion.div>
       </div>
