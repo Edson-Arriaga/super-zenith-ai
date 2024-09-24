@@ -20,15 +20,19 @@ export async function getHabits() {
         }
     });
     
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     await Promise.all(habits.map(async (habit) => {
         if(!habit.completed){ 
             let failedDays = [];
-            // Day before today until Created At 
-            const startDate = new Date();
+            // One days before today until Created At 
+            const startDate = new Date(today);
             startDate.setDate(startDate.getDate() - 1);
 
-            const endDate = new Date(habit.createdAt)
-            let dateAux = new Date(startDate)
+            const endDate = new Date(habit.createdAt);
+            endDate.setHours(0, 0, 0, 0);
+            let dateAux = new Date(startDate);
 
             while(dateAux >= endDate) {
                 const isoDateString = dateAux.toISOString().split('T')[0];
@@ -42,11 +46,10 @@ export async function getHabits() {
                 dateAux.setDate(dateAux.getDate() - 1);
             }
 
-            let forcedRestart = habit.forcedRestart
+            let forcedRestart = habit.forcedRestart;
             if(failedDays.length >= Math.floor(habit.plannedDays * 0.05)){
-                forcedRestart = true
+                forcedRestart = true;
             }
-
 
             if ((failedDays.length !== habit.failedDays.length || forcedRestart !== habit.forcedRestart)) {
                 await prisma.habit.update({
@@ -58,8 +61,8 @@ export async function getHabits() {
     }));
 
     //SORT HABITS
-    const isoTodayString = new Date().toISOString().split('T')[0]
-    const weekDay = new Date().getDay();
+    const isoTodayString = today.toISOString().split('T')[0];
+    const weekDay = today.getDay();
 
     habits.sort((a, b) => {
         const isPlannedTodayA = a.frequency === 'DAILY' || a.weeklyDays.includes(weekDay);
