@@ -14,7 +14,8 @@
 
 /* Toastify */
 .Toastify__toast-theme--light, .Toastify__toast-theme--dark{
-  background: var(--zenith-light-purple) !important
+  background: var(--zenith-dark-purple) !important;
+  outline: solid 1px var(--zenith-yellow);
 }
 
 .Toastify__toast-body {
@@ -27,7 +28,7 @@
   fill: var(--zenith-yellow) !important;
 }
 
-.Toastify__progress-bar--success {
+.Toastify__progress-bar {
   background: var(--zenith-yellow) !important;
 }
 

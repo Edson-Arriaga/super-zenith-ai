@@ -4,6 +4,7 @@ import { createHabit } from "@/actions/create-habit"
 import AppButton from "@/components/AppButton"
 import ErrorMessage from "@/components/ErrorMessage"
 import Loading from "@/components/Loading"
+import NotificationIcon from "@/components/NotificationIcon"
 import PageTitle from "@/components/PageTitle"
 import { categories } from "@/src/data/categories"
 import { weeklyDaysCheckBoxes } from "@/src/dictionaries/weeklyDaysCheckBoxes"
@@ -22,8 +23,12 @@ export default function CreateHabitPage() {
 
     async function handleCreateHabitForm(data : AddHabitFormData){
         setIsLoading(true)
-        const response = await createHabit(data)
-        toast.success(response)
+        const res = await createHabit(data)
+        if(res.success){
+            toast.success(res.message, { icon: () => <NotificationIcon />})  
+        } else {
+            toast.error(res.message)
+        }
         router.push('/habit-tracker')
     }
 

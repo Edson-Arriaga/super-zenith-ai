@@ -5,13 +5,14 @@ import { Habit } from "@prisma/client";
 import { CgAdd } from "react-icons/cg";
 import { CiFilter } from "react-icons/ci";
 import HabitCard from "@/components/HabitCard";
-import Confetti from "react-confetti";
 import { motion } from "framer-motion";
 import { getHabits } from "@/actions/get-habits";
 import { useUser } from "@clerk/nextjs";
 import PageTitle from "@/components/PageTitle";
 import AppButton from "@/components/AppButton";
 import Loading from "@/components/Loading";
+import { toast } from "react-toastify";
+import ConfettiDecor from "@/components/ConfettiDecor";
 
 export default function HabitTrackerPage() {
     const [habits, setHabits] = useState<Habit[]>([])
@@ -23,26 +24,20 @@ export default function HabitTrackerPage() {
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        const timeout = setTimeout(() => {
-            setIsConfettiActive(false);
-        }, 4500);
-
-        return () => clearTimeout(timeout);
-    }, [isConfettiActive]);
-
-    useEffect(() => {
         async function fetchHabits() {
             setIsLoading(true)
-            const habits = await getHabits()
-            setHabits(habits)
-            setIsLoading(false)
+            const res = await getHabits()
+            if(res.success && res.data){
+                setHabits(res.data)
+                setIsLoading(false)
+            } else {
+                toast.error(res.message) 
+            }
         }
         fetchHabits()
     }, [refetch])
     
-    if (isLoading || !isLoaded) {
-        return <Loading />
-    }
+    if (isLoading || !isLoaded) return <Loading />
     
     return (
         <div className="mx-auto px-5 lg:px-10">
@@ -84,11 +79,7 @@ export default function HabitTrackerPage() {
                 </section>
             </main>
 
-            {isConfettiActive && (
-                <div className="fixed inset-0">
-                    <Confetti recycle={false} numberOfPieces={300} wind={0.05}/>
-                </div>
-            )}
+            {isConfettiActive && <ConfettiDecor isConfettiActive={isConfettiActive} setIsConfettiActive={setIsConfettiActive}/>}
         </div>
     );
 }

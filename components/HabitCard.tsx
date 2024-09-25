@@ -15,6 +15,7 @@ import { deleteHabit } from "@/actions/delete-habit";
 import WarningResetHabit from "./WarningResetHabit";
 import AppButton from "./AppButton";
 import { resetHabit } from "@/actions/reset-habit";
+import NotificationIcon from "./NotificationIcon";
 
 type HabitCardProps = {
     habit: Habit, 
@@ -27,42 +28,39 @@ export default function HabitCard({habit, setRefetch, setIsConfettiActive} : Hab
     const weekDay = new Date().getDay()
     const today = new Date().toLocaleDateString('en-CA')
 
-    const isTodayCompleted = habit.completedDates.some(date => date === today)
+    const isTodayCompleted = habit.completedDates.includes(today)
     const isPlannedToday = habit.frequency === 'DAILY' || habit.weeklyDays.includes(weekDay);
 
-    const updateDatesHandleClick = async () => {
-        const response = await updateDatesCompleted(habit.id, habit, today)
-        toast.success(response.message, {
-            icon: () => (
-                <div className="scale-150">
-                    <img src="/images/zenith-logo.png" alt="logo zenith" />
-                </div>
-            )
-        });
-        setRefetch(prev => !prev)
-        if(!isTodayCompleted){
-            setIsConfettiActive(true)
-        }
+    const updateDatesCompletedHandleClick = async () => {
+        const res = await updateDatesCompleted(habit.id, habit, today)
+        if(res.success){
+            toast.success(res.message, { icon: () => <NotificationIcon />})
+            setRefetch(prev => !prev)
+            if(!isTodayCompleted) setIsConfettiActive(true)
+        } else {
+            toast.error(res.message)
+        }  
     }
 
     const deleteHabitHandleClick = async () => {
-        const response = await deleteHabit(habit.id)
-        toast.success(response, {
-            icon: () => (
-                <div className="scale-150">
-                    <img src="/images/zenith-logo.png" alt="logo zenith" />
-                </div>
-            )
-          });
-        setRefetch(prev => !prev)
+        const res = await deleteHabit(habit.id)
+        if(res.success){
+            toast.success(res.message, { icon: () => <NotificationIcon />});
+            setRefetch(prev => !prev)
+        } else {
+            toast.error(res.message)
+        }
     }
 
-    const handleResetHabitClick = async () => {
-        const response = await resetHabit(habit.id, new Date().toISOString()) 
-        toast.success(response.message)
-        setRefetch(prev => !prev)
+    const ResetHabithandleClick = async () => {
+        const res = await resetHabit(habit.id, new Date().toISOString())
+        if(res.success){
+            toast.success(res.message, { icon: () => <NotificationIcon />});
+            setRefetch(prev => !prev)
+        } else {
+            toast.error(res.message)
+        }
     }
-
 
     return (
         <div
@@ -75,7 +73,7 @@ export default function HabitCard({habit, setRefetch, setIsConfettiActive} : Hab
                 <h1 className={`${habit.completed && 'text-zenith-yellow'} flex-grow capitalize text-2xl font-black`}>{habit.title}</h1>
                 <button 
                     className="px-4 py-2 bg-white/15 hover:bg-white/40 transition-colors rounded-lg disabled:cursor-not-allowed"
-                    onClick={updateDatesHandleClick}
+                    onClick={updateDatesCompletedHandleClick}
                     disabled={!isPlannedToday || habit.completed}
                 >
                     {isTodayCompleted ? (
@@ -121,7 +119,7 @@ export default function HabitCard({habit, setRefetch, setIsConfettiActive} : Hab
                     {habit.completed ? (
                         <div className="space-y-5">
                             <p className="uppercase text-2xl text-center text-zenith-yellow mt-5 font-black">¡FELICIDADES! Has completado este hábito.</p>
-                            <AppButton onClick={handleResetHabitClick} type="button">Volver a comenzar este hábito</AppButton>
+                            <AppButton onClick={ResetHabithandleClick} type="button">Volver a comenzar este hábito</AppButton>
                         </div>
                     ) : (
                         <MonthCalendar habit={habit} />

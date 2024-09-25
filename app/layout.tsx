@@ -53,7 +53,7 @@ export default function RootLayout({
                 <ToastContainer 
                     position="top-center"
                     pauseOnHover={false}
-                    rtl
+                    // rtl
                 />
             </body>
           </html>

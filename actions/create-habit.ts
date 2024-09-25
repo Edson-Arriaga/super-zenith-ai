@@ -5,26 +5,28 @@ import { AddHabitFormData } from "@/src/schema"
 import { currentUser } from "@clerk/nextjs/server"
 
 export async function createHabit(data : AddHabitFormData){
-    
-    const clerkUser = await currentUser()
+    try {
+        const clerkUser = await currentUser()
 
-    const user = await prisma.user.findUnique(
-        {
-            where: { clerkId: clerkUser?.id }
+        const user = await prisma.user.findUnique(
+            {
+                where: { clerkId: clerkUser?.id }
+            }
+        )
+
+        if (!user) {
+            throw new Error('Usuario no encontrado')
         }
-    )
 
-    if (!user) {
-        throw new Error('Usuario no encontrado')
+        await prisma.habit.create({
+            data: {
+                ...data,
+                weeklyDays: data.weeklyDays ? data.weeklyDays.map(day => +day) : undefined,
+                userId: user.id
+            }
+        })
+        return { success: true, message: 'Habito Creado Correctamente'}
+    } catch (error) {
+        return { success: false, message: 'Error Al Crear El hábito'}
     }
-
-    await prisma.habit.create({
-        data: {
-            ...data,
-            weeklyDays: data.weeklyDays ? data.weeklyDays.map(day => +day) : undefined,
-            userId: user.id
-        }
-    })
-
-    return 'Habito Creado Correctamente'
 }
