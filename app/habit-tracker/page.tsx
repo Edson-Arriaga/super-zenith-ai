@@ -60,7 +60,7 @@ export default function HabitTrackerPage() {
                 </section>
 
                 <section className="mt-10">
-                    <ul className="grid gap-5 md:grid-cols-2 md:gap-10 xl:gap-8 xl:grid-cols-3">
+                    <ul className="grid gap-5 md:grid-cols-2 md:gap-10 lg:gap-5 xl:gap-8 xl:grid-cols-3">
                         {habits.map((habit, index) => (
                             <motion.li
                                 key={habit.id}
