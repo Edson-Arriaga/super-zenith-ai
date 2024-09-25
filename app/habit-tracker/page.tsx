@@ -40,9 +40,9 @@ export default function HabitTrackerPage() {
     if (isLoading || !isLoaded) return <Loading />
     
     return (
-        <div className="mx-auto px-5 lg:px-10">
+        <main>
             <PageTitle>Habit Tracker</PageTitle>
-            <main className="max-w-5xl mx-auto">
+            <div>
                 <section className="flex flex-col lg:flex-row justify-between gap-5 max-w-3xl mx-auto">
                     <AppButton type="button" href="/create-habit">
                         <div className="flex items-center justify-center gap-1">
@@ -60,7 +60,7 @@ export default function HabitTrackerPage() {
                 </section>
 
                 <section className="mt-10">
-                    <ul className="grid lg:grid-cols-2 gap-14">
+                    <ul className="grid gap-5 md:grid-cols-2 md:gap-10 xl:gap-8 xl:grid-cols-3">
                         {habits.map((habit, index) => (
                             <motion.li
                                 key={habit.id}
@@ -77,9 +77,9 @@ export default function HabitTrackerPage() {
                         ))}
                     </ul>
                 </section>
-            </main>
+            </div>
 
             {isConfettiActive && <ConfettiDecor isConfettiActive={isConfettiActive} setIsConfettiActive={setIsConfettiActive}/>}
-        </div>
+        </main>
     );
 }

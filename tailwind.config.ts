@@ -1,14 +1,12 @@
 import type { Config } from "tailwindcss";
-import fluid, { extract } from 'fluid-tailwind'
 
 const config: Config = {
   content: {
     files: [
       "./pages/**/*.{js,ts,jsx,tsx,mdx}",
       "./components/**/*.{js,ts,jsx,tsx,mdx}",
-      "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    ],
-    extract
+      "./app/**/*.{js,ts,jsx,tsx,mdx}"
+    ]
   },
   theme: {
     extend: {
@@ -20,11 +18,10 @@ const config: Config = {
         "zenith-purple": "var(--zenith-purple)",
         "zenith-dark-purple": "var(--zenith-dark-purple)",
       },
+      height: {
+        "screen-without-header" : "calc(100svh - 4rem)"
+      }
     },
   },
-  plugins: [
-    fluid
-  ],
-  
 };
 export default config;

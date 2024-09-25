@@ -1,10 +1,10 @@
 "use server"
 
 import prisma from "@/src/lib/prisma"
-import { AddHabitFormData } from "@/src/schema"
+import { HabitFormData } from "@/src/schema"
 import { currentUser } from "@clerk/nextjs/server"
 
-export async function createHabit(data : AddHabitFormData){
+export async function createHabit(data : HabitFormData){
     try {
         const clerkUser = await currentUser()
 
@@ -21,7 +21,6 @@ export async function createHabit(data : AddHabitFormData){
         await prisma.habit.create({
             data: {
                 ...data,
-                weeklyDays: data.weeklyDays ? data.weeklyDays.map(day => +day) : undefined,
                 userId: user.id
             }
         })

@@ -8,7 +8,7 @@ import NotificationIcon from "@/components/NotificationIcon"
 import PageTitle from "@/components/PageTitle"
 import { categories } from "@/src/data/categories"
 import { weeklyDaysCheckBoxes } from "@/src/dictionaries/weeklyDaysCheckBoxes"
-import { AddHabitFormData } from "@/src/schema"
+import { HabitFormData, HabitSchema } from "@/src/schema"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
@@ -16,14 +16,24 @@ import { toast } from "react-toastify"
 
 export default function CreateHabitPage() {
 
-    const [frecuency, setFrecuency] = useState('')
     const [isLoading, setIsLoading] = useState(false)
-    const { register, handleSubmit , formState: {errors}} = useForm<AddHabitFormData>()
+    const [frecuency, setFrecuency] = useState('')
+    const { register, handleSubmit , formState: {errors}, setValue} = useForm<HabitFormData>()
     const router = useRouter()
 
-    async function handleCreateHabitForm(data : AddHabitFormData){
+    async function handleCreateHabitForm(data : HabitFormData){
+        data.weeklyDays = !data.weeklyDays ? [] : data.weeklyDays.map(day => +day)
+        
+        const result = HabitSchema.safeParse(data)
+        if(!result.success){
+            result.error.issues.forEach(issue => {
+                toast.error(issue.message)
+            })
+            return
+        }
+
         setIsLoading(true)
-        const res = await createHabit(data)
+        const res = await createHabit(result.data!)
         if(res.success){
             toast.success(res.message, { icon: () => <NotificationIcon />})  
         } else {
@@ -37,7 +47,7 @@ export default function CreateHabitPage() {
     return (
         <main>
             <PageTitle>Crea un hábito nuevo</PageTitle>
-            <form noValidate className="space-y-5 max-w-sm mx-auto mt-20" onSubmit={handleSubmit(handleCreateHabitForm)}>
+            <form noValidate className="space-y-5 max-w-sm mx-auto" onSubmit={handleSubmit(handleCreateHabitForm)}>
                 <input 
                     type="text"
                     placeholder="Titulo"
@@ -54,7 +64,9 @@ export default function CreateHabitPage() {
                 <textarea 
                     className="bg-white/20 rounded-lg w-full p-2 border border-white/50 text-white placeholder:text-gray-400"
                     placeholder="Descripción (Opcional)"
-                    {...register('description')}
+                    {...register('description', {
+                        required: 'Selecciona una categoria'
+                    })}
                 >
                 
                 </textarea>
@@ -63,7 +75,7 @@ export default function CreateHabitPage() {
                     defaultValue=""
                     className="bg-white/20 rounded-lg w-full p-2 border border-white/50 text-white placeholder:text-gray-400"
                     {...register('category', {
-                        required: 'Selecciona una categoria'
+                        required: 'La frecuencia es obligatoria'
                     })}
                 >
                     <option className="bg-zenith-yellow text-zenith-purple" value="" disabled>-- Selecciona una categoría --</option>
@@ -86,7 +98,10 @@ export default function CreateHabitPage() {
                     {...register('frequency', {
                         required: 'La frecuencia es obligatoria'
                     })}
-                    onChange={e => setFrecuency(e.target.value)}
+                    onChange={e => {
+                        setFrecuency(e.target.value),
+                        setValue('weeklyDays', [])
+                    }}
                 >
                     <option className="bg-zenith-yellow text-zenith-purple" value="" disabled>-- Frecuencia --</option>
                     <option className="bg-zenith-yellow text-zenith-purple" value="DAILY">Diario</option>
