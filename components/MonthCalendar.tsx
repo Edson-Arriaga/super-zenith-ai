@@ -101,59 +101,61 @@ export default function MonthCalendar({ habit }: MonthCalendarProps) {
   }, [currentDate, calendarData.lastPlannedDate]);
 
   return (
-    <div className="bg-white/5 rounded-lg p-4 backdrop-blur-sm">
-      <div className="flex justify-between items-center mb-4">
-        <button 
-          onClick={() => changeMonth(-1)} 
-          className={`text-zenith-yellow w-8 h-8 flex items-center justify-center ${isFirstMonth ? 'invisible' : ''}`}
-          disabled={isFirstMonth}
-        >
-          <BiSolidLeftArrow size={24} />
-        </button>
-        <h3 className="text-lg font-semibold text-zenith-yellow uppercase">
-          {currentDate.toLocaleDateString("es-ES", { month: "long", year: "numeric" })}
-        </h3>
-        <button 
-          onClick={() => changeMonth(1)} 
-          className={`text-zenith-yellow w-8 h-8 flex items-center justify-center ${isLastMonth ? 'invisible' : ''}`}
-          disabled={isLastMonth}
-        >
-          <BiSolidRightArrow size={24} />
-        </button>
-      </div>
-      <p className="text-center text-sm text-zenith-yellow mb-2">{frequency_ES[habit.frequency]}</p>
-      <div className="grid grid-cols-7 gap-1 place-items-center">
-        {["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"].map(day => (
-          <div key={day} className="text-center text-xs font-semibold text-zenith-yellow">
-            {day}
-          </div>
-        ))}
-        {monthDays.map((day, index) =>
-          day === null ? (
-            <div key={index} className="h-8 w-8" />
-          ) : (
-            <div
-              key={index}
-              className={`h-8 w-8 rounded-full flex items-center justify-center text-xs ${
-                day.isCompleted
-                  ? "bg-zenith-yellow text-zenith-purple"
-                  : day.isFailed
-                  ? "bg-red-600/50 text-white"
-                  : day.isPlanned
-                  ? "bg-black/20 text-zenith-yellow"
-                  : "bg-white/10 text-white"
-              } ${day.isToday ? "ring-2 ring-zenith-yellow" : ""}`}
-            >
-              {day.date}
+    <div>
+      <div className="bg-white/5 rounded-lg p-4 z-40">
+        <div className="flex justify-between items-center mb-4">
+          <button 
+            onClick={() => changeMonth(-1)} 
+            className={`text-zenith-yellow w-8 h-8 flex items-center justify-center ${isFirstMonth ? 'invisible' : ''}`}
+            disabled={isFirstMonth}
+          >
+            <BiSolidLeftArrow size={24} />
+          </button>
+          <h3 className="text-lg font-semibold text-zenith-yellow uppercase">
+            {currentDate.toLocaleDateString("es-ES", { month: "long", year: "numeric" })}
+          </h3>
+          <button 
+            onClick={() => changeMonth(1)} 
+            className={`text-zenith-yellow w-8 h-8 flex items-center justify-center ${isLastMonth ? 'invisible' : ''}`}
+            disabled={isLastMonth}
+          >
+            <BiSolidRightArrow size={24} />
+          </button>
+        </div>
+        <p className="text-center text-sm text-zenith-yellow mb-2">{frequency_ES[habit.frequency]}</p>
+        <div className="grid grid-cols-7 gap-1 place-items-center">
+          {["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"].map(day => (
+            <div key={day} className="text-center text-xs font-semibold text-zenith-yellow">
+              {day}
             </div>
-          )
-        )}
-      </div>
-      <div className="mt-4 text-sm text-zenith-yellow flex justify-between items-center">
-        <span>Días planificados: {habit.plannedDays}</span>
-        <span>
-          {formatDate(calendarData.firstPlannedDate)} - {formatDate(calendarData.lastPlannedDate)}
-        </span>
+          ))}
+          {monthDays.map((day, index) =>
+            day === null ? (
+              <div key={index} className="h-8 w-8" />
+            ) : (
+              <div
+                key={index}
+                className={`h-8 w-8 rounded-full flex items-center justify-center text-xs ${
+                  day.isCompleted
+                    ? "bg-zenith-yellow text-zenith-purple"
+                    : day.isFailed
+                    ? "bg-red-600/50 text-white"
+                    : day.isPlanned
+                    ? "bg-black/20 text-zenith-yellow"
+                    : "bg-white/10 text-white"
+                } ${day.isToday ? "ring-2 ring-zenith-yellow" : ""}`}
+              >
+                {day.date}
+              </div>
+            )
+          )}
+        </div>
+        <div className="mt-4 text-sm text-zenith-yellow flex justify-between items-center">
+          <span>Días planificados: {habit.plannedDays}</span>
+          <span>
+            {formatDate(calendarData.firstPlannedDate)} - {formatDate(calendarData.lastPlannedDate)}
+          </span>
+        </div>
       </div>
     </div>
   );

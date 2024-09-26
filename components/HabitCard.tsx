@@ -91,9 +91,9 @@ export default function HabitCard({habit, setRefetch, setIsConfettiActive} : Hab
             </div>
             <div className="flex justify-between items-center mt-3">
                 <div className="flex items-center gap-4">
-                    <div className="scale-150">
-                        {categoryIcons[habit.category]}
-                    </div>
+            
+                    {categoryIcons[habit.category]}
+                    
                     <p className="text-zenith-yellow font-black">{categories_ES[habit.category]}</p>
                 </div>
                 <button 
@@ -103,7 +103,7 @@ export default function HabitCard({habit, setRefetch, setIsConfettiActive} : Hab
                 </button>
             </div>
                     
-            <div className="w-36 mx-auto pb-5 flex-grow">
+            <div className="w-36 mx-auto pb-5 flex-grow relative -z-20">
                 <CircularProgressbarWithChildren value={habit.completedDates.length} maxValue={habit.plannedDays} styles={buildStyles({pathColor: '#fcc919', trailColor: '#380e6a'})}>
                     <img width={40} height={40} src="/images/zenith-logo.png" alt="Logo Zenith" />
                     <div className="mt-2 text-sm">

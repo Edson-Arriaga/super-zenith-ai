@@ -21,7 +21,7 @@ export default function WarningResetHabit({habitId, setRefetch} : WarningResetHa
     }
     
     return (
-        <div className="bg-white/5 rounded-lg p-4 backdrop-blur-sm flex flex-col gap-5 items-center py-12">
+        <div className="bg-white/10 rounded-lg p-4 flex flex-col gap-5 items-center py-12">
             <p className="text-zenith-yellow font-black text-xl text-center">Haz superado el rango máximo de fallos para este hábito (5%)</p>
             <RiErrorWarningLine className="w-20 h-20 text-zenith-yellow" />
             <AppButton 
