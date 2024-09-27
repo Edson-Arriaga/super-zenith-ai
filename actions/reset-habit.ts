@@ -3,17 +3,17 @@
 import prisma from "@/src/lib/prisma";
 import { Habit } from "@prisma/client";
 
-export async function resetHabit(habitId : Habit['id'], utcDate: string){
+export async function resetHabit(habitId : Habit['id']){
     try {
         await prisma.habit.update({
             where: {
                 id: habitId
             },
             data: {
-                createdAt: utcDate,
+                startDay: new Date().toLocaleDateString('en-CA'),
                 completedDates: [],
                 forcedRestart: false,
-                failedDays: [],
+                failedDates: [],
                 completed: false,
                 level: 1,
             }

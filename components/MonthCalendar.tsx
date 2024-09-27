@@ -39,7 +39,7 @@ export default function MonthCalendar({ habit }: MonthCalendarProps) {
     return {
       plannedDates: Array.from(plannedDates),
       completedDates: new Set(habit.completedDates),
-      failedDates: new Set(habit.failedDays),
+      failedDates: new Set(habit.failedDates),
       firstPlannedDate,
       lastPlannedDate,
     };

@@ -2,6 +2,7 @@
 
 import prisma from "@/src/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
+import { exit } from "process";
 
 export async function getHabits() {
     try {
@@ -20,55 +21,69 @@ export async function getHabits() {
                 userId: user.id
             }
         })
+
+
+        const today = new Date()
+        const todayDateString = today.toLocaleDateString('en-CA')
         
-        await Promise.all(habits.map(async (habit) => {
+        habits.map(async habit => {
             if(!habit.completed){ 
-                let failedDays = []
+                let failedDates = habit.failedDates
+                                
+                const startDate = new Date(today)
+                startDate.setDate(startDate.getDate() - 1)
+                
+                const timeZoneOffset = today.getTimezoneOffset()
+                const endDate = new Date(habit.startDay)
+                endDate.setMinutes(endDate.getMinutes() + timeZoneOffset)
 
-                const startDate = new Date()
-                startDate.setHours(0, 0, 0, -1)
-
-                const endDate = new Date(habit.createdAt)
                 let dateAux = new Date(startDate)
 
-                while(dateAux.getDate() >= endDate.getDate()) {
+                while(dateAux.getDate() >= endDate.getDate()){
                     const isoDateString = dateAux.toLocaleDateString('en-CA')
 
-                    const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(dateAux.getDay()))
+                    /**
+                     * Break because if it coincides with a failed day, 
+                     * the process of calculating the failed days prior to that day 
+                     * will have already been done before.
+                     */
+                    if(failedDates.includes(isoDateString)) break 
 
-                    if (isPlanned && (!habit.completedDates.includes(isoDateString)) && (failedDays.length < Math.floor(habit.plannedDays * 0.05))) {
-                        failedDays.push(isoDateString)
+                    const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(dateAux.getDay()))
+                    
+                    if (isPlanned
+                        && (!habit.completedDates.includes(isoDateString)) //Verify if the Date isn't in completedDates
+                        && (failedDates.length < Math.floor(habit.plannedDays * 0.05)) //Verify if the error has less than 5% error
+                    ) {
+                        failedDates.push(isoDateString)
                     }
 
                     dateAux.setDate(dateAux.getDate() - 1);
                 }
 
                 let forcedRestart = habit.forcedRestart
-                if(failedDays.length >= Math.floor(habit.plannedDays * 0.05)){
+                if(failedDates.length >= Math.floor(habit.plannedDays * 0.05)){
                     forcedRestart = true
                 }
 
-                if ((failedDays.length !== habit.failedDays.length || forcedRestart !== habit.forcedRestart)) {
+                if ((failedDates.length !== habit.failedDates.length || forcedRestart !== habit.forcedRestart)) {
                     await prisma.habit.update({
                         where: { id: habit.id },
-                        data: { failedDays, forcedRestart }
+                        data: { failedDates, forcedRestart }
                     });
                 }
             }
-        }));
-
-        const today = new Date()
+        });
 
         //SORT HABITS
-        const isoTodayString = today.toISOString().split('T')[0]
         const weekDay = today.getDay()
 
         habits.sort((a, b) => {
             const isPlannedTodayA = a.frequency === 'DAILY' || a.weeklyDays.includes(weekDay)
             const isPlannedTodayB = b.frequency === 'DAILY' || b.weeklyDays.includes(weekDay)
 
-            const isCompletedA = a.completedDates.includes(isoTodayString)
-            const isCompletedB = b.completedDates.includes(isoTodayString)
+            const isCompletedA = a.completedDates.includes(todayDateString)
+            const isCompletedB = b.completedDates.includes(todayDateString)
             
             if (isPlannedTodayA && !isPlannedTodayB) return -1
             if (!isPlannedTodayA && isPlannedTodayB) return 1

@@ -34,7 +34,7 @@ export default function HabitCard({habit, setRefetch, setIsConfettiActive} : Hab
     const isPlannedToday = habit.frequency === 'DAILY' || habit.weeklyDays.includes(weekDay);
 
     const updateDatesCompletedHandleClick = async () => {
-        const res = await updateDatesCompleted(habit.id, habit, today)
+        const res = await updateDatesCompleted(habit.id, habit)
         if(res.success){
             toast.success(res.message, { icon: () => <NotificationIcon />})
             setRefetch(prev => !prev)
@@ -55,7 +55,7 @@ export default function HabitCard({habit, setRefetch, setIsConfettiActive} : Hab
     }
 
     const ResetHabithandleClick = async () => {
-        const res = await resetHabit(habit.id, new Date().toISOString())
+        const res = await resetHabit(habit.id)
         if(res.success){
             toast.success(res.message, { icon: () => <NotificationIcon />});
             setRefetch(prev => !prev)

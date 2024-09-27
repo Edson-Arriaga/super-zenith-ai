@@ -29,7 +29,8 @@ model Habit {
   level Int @default(1)
   weeklyDays Int[]
   completedDates String[]
-  failedDays String[]
+  failedDates String[]
+  startDay String
   longestStreak Int @default(0)
   plannedDays Int @default(66)
   forcedRestart Boolean @default(false)
