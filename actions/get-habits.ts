@@ -31,7 +31,7 @@ export async function getHabits() {
                 const endDate = new Date(habit.createdAt)
                 let dateAux = new Date(startDate)
 
-                while(dateAux >= endDate) {
+                while(dateAux.getDate() >= endDate.getDate()) {
                     const isoDateString = dateAux.toLocaleDateString('en-CA')
 
                     const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(dateAux.getDay()))
