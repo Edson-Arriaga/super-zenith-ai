@@ -21,22 +21,18 @@ export async function getHabits() {
             }
         })
         
-        const today = new Date()
-        today.setHours(0, 0, 0, 0)
-
         await Promise.all(habits.map(async (habit) => {
             if(!habit.completed){ 
                 let failedDays = []
-                // One day before today until Created At 
-                const startDate = new Date(today)
-                startDate.setDate(startDate.getDate() - 1)
+
+                const startDate = new Date()
+                startDate.setHours(0, 0, 0, -1)
 
                 const endDate = new Date(habit.createdAt)
-                endDate.setHours(0, 0, 0, 0)
                 let dateAux = new Date(startDate)
 
                 while(dateAux >= endDate) {
-                    const isoDateString = dateAux.toISOString().split('T')[0]
+                    const isoDateString = dateAux.toLocaleDateString('en-CA')
 
                     const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(dateAux.getDay()))
 
@@ -60,6 +56,8 @@ export async function getHabits() {
                 }
             }
         }));
+
+        const today = new Date()
 
         //SORT HABITS
         const isoTodayString = today.toISOString().split('T')[0]
