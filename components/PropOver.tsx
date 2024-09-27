@@ -12,7 +12,7 @@ export default function PropOver({children} : PropOverProps) {
             animate={{ opacity: 1, x: 0}}
             transition={{ duration: 0.4 }}
         >
-            <div className="absolute w-full h-full inset-0 bg-white/5 z-40 rounded-"></div>
+            <div className="absolute w-full h-full inset-0 bg-white/5 z-40 rounded-lg"></div>
             <p className="relative z-50 text-center font-black text-zenith-yellow px-1">
                 {children}
             </p>

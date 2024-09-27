@@ -41,13 +41,13 @@ export default function RootLayout({
           }
         }}>
           <html lang="en" className="overflow-x-hidden">
-            <body className={`${nunito.className} antialiased flex flex-col lg:flex-row bg-main`}>
+            <body className={`${nunito.className} antialiased flex flex-col lg:flex-row bg-zenith-dark-purple`}>
 
                 <Header />
 
                 <Aside />
                 
-                <div className="flex-grow lg:ml-24 px-5 sm:px-10 md:px-5 lg:px-14 xl:px-10 mb-10">
+                <div className="flex-grow lg:ml-24 px-3 sm:px-10 md:px-5 lg:px-14 xl:px-10 mb-10">
                     {children}
                 </div>
                 

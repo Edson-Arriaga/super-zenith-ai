@@ -19,7 +19,7 @@ const config: Config = {
         "zenith-dark-purple": "var(--zenith-dark-purple)",
       },
       height: {
-        "screen-without-header" : "calc(100svh - 4rem)"
+        "screen-without-header" : "calc(100svh - 5rem)"
       }
     },
   },

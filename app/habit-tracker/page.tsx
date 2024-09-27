@@ -17,6 +17,7 @@ import ConfettiDecor from "@/components/ConfettiDecor";
 export default function HabitTrackerPage() {
     const [habits, setHabits] = useState<Habit[]>([])
     const [refetch, setRefetch] = useState(false)
+
     const [isConfettiActive, setIsConfettiActive] = useState(false)
     
     const {isLoaded} = useUser()

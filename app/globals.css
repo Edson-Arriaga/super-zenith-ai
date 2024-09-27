@@ -32,15 +32,6 @@
   background: var(--zenith-yellow) !important;
 }
 
-.bg-main {
-  position: relative;
-  overflow: hidden;
-  background: #28094f; /* Gradiente morado profundo */
-  background-attachment: fixed;
-}
-
-
-
 /* Clerk */
 
 .cl-button{

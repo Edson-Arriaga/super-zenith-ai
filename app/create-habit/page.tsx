@@ -64,9 +64,7 @@ export default function CreateHabitPage() {
                 <textarea 
                     className="bg-white/20 rounded-lg w-full p-2 border border-white/50 text-white placeholder:text-gray-400"
                     placeholder="Descripción (Opcional)"
-                    {...register('description', {
-                        required: 'Selecciona una categoria'
-                    })}
+                    {...register('description')}
                 >
                 
                 </textarea>
@@ -75,7 +73,7 @@ export default function CreateHabitPage() {
                     defaultValue=""
                     className="bg-white/20 rounded-lg w-full p-2 border border-white/50 text-white placeholder:text-gray-400"
                     {...register('category', {
-                        required: 'La frecuencia es obligatoria'
+                        required: 'Selecciona una categoria'
                     })}
                 >
                     <option className="bg-zenith-yellow text-zenith-purple" value="" disabled>-- Selecciona una categoría --</option>
