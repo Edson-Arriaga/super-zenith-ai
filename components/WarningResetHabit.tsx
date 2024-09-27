@@ -11,11 +11,9 @@ type WarningResetHabitProps = {
 }
 
 export default function WarningResetHabit({habitId, setRefetch} : WarningResetHabitProps) {
-    
-    const utcDate = new Date().toISOString();
 
     const handleResetHabitClick = async () => {
-        const response = await resetHabit(habitId, utcDate) 
+        const response = await resetHabit(habitId) 
         toast.success(response.message)
         setRefetch(prev => !prev)
     }
