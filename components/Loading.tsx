@@ -12,7 +12,7 @@ const motivationalPhrases = [
   "Tus hábitos definen tu destino",
 ]
 
-export default function Component() {
+export default function Loading() {
   const [currentPhrase, setCurrentPhrase] = useState(0)
   const [progress, setProgress] = useState(0)
 

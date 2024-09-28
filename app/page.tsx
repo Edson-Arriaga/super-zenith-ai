@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default async function InitialPage() {
-    // 
+
     return (
         <main className="h-screen-without-header flex flex-col justify-center -mb-10 xl:p-10">
             <div className="flex items-center lg:mx-20 my-24 lg:my-16">

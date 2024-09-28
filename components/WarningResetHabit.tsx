@@ -3,28 +3,37 @@ import AppButton from "./AppButton";
 import { resetHabit } from "@/actions/reset-habit";
 import { Habit } from "@prisma/client";
 import { toast } from "react-toastify";
-import { Dispatch, SetStateAction } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import NotificationIcon from "./NotificationIcon";
+import Loading from "./Loading";
 
 type WarningResetHabitProps = {
     habitId : Habit['id'], 
-    setRefetch: Dispatch<SetStateAction<boolean>>
 }
 
-export default function WarningResetHabit({habitId, setRefetch} : WarningResetHabitProps) {
+export default function WarningResetHabit({habitId} : WarningResetHabitProps) {
+    const queryClient = useQueryClient()
 
-    const handleResetHabitClick = async () => {
-        const response = await resetHabit(habitId) 
-        toast.success(response.message)
-        setRefetch(prev => !prev)
-    }
-    
+    const { mutate : ResetHabitMutate, isPending } = useMutation({
+        mutationFn: () => resetHabit(habitId),
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({queryKey: ['habits']})
+            toast.success(data, { icon: () => <NotificationIcon />});
+        },
+        onError: (error) => {
+            toast.error(error.message)
+        }
+    })
+
+    if(isPending) return <Loading />
+
     return (
         <div className="bg-white/10 rounded-lg p-4 flex flex-col gap-5 items-center py-12">
             <p className="text-zenith-yellow font-black text-xl text-center">Haz superado el rango máximo de fallos para este hábito (5%)</p>
             <RiErrorWarningLine className="w-20 h-20 text-zenith-yellow" />
             <AppButton 
                 type="button"
-                onClick={handleResetHabitClick}
+                onClick={ResetHabitMutate}
             >Reiniciar Hábito</AppButton>
         </div>
     )

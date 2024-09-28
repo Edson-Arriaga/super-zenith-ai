@@ -13,33 +13,35 @@ export default function MonthCalendar({ habit }: MonthCalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const calendarData = useMemo(() => {
-    const startDate = new Date(habit.createdAt);
+    const startDay = new Date(habit.startDay);
+    const timeZoneOffset = new Date().getTimezoneOffset();
+    startDay.setMinutes(startDay.getMinutes() + timeZoneOffset);
+
     const plannedDates = new Set<string>();
-    const endDate = new Date(startDate);
+    let currentDate = new Date(startDay);
     let firstPlannedDate = null;
     let lastPlannedDate = null;
+    let plannedDaysCount = 0;
 
-    for (let i = 0; i < habit.plannedDays; i++) {
-      while (true) {
-        const isPlannedDay = habit.frequency === "DAILY" || 
-          (habit.frequency === "WEEKLY" && habit.weeklyDays.includes(endDate.getDay()));
-        
-        if (isPlannedDay) {
-          const dateString = endDate.toLocaleDateString('en-CA');
-          plannedDates.add(dateString);
-          if (!firstPlannedDate) firstPlannedDate = new Date(endDate);
-          lastPlannedDate = new Date(endDate);
-          break;
-        }
-        endDate.setDate(endDate.getDate() + 1);
+    while (plannedDaysCount < habit.plannedDays) {
+      const isPlannedDay = habit.frequency === "DAILY" || 
+        (habit.frequency === "WEEKLY" && habit.weeklyDays.includes(currentDate.getDay()));
+      
+      if (isPlannedDay) {
+        const dateString = currentDate.toISOString().split('T')[0];
+        plannedDates.add(dateString);
+        if (!firstPlannedDate) firstPlannedDate = new Date(currentDate);
+        lastPlannedDate = new Date(currentDate);
+        plannedDaysCount++;
       }
-      endDate.setDate(endDate.getDate() + 1);
+
+      currentDate.setDate(currentDate.getDate() + 1);
     }
 
     return {
       plannedDates: Array.from(plannedDates),
       completedDates: new Set(habit.completedDates),
-      failedDates: new Set(habit.failedDates),
+      failedDates: new Set(habit.failedDates), // Use habit.failedDates directly
       firstPlannedDate,
       lastPlannedDate,
     };
@@ -64,7 +66,7 @@ export default function MonthCalendar({ habit }: MonthCalendarProps) {
         isPlanned: calendarData.plannedDates.includes(dateString),
         isCompleted: calendarData.completedDates.has(dateString),
         isFailed: calendarData.failedDates.has(dateString),
-        isToday: date.toDateString() === today.toDateString(),
+        isToday: date.toLocaleDateString() === today.toLocaleDateString(),
       });
     }
 
@@ -122,6 +124,7 @@ export default function MonthCalendar({ habit }: MonthCalendarProps) {
             <BiSolidRightArrow size={24} />
           </button>
         </div>
+
         <p className="text-center text-sm text-zenith-yellow mb-2">{frequency_ES[habit.frequency]}</p>
         <div className="grid grid-cols-7 gap-1 place-items-center">
           {["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"].map(day => (

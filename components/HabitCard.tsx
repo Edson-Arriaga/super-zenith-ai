@@ -1,12 +1,15 @@
+"use client"
+
 import { toast } from "react-toastify";
 import { GoTrash } from "react-icons/go";
 import { RxCross2 } from "react-icons/rx";
 import { IoMdCheckmark } from "react-icons/io";
 import { CgMenuGridO } from "react-icons/cg";
 import { Habit } from "@prisma/client";
+import { motion } from "framer-motion";
 import MonthCalendar from "./MonthCalendar";
 import { updateDatesCompleted } from "@/actions/update-day-mompleted";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { categories_ES } from "@/src/locales/categories";
 import { CircularProgressbarWithChildren, buildStyles } from "react-circular-progressbar";
 import 'react-circular-progressbar/dist/styles.css';
@@ -17,67 +20,80 @@ import AppButton from "./AppButton";
 import { resetHabit } from "@/actions/reset-habit";
 import NotificationIcon from "./NotificationIcon";
 import Modal from "./Modal";
+import ConfettiDecor from "./ConfettiDecor";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Loading from "./Loading";
 
 type HabitCardProps = {
     habit: Habit, 
-    setRefetch: Dispatch<SetStateAction<boolean>>, 
-    setIsConfettiActive: Dispatch<SetStateAction<boolean>>
 }
 
-export default function HabitCard({habit, setRefetch, setIsConfettiActive} : HabitCardProps) {
-    
+export default function HabitCard({ habit } : HabitCardProps) {
+
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+    const [isConfettiActive, setIsConfettiActive] = useState(false)
 
     const weekDay = new Date().getDay()
     const today = new Date().toLocaleDateString('en-CA')
     const isTodayCompleted = habit.completedDates.includes(today)
     const isPlannedToday = habit.frequency === 'DAILY' || habit.weeklyDays.includes(weekDay);
 
-    const updateDatesCompletedHandleClick = async () => {
-        const res = await updateDatesCompleted(habit.id, habit)
-        if(res.success){
-            toast.success(res.message, { icon: () => <NotificationIcon />})
-            setRefetch(prev => !prev)
+    const queryClient = useQueryClient()
+
+    const { mutate : updateDatesCompletedMutate, isPending : isPendingUpdate } = useMutation({
+        mutationFn: () => updateDatesCompleted(habit),
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({queryKey: ['habits']})
+            toast.success(data, { icon: () => <NotificationIcon />})
             if(!isTodayCompleted) setIsConfettiActive(true)
-        } else {
-            toast.error(res.message)
-        }  
-    }
-
-    const deleteHabitHandleClick = async () => {
-        const res = await deleteHabit(habit.id)
-        if(res.success){
-            toast.success(res.message, { icon: () => <NotificationIcon />});
-            setRefetch(prev => !prev)
-        } else {
-            toast.error(res.message)
+        },
+        onError: (error) => {
+            toast.error(error.message)
         }
-    }
+    })
 
-    const ResetHabithandleClick = async () => {
-        const res = await resetHabit(habit.id)
-        if(res.success){
-            toast.success(res.message, { icon: () => <NotificationIcon />});
-            setRefetch(prev => !prev)
-        } else {
-            toast.error(res.message)
+    const { mutate : deleteHabitMutate, isPending : isPendingDelete } = useMutation({
+        mutationFn: () => deleteHabit(habit.id),
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({queryKey: ['habits']})
+            toast.success(data, { icon: () => <NotificationIcon />});
+        },
+        onError: (error) => {
+            toast.error(error.message)
         }
-    }
+    })
+
+    const { mutate : ResetHabitMutate, isPending : isPendingReset} = useMutation({
+        mutationFn: () => resetHabit(habit.id),
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({queryKey: ['habits']})
+            toast.success(data, { icon: () => <NotificationIcon />});
+        },
+        onError: (error) => {
+            toast.error(error.message)
+        }
+    })
+
+    if(isPendingUpdate || isPendingDelete || isPendingReset) return <Loading />;
 
     return (
         <>
-            <div
-            className={`
-                ${!isPlannedToday && 'opacity-50 scale-95 lg:hover:scale-[0.98]'}
-                ${isTodayCompleted ? 'border-green-600 bg-green-600/20' : 'border-zenith-yellow'}
-                ${habit.completed && 'border-zenith-yellow bg-yellow-600/90'}
-                text-white p-5 rounded-lg transition-all lg:hover:scale-[1.02] ease border-x-2`}
+            <motion.li
+                key={habit.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1 * 0.1, duration: 0.5 }}
+                className={`
+                    ${!isPlannedToday && 'opacity-50 scale-95 lg:hover:scale-[0.98]'}
+                    ${isTodayCompleted ? 'border-green-600 bg-green-600/20' : 'border-zenith-yellow'}
+                    ${habit.completed && 'border-zenith-yellow bg-yellow-600/90'}
+                    text-white p-5 rounded-lg transition-all lg:hover:scale-[1.02] ease border-x-2`}
             >
                 <div className="flex gap-3 items-center">
                     <h1 className={`${habit.completed && 'text-zenith-yellow'} flex-grow capitalize text-2xl font-black`}>{habit.title}</h1>
                     <button 
                         className="px-4 py-2 bg-white/15 hover:bg-white/40 transition-colors rounded-lg disabled:cursor-not-allowed"
-                        onClick={updateDatesCompletedHandleClick}
+                        onClick={() => updateDatesCompletedMutate()}
                         disabled={!isPlannedToday || habit.completed}
                     >
                         {isTodayCompleted ? (
@@ -117,20 +133,20 @@ export default function HabitCard({habit, setRefetch, setIsConfettiActive} : Hab
                 </div>
             
                 {habit.forcedRestart ? (
-                    <WarningResetHabit habitId={habit.id} setRefetch={setRefetch} />
+                    <WarningResetHabit habitId={habit.id} />
                 ) : (
                     <>
                         {habit.completed ? (
                             <div className="space-y-5">
                                 <p className="uppercase text-2xl text-center text-zenith-yellow mt-5 font-black">¡FELICIDADES! Has completado este hábito.</p>
-                                <AppButton onClick={ResetHabithandleClick} type="button">Volver a comenzar este hábito</AppButton>
+                                <AppButton onClick={ResetHabitMutate} type="button">Volver a comenzar este hábito</AppButton>
                             </div>
                         ) : (
                             <MonthCalendar habit={habit} />
                         )}
                     </>
                 )}
-            </div>
+            </motion.li>
 
             <Modal isModalOpen={isDeleteModalOpen} setIsModalOpen={setIsDeleteModalOpen}>
                 <div className="flex flex-col gap-5 w-full">
@@ -139,13 +155,14 @@ export default function HabitCard({habit, setRefetch, setIsConfettiActive} : Hab
                         type="button" 
                         onClick={() => {
                             setIsDeleteModalOpen(false)
-                            deleteHabitHandleClick()
+                            deleteHabitMutate()
                         }}
                     >
                         Eliminar
                     </AppButton>
                 </div>
             </Modal>
+            {isConfettiActive && <ConfettiDecor isConfettiActive={isConfettiActive} setIsConfettiActive={setIsConfettiActive}/>}
         </>
     )
 }

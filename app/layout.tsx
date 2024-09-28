@@ -7,6 +7,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { esES } from '@clerk/localizations';
 import Aside from "@/components/Aside";
 import Header from "@/components/Header";
+import QueryClientProvider from "@/components/QueryClientProvider";
 
 const nunito = Nunito({
   weight: ['300', '500', '700'], 
@@ -23,7 +24,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-    
     return (
         <ClerkProvider localization={esES} appearance={{
           variables: {
@@ -40,24 +40,26 @@ export default function RootLayout({
             },
           }
         }}>
-          <html lang="en" className="overflow-x-hidden">
-            <body className={`${nunito.className} antialiased flex flex-col lg:flex-row bg-zenith-dark-purple`}>
+            <html lang="en" className="overflow-x-hidden">
+              <body className={`${nunito.className} antialiased flex flex-col lg:flex-row bg-zenith-dark-purple`}>
 
-                <Header />
+                  <Header />
 
-                <Aside />
-                
-                <div className="flex-grow lg:ml-24 px-3 sm:px-10 md:px-5 lg:px-14 xl:px-10 mb-10">
-                    {children}
-                </div>
-                
-                <ToastContainer 
-                    position="top-center"
-                    pauseOnHover={false}
-                    // rtl
-                />
-            </body>
-          </html>
+                  <Aside />
+                  
+                  <div className="flex-grow lg:ml-24 px-3 sm:px-10 md:px-5 lg:px-14 xl:px-10 mb-10">
+                    <QueryClientProvider>
+                      {children}
+                    </QueryClientProvider>
+                  </div>
+                  
+                  <ToastContainer 
+                      position="top-center"
+                      pauseOnHover={false}
+                      // rtl
+                  />
+              </body>
+            </html>  
         </ClerkProvider>
     );
 }
