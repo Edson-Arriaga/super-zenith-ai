@@ -18,7 +18,7 @@ export default function MonthCalendar({ habit }: MonthCalendarProps) {
     startDay.setMinutes(startDay.getMinutes() + timeZoneOffset);
 
     const plannedDates = new Set<string>();
-    let currentDate = new Date(startDay);
+    const currentDate = new Date(startDay);
     let firstPlannedDate = null;
     let lastPlannedDate = null;
     let plannedDaysCount = 0;
