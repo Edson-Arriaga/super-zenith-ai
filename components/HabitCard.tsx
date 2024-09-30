@@ -6,7 +6,6 @@ import { RxCross2 } from "react-icons/rx";
 import { IoMdCheckmark } from "react-icons/io";
 import { CgMenuGridO } from "react-icons/cg";
 import { Habit } from "@prisma/client";
-import { motion } from "framer-motion";
 import MonthCalendar from "./MonthCalendar";
 import { updateDatesCompleted } from "@/actions/update-day-mompleted";
 import { useState } from "react";
@@ -37,6 +36,7 @@ export default function HabitCard({ habit } : HabitCardProps) {
     const today = new Date().toLocaleDateString('en-CA')
     const isTodayCompleted = habit.completedDates.includes(today)
     const isPlannedToday = habit.frequency === 'DAILY' || habit.weeklyDays.includes(weekDay);
+    console.log(isPlannedToday)
 
     const queryClient = useQueryClient()
 
@@ -78,16 +78,11 @@ export default function HabitCard({ habit } : HabitCardProps) {
 
     return (
         <>
-            <motion.li
-                key={habit.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1 * 0.1, duration: 0.5 }}
-                className={`
-                    ${!isPlannedToday && 'opacity-50 scale-95 lg:hover:scale-[0.98]'}
-                    ${isTodayCompleted ? 'border-green-600 bg-green-600/20' : 'border-zenith-yellow'}
-                    ${habit.completed && 'border-zenith-yellow bg-yellow-600/90'}
-                    text-white p-5 rounded-lg transition-all lg:hover:scale-[1.02] ease border-x-2`}
+            <div className={`
+                ${!isPlannedToday && 'opacity-50 scale-95 lg:hover:scale-100'}
+                ${isTodayCompleted ? 'border-green-600 bg-green-600/20' : 'border-zenith-yellow'}
+                ${habit.completed && 'border-zenith-yellow bg-yellow-600/90'}
+                text-white p-5 rounded-lg transition-all lg:hover:scale-[1.02] ease border-x-2`}
             >
                 <div className="flex gap-3 items-center">
                     <h1 className={`${habit.completed && 'text-zenith-yellow'} flex-grow capitalize text-2xl font-black`}>{habit.title}</h1>
@@ -146,7 +141,8 @@ export default function HabitCard({ habit } : HabitCardProps) {
                         )}
                     </>
                 )}
-            </motion.li>
+            </div>
+            
 
             <Modal isModalOpen={isDeleteModalOpen} setIsModalOpen={setIsDeleteModalOpen}>
                 <div className="flex flex-col gap-5 w-full">

@@ -110,6 +110,6 @@ export async function getHabits() {
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     });
 
-    console.log(newHabits)
+    //console.log(newHabits)
     return newHabits
 }

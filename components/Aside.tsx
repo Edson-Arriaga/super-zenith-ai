@@ -11,7 +11,7 @@ import PropOver from "./PropOver";
 
 export default function Aside() {
     
-    const [isPropOverActive, setIsPropOverActive] = useState({id: 0})
+    const [propOverActive, setPropOverActive] = useState(0)
     
     return (
         <>
@@ -26,31 +26,31 @@ export default function Aside() {
                         <Link
                             className="relative"
                             href='/habit-tracker'
-                            onMouseEnter={() => setIsPropOverActive({id: 1})}
-                            onMouseLeave={() => setIsPropOverActive({id: 0})}
+                            onMouseEnter={() => setPropOverActive(1)}
+                            onMouseLeave={() => setPropOverActive(0)}
                         >
                             <HiCalendarDays className="w-12 h-12 hover:scale-105 hover:cursor-pointer text-yellow-400 border-x-2 border-zenith-yellow p-1 rounded-lg hover:text-zenith-yellow hover:bg-white/10 transition-all" />
-                            {isPropOverActive.id === 1 && <PropOver>Habit Tracker</PropOver>}
+                            {propOverActive === 1 && <PropOver>Habit Tracker</PropOver>}
                         </Link>
 
                         <Link
                             className="relative"
                             href=''
-                            onMouseEnter={() => setIsPropOverActive({id: 2})}
-                            onMouseLeave={() => setIsPropOverActive({id: 0})}
+                            onMouseEnter={() => setPropOverActive(2)}
+                            onMouseLeave={() => setPropOverActive(0)}
                             >
                             <PiListChecksBold className="w-12 h-12 hover:scale-105 hover:cursor-pointer text-yellow-400 border-x-2 border-zenith-yellow p-1 rounded-lg hover:text-zenith-yellow hover:bg-white/10 transition-all" />
-                            {isPropOverActive.id === 2 && <PropOver>Proximamente...</PropOver>}
+                            {propOverActive === 2 && <PropOver>Proximamente...</PropOver>}
                         </Link>
 
                         <Link
                             className="relative"
                             href=''
-                            onMouseEnter={() => setIsPropOverActive({id: 3})}
-                            onMouseLeave={() => setIsPropOverActive({id: 0})}
+                            onMouseEnter={() => setPropOverActive(3)}
+                            onMouseLeave={() => setPropOverActive(0)}
                             >
                             <BiSolidMedal className="w-12 h-12 hover:scale-105 hover:cursor-pointer text-yellow-400 border-x-2 border-zenith-yellow p-1 rounded-lg hover:text-zenith-yellow hover:bg-white/10 transition-all" />
-                            {isPropOverActive.id === 3 && <PropOver>Proximamente...</PropOver>}
+                            {propOverActive === 3 && <PropOver>Proximamente...</PropOver>}
                         </Link>
                     </nav>
                     

@@ -13,7 +13,9 @@ export default function Modal({children, isModalOpen, setIsModalOpen} : ModalPro
     useEffect(() => {
         if(isModalOpen){
             document.documentElement.style.overflow = 'hidden'
-            document.body.style.paddingRight = '15px'
+            if(window.innerWidth >= 1028){
+                document.body.style.paddingRight = '15px'
+            }
         } 
 
         return () => {

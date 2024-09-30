@@ -8,17 +8,18 @@ import PageTitle from "@/components/PageTitle";
 import AppButton from "@/components/AppButton";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "@/components/Loading";
+import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 
 export default function HabitTrackerPage() {
 
-    const { data , isLoading, isError, error } = useQuery({
+    const { data , isLoading, isError } = useQuery({
         queryKey: ['habits'],
-        queryFn: () => getHabits(),
-        staleTime: 1000 * 60 * 60 * (24 - new Date().getHours())
+        queryFn: () => getHabits()
     })
     
-    if (isLoading) return <Loading />;
-    if (isError) return console.log(error.message.toString());
+    if (isLoading) return <Loading />
+    if (isError) toast.error('Error al obtener los hábitos')
     
     if(data) return (
         <main>
@@ -42,11 +43,18 @@ export default function HabitTrackerPage() {
 
                 <section className="mt-10">
                     <ul className="grid gap-5 md:grid-cols-2 md:gap-10 lg:gap-5 xl:gap-8 xl:grid-cols-3">
-                        {data.map(habit => (
-                            <HabitCard
+                        {data.map((habit, i) => (
+                            <motion.li
                                 key={habit.id}
-                                habit={habit}
-                            />
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: i * 0.1, duration: 0.5 }}
+                            >
+                                <HabitCard
+                                    key={habit.id}
+                                    habit={habit}
+                                />
+                            </motion.li>
                         ))}
                     </ul>
                 </section>
