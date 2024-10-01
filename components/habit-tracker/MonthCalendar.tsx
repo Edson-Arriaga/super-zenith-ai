@@ -14,7 +14,7 @@ export default function MonthCalendar({ habit }: MonthCalendarProps) {
 
   // 1. Cálculo de las fechas planificadas, completadas y fallidas
   const calendarData = useMemo(() => {
-    // Obtener la fecha de inicio del hábito ajustada a la zona horaria local
+    // Obtener la fecha de inicio del hábito
     const startDay = new Date(habit.startDay);
 
     const plannedDates = new Set<string>();
@@ -26,11 +26,11 @@ export default function MonthCalendar({ habit }: MonthCalendarProps) {
     // Crear las fechas planificadas según la frecuencia del hábito
     while (plannedDaysCount < habit.plannedDays) {
       const isPlannedDay = habit.frequency === "DAILY" || 
-        (habit.frequency === "WEEKLY" && habit.weeklyDays.includes(currentDate.getDay()));
+        (habit.frequency === "WEEKLY" && habit.weeklyDays.includes(currentDate.getUTCDay()));
 
       if (isPlannedDay) {
-        // Generar la fecha en formato local 'en-CA' (ISO)
-        const dateString = currentDate.toLocaleDateString('en-CA');
+        // Generar la fecha en formato ISO
+        const dateString = currentDate.toISOString().split('T')[0];
         plannedDates.add(dateString);
  
         if (!firstPlannedDate) firstPlannedDate = new Date(currentDate);
@@ -39,13 +39,13 @@ export default function MonthCalendar({ habit }: MonthCalendarProps) {
       }
 
       // Avanzar al siguiente día
-      currentDate.setDate(currentDate.getDate() + 1);
+      currentDate.setUTCDate(currentDate.getUTCDate() + 1);
     }
 
     return {
       plannedDates: Array.from(plannedDates),
-      completedDates: new Set(habit.completedDates),
-      failedDates: new Set(habit.failedDates),
+      completedDates: new Set(habit.completedDates.map(date => date.toISOString().split('T')[0])),
+      failedDates: new Set(habit.failedDates.map(date => date.toISOString().split('T')[0])),
       firstPlannedDate,
       lastPlannedDate,
     };
@@ -53,20 +53,20 @@ export default function MonthCalendar({ habit }: MonthCalendarProps) {
 
   // 2. Cálculo de los días del mes actual
   const monthDays = useMemo(() => {
-    const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-    const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+    const firstDay = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), 1));
+    const lastDay = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth() + 1, 0));
     const days = [];
     const today = new Date();
 
     // Rellenar con `null` los días hasta el primer día del mes
-    for (let i = 0; i < firstDay.getDay(); i++) {
+    for (let i = 0; i < firstDay.getUTCDay(); i++) {
       days.push(null);
     }
 
     // Rellenar con información cada día del mes
-    for (let i = 1; i <= lastDay.getDate(); i++) {
-      const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
-      const dateString = date.toLocaleDateString('en-CA');
+    for (let i = 1; i <= lastDay.getUTCDate(); i++) {
+      const date = new Date(Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), i));
+      const dateString = date.toISOString().split('T')[0];
       
       days.push({
         date: i,
@@ -74,7 +74,7 @@ export default function MonthCalendar({ habit }: MonthCalendarProps) {
         isPlanned: calendarData.plannedDates.includes(dateString),
         isCompleted: calendarData.completedDates.has(dateString),
         isFailed: calendarData.failedDates.has(dateString),
-        isToday: date.toLocaleDateString() === today.toLocaleDateString(),
+        isToday: date.toISOString().split('T')[0] === today.toISOString().split('T')[0],
       });
     }
 
@@ -85,7 +85,7 @@ export default function MonthCalendar({ habit }: MonthCalendarProps) {
   const changeMonth = (increment: number) => {
     setCurrentDate(prevDate => {
       const newDate = new Date(prevDate);
-      newDate.setMonth(newDate.getMonth() + increment);
+      newDate.setUTCMonth(newDate.getUTCMonth() + increment);
       return newDate;
     });
   };
@@ -93,23 +93,23 @@ export default function MonthCalendar({ habit }: MonthCalendarProps) {
   // 4. Formateo de las fechas para mostrar en el rango (ejemplo: "3 ene.")
   const formatDate = (date: Date | null) => {
     if (!date) return "";
-    return date.toLocaleDateString("es-ES", { day: "numeric", month: "short" }).replace(".", "");
+    return date.toLocaleDateString("es-ES", { day: "numeric", month: "short", timeZone: 'UTC' }).replace(".", "");
   };
 
   // 5. Comprobación si el mes actual es el primer o último del rango planificado
   const isFirstMonth = useMemo(() => {
     if (!calendarData.firstPlannedDate) return true;
     return (
-      currentDate.getFullYear() === calendarData.firstPlannedDate.getFullYear() &&
-      currentDate.getMonth() === calendarData.firstPlannedDate.getMonth()
+      currentDate.getUTCFullYear() === calendarData.firstPlannedDate.getUTCFullYear() &&
+      currentDate.getUTCMonth() === calendarData.firstPlannedDate.getUTCMonth()
     );
   }, [currentDate, calendarData.firstPlannedDate]);
 
   const isLastMonth = useMemo(() => {
     if (!calendarData.lastPlannedDate) return true;
     return (
-      currentDate.getFullYear() === calendarData.lastPlannedDate.getFullYear() &&
-      currentDate.getMonth() === calendarData.lastPlannedDate.getMonth()
+      currentDate.getUTCFullYear() === calendarData.lastPlannedDate.getUTCFullYear() &&
+      currentDate.getUTCMonth() === calendarData.lastPlannedDate.getUTCMonth()
     );
   }, [currentDate, calendarData.lastPlannedDate]);
 
@@ -127,7 +127,7 @@ export default function MonthCalendar({ habit }: MonthCalendarProps) {
             <BiSolidLeftArrow size={24} />
           </button>
           <h3 className="text-lg font-semibold text-zenith-yellow uppercase">
-            {currentDate.toLocaleDateString("es-ES", { month: "long", year: "numeric" })}
+            {currentDate.toLocaleDateString("es-ES", { month: "long", year: "numeric", timeZone: 'UTC' })}
           </h3>
           <button 
             onClick={() => changeMonth(1)} 

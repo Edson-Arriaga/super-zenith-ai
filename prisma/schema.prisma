@@ -28,9 +28,9 @@ model Habit {
   frequency Frequency
   level Int @default(1)
   weeklyDays Int[]
-  completedDates String[]
-  failedDates String[]
-  startDay String
+  completedDates DateTime[]
+  failedDates DateTime[]
+  startDay DateTime @default(now())
   longestStreak Int @default(0)
   plannedDays Int @default(66)
   forcedRestart Boolean @default(false)

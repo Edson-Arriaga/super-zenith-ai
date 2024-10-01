@@ -23,7 +23,7 @@ export async function getHabits() {
 
 
     const today = new Date()
-    const todayDateString = today.toLocaleDateString('en-CA')
+    const todayString = today.toLocaleDateString('en-CA');
     
     await Promise.all(
         habits.map(async habit => {
@@ -43,25 +43,22 @@ export async function getHabits() {
                 const endDate = new Date(habit.startDay)
                 
                 let dateAux = new Date(startDate)
-                console.log(startDate)
-                console.log(endDate)
                 
                 while(dateAux >= endDate){
-                    const isoDateString = dateAux.toLocaleDateString('en-CA')
                     /**
                      * Break because if it coincides with a failed day,
                      * the process of calculating the failed days prior to that day
                      * will have already been done before.
                      */
-                    if(failedDates.includes(isoDateString)) break
+                    if(failedDates.some(date => date.toLocaleDateString('en-CA') === dateAux.toLocaleDateString('en-CA'))) break
 
                     const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(dateAux.getDay()))
                     
                     if ( isPlanned
-                        && (!habit.completedDates.includes(isoDateString)) //Verify if the Date isn't in completedDates
+                        && (!habit.completedDates.some(date => date.toLocaleDateString('en-CA') === dateAux.toLocaleDateString('en-CA'))) //Verify if the Date isn't in completedDates
                         && (failedDates.length < Math.floor(habit.plannedDays * 0.05)) //Verify if the error has less than 5% error
                     ) {
-                        failedDates.push(isoDateString)
+                        failedDates.push(dateAux)
                     }
 
                     dateAux.setDate(dateAux.getDate() - 1);
@@ -96,8 +93,8 @@ export async function getHabits() {
         const isPlannedTodayA = a.frequency === 'DAILY' || a.weeklyDays.includes(weekDay)
         const isPlannedTodayB = b.frequency === 'DAILY' || b.weeklyDays.includes(weekDay)
 
-        const isCompletedA = a.completedDates.includes(todayDateString)
-        const isCompletedB = b.completedDates.includes(todayDateString)
+        const isCompletedA = a.completedDates.some(date => date.toLocaleDateString('en-CA') === todayString)
+        const isCompletedB = b.completedDates.some(date => date.toLocaleDateString('en-CA') === todayString)
 
         if (isPlannedTodayA && !isPlannedTodayB) return -1
         if (!isPlannedTodayA && isPlannedTodayB) return 1

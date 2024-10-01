@@ -34,10 +34,10 @@ export default function HabitCard({ habit } : HabitCardProps) {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
     const [isHabitDetailsModalOpen, setHabitDetailsModalOpen] = useState(false)
 
-    const weekDay = new Date().getDay()
-    const today = new Date().toLocaleDateString('en-CA')
-    const isTodayCompleted = habit.completedDates.includes(today)
-    const isPlannedToday = habit.frequency === 'DAILY' || habit.weeklyDays.includes(weekDay);
+    const today = new Date()
+    const isTodayCompleted = habit.completedDates.some(date => date.getDate() === today.getDate())
+
+    const isPlannedToday = habit.frequency === 'DAILY' || habit.weeklyDays.includes(today.getDay());
 
     const queryClient = useQueryClient()
 

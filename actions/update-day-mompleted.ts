@@ -7,10 +7,11 @@ export async function updateDatesCompleted(habit: Habit){
     let uppdatedDates : Habit['completedDates'] = []
     let message : string
 
-    const today = new Date().toLocaleDateString('en-CA')
+    const today = new Date()
+    const todayString = today.toLocaleDateString('en-CA')
     
-    if(habit.completedDates.includes(today)){
-        uppdatedDates = habit.completedDates.filter(date => date !== today)
+    if(habit.completedDates.some(date => date.getDate() === today.getDate())){
+        uppdatedDates = habit.completedDates.filter(date => date.toLocaleDateString('en-CA') !== todayString)
         message = '¡No te desanimes! ¡Tu Puedes!'
     } else {
         uppdatedDates = [...habit.completedDates, today]
