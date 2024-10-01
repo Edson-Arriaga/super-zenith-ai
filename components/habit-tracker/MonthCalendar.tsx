@@ -16,8 +16,6 @@ export default function MonthCalendar({ habit }: MonthCalendarProps) {
   const calendarData = useMemo(() => {
     // Obtener la fecha de inicio del hábito ajustada a la zona horaria local
     const startDay = new Date(habit.startDay);
-    const timeZoneOffset = new Date().getTimezoneOffset();
-    startDay.setMinutes(startDay.getMinutes() + timeZoneOffset);
 
     const plannedDates = new Set<string>();
     const currentDate = new Date(startDay);

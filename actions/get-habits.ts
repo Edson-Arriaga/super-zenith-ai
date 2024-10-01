@@ -37,17 +37,15 @@ export async function getHabits() {
 
             if(!habit.completed || !habit.forcedRestart){
                 let failedDates = [...habit.failedDates]
-
                 const startDate = new Date(today)
-                startDate.setHours(-24,0,0,0)
-
-                const timeZoneOffset = today.getTimezoneOffset()
-
+                startDate.setDate(startDate.getDate() - 1)
+                
                 const endDate = new Date(habit.startDay)
-                endDate.setMinutes(endDate.getMinutes() + timeZoneOffset)
-
+                
                 let dateAux = new Date(startDate)
-
+                console.log(startDate)
+                console.log(endDate)
+                
                 while(dateAux >= endDate){
                     const isoDateString = dateAux.toLocaleDateString('en-CA')
                     /**

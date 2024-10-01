@@ -9,7 +9,7 @@ export async function resetHabit(habitId : Habit['id']){
             id: habitId
         },
         data: {
-            startDay: new Date().toISOString().split('T')[0],
+            startDay: new Date().toISOString(),
             completedDates: [],
             forcedRestart: false,
             failedDates: [],

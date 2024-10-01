@@ -29,14 +29,15 @@ type HabitCardProps = {
 
 export default function HabitCard({ habit } : HabitCardProps) {
 
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
     const [isConfettiActive, setIsConfettiActive] = useState(false)
+
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+    const [isHabitDetailsModalOpen, setHabitDetailsModalOpen] = useState(false)
 
     const weekDay = new Date().getDay()
     const today = new Date().toLocaleDateString('en-CA')
     const isTodayCompleted = habit.completedDates.includes(today)
     const isPlannedToday = habit.frequency === 'DAILY' || habit.weeklyDays.includes(weekDay);
-    console.log(isPlannedToday)
 
     const queryClient = useQueryClient()
 
@@ -78,39 +79,53 @@ export default function HabitCard({ habit } : HabitCardProps) {
                 ${habit.completed && 'border-zenith-yellow bg-yellow-600/90'}
                 text-white p-5 rounded-lg transition-all lg:hover:scale-[1.02] ease border-x-2`}
             >
-                <div className="flex gap-3 items-center">
-                    <h1 className={`${habit.completed && 'text-zenith-yellow'} flex-grow capitalize text-2xl font-black`}>{habit.title}</h1>
-                    <button 
-                        className="px-4 py-2 bg-white/15 hover:bg-white/40 transition-colors rounded-lg disabled:cursor-not-allowed"
-                        onClick={() => updateDatesCompletedMutate()}
-                        disabled={!isPlannedToday || habit.completed}
-                    >
-                        {isTodayCompleted ? (
-                            <RxCross2 className="w-5 h-5"/>
-                        ) : (
-                            <IoMdCheckmark className="w-5 h-5" />
-                        )}
-                    </button>
-                    <button 
-                        className="px-4 py-2 bg-red-500/50 hover:bg-red-500/80 transition-colors rounded-lg"
-                        onClick={() => setIsDeleteModalOpen(true)}
-                    >
-                        <GoTrash className="w-5 h-5" />
-                    </button>
-                </div>
-                <div className="flex justify-between items-center mt-3">
-                    <div className="flex items-center gap-4">
-                
-                        {categoryIcons[habit.category]}
-                        
-                        <p className="text-zenith-yellow font-black">{categories_ES[habit.category]}</p>
-                    </div>
-                    <button 
-                            className="px-4 py-2 bg-white/15 hover:bg-white/40 transition-colors rounded-lg"
-                        >
-                            <CgMenuGridO className="w-5 h-5"/>
-                    </button>
-                </div>
+
+                <section className="grid grid-cols-6">
+                    <article className="space-y-5 col-span-4">
+                        <h1 className={`${habit.completed && 'text-zenith-yellow'} flex-grow capitalize text-2xl font-black`}>{habit.title}</h1>
+                        <div className="flex items-center gap-4">
+                            {categoryIcons[habit.category]}
+                            
+                            <p className="text-zenith-yellow font-black">{categories_ES[habit.category]}</p>
+                        </div>
+                    </article>
+
+                    <article className="col-span-2 text-end ml-auto">
+                        <div className="grid grid-cols-2 gap-2 w-28">
+                            <div className="text-end">
+                                <button
+                                    className="px-4 py-2 bg-white/15 hover:bg-white/40 transition-colors rounded-lg disabled:cursor-not-allowed "
+                                    onClick={() => updateDatesCompletedMutate()}
+                                    disabled={!isPlannedToday || habit.completed}
+                                >
+                                    {isTodayCompleted ? (
+                                        <RxCross2 className="w-5 h-5"/>
+                                    ) : (
+                                        <IoMdCheckmark className="w-5 h-5" />
+                                    )}
+                                </button>
+                            </div>
+
+                            <div className="text-end">
+                                <button
+                                    className="px-4 py-2 bg-red-500/50 hover:bg-red-500/80 transition-colors rounded-lg"
+                                    onClick={() => setIsDeleteModalOpen(true)}
+                                >
+                                <GoTrash className="w-5 h-5" />
+                                </button>
+                            </div>
+
+                            <div className="col-start-2 text-end">
+                                <button
+                                    className="px-4 py-2 bg-white/15 hover:bg-white/40 transition-colors rounded-lg"
+                                    onClick={() => setHabitDetailsModalOpen(true)}
+                                >
+                                    <CgMenuGridO className="w-5 h-5"/>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </section>
                         
                 <div className="w-36 mx-auto pb-5 flex-grow">
                     <CircularProgressbarWithChildren value={habit.completedDates.length} maxValue={habit.plannedDays} styles={buildStyles({pathColor: '#fcc919', trailColor: '#380e6a'})}>
@@ -137,7 +152,6 @@ export default function HabitCard({ habit } : HabitCardProps) {
                 )}
             </div>
             
-
             <Modal isModalOpen={isDeleteModalOpen} setIsModalOpen={setIsDeleteModalOpen}>
                 <div className="flex flex-col gap-5 w-full">
                     <p className="text-zenith-yellow font-bold pr-6 text-xl">¿Estás seguro que quieres eliminar el hábito?</p>
@@ -152,6 +166,24 @@ export default function HabitCard({ habit } : HabitCardProps) {
                     </AppButton>
                 </div>
             </Modal>
+
+            <Modal isModalOpen={isHabitDetailsModalOpen} setIsModalOpen={setHabitDetailsModalOpen}>
+                <div className="space-y-5">
+                    <h1 className="font-bold text-white capitalize text-xl">{habit.title}</h1>
+                    <p className="text-zenith-yellow">{habit.description}</p>
+                    <div className="bg-black/30 p-4 rounded-lg space-y-3">
+                        <p className="text-center text-red-600 font-black text-lg">Errores permitidos restantes: <span className="text-xl translate-y-5">{Math.floor(habit.plannedDays * 0.05) - habit.failedDates.length}</span></p>
+                        <div className="w-24 mx-auto">
+                            <CircularProgressbarWithChildren value={habit.failedDates.length} maxValue={Math.floor(habit.plannedDays * 0.05)} styles={buildStyles({pathColor: '#dc2626', trailColor: '#28094f'})}>
+                                <div className="text-red-600 text-2xl">
+                                    <strong>{habit.failedDates.length} / {Math.floor(habit.plannedDays * 0.05)}</strong>
+                                </div>
+                            </CircularProgressbarWithChildren>
+                        </div>
+                    </div>
+                </div>
+            </Modal>
+
             {isConfettiActive && <ConfettiDecor isConfettiActive={isConfettiActive} setIsConfettiActive={setIsConfettiActive}/>}
         </>
     )

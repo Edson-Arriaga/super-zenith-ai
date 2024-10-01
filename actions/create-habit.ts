@@ -20,7 +20,7 @@ export async function createHabit(data : HabitFormData){
     await prisma.habit.create({
         data: {
             ...data,
-            startDay: new Date().toISOString().split('T')[0],
+            startDay: new Date().toISOString(),
             userId: user.id
         }
     })

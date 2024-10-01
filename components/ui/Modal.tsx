@@ -32,7 +32,7 @@ export default function Modal({children, isModalOpen, setIsModalOpen} : ModalPro
             onClick={() => setIsModalOpen(false)}
         >
             <motion.div 
-                className="p-6 rounded-md shadow-md w-96 bg-zenith-dark-purple relative mx-3"
+                className="p-6 rounded-xl shadow-md w-96 bg-zenith-dark-purple relative mx-3"
                 onClick={e => e.stopPropagation()}
                 initial={{scale: 0.8, opacity: 0}}
                 animate={{scale: 1, opacity: 1}}
