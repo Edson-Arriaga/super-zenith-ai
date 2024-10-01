@@ -14,14 +14,14 @@ import { CircularProgressbarWithChildren, buildStyles } from "react-circular-pro
 import 'react-circular-progressbar/dist/styles.css';
 import { categoryIcons } from "@/src/dictionaries/categoryIcons";
 import { deleteHabit } from "@/actions/delete-habit";
-import WarningResetHabit from "./WarningResetHabit";
-import AppButton from "./AppButton";
+import AppButton from "../ui/AppButton";
 import { resetHabit } from "@/actions/reset-habit";
-import NotificationIcon from "./NotificationIcon";
-import Modal from "./Modal";
-import ConfettiDecor from "./ConfettiDecor";
+import NotificationIcon from "../ui/NotificationIcon";
+import Modal from "../ui/Modal";
+import ConfettiDecor from "../ui/ConfettiDecor";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import Loading from "./Loading";
+import Loading from "../ui/Loading";
+import WarningResetHabit from "./WarningResetHabit";
 
 type HabitCardProps = {
     habit: Habit, 
@@ -47,31 +47,25 @@ export default function HabitCard({ habit } : HabitCardProps) {
             toast.success(data, { icon: () => <NotificationIcon />})
             if(!isTodayCompleted) setIsConfettiActive(true)
         },
-        onError: (error) => {
-            toast.error(error.message)
-        }
+        onError: () => toast.error('Error Al Actualizar El Hábito')
     })
 
     const { mutate : deleteHabitMutate, isPending : isPendingDelete } = useMutation({
         mutationFn: () => deleteHabit(habit.id),
         onSuccess: (data) => {
             queryClient.invalidateQueries({queryKey: ['habits']})
-            toast.success(data, { icon: () => <NotificationIcon />});
+            toast.success(data, { icon: () => <NotificationIcon />})
         },
-        onError: (error) => {
-            toast.error(error.message)
-        }
+        onError: () => toast.error('Error Al Eliminar El Hábito')
     })
 
     const { mutate : ResetHabitMutate, isPending : isPendingReset} = useMutation({
         mutationFn: () => resetHabit(habit.id),
         onSuccess: (data) => {
             queryClient.invalidateQueries({queryKey: ['habits']})
-            toast.success(data, { icon: () => <NotificationIcon />});
+            toast.success(data, { icon: () => <NotificationIcon />})
         },
-        onError: (error) => {
-            toast.error(error.message)
-        }
+        onError: () => toast.error('Error Al Reiniciar El Hábito')
     })
 
     if(isPendingUpdate || isPendingDelete || isPendingReset) return <Loading />;

@@ -1,11 +1,13 @@
 import { RiErrorWarningLine } from "react-icons/ri";
-import AppButton from "./AppButton";
+
 import { resetHabit } from "@/actions/reset-habit";
 import { Habit } from "@prisma/client";
 import { toast } from "react-toastify";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import NotificationIcon from "./NotificationIcon";
-import Loading from "./Loading";
+import NotificationIcon from "../ui/NotificationIcon";
+import Loading from "../ui/Loading";
+import AppButton from "../ui/AppButton";
+
 
 type WarningResetHabitProps = {
     habitId : Habit['id'], 
@@ -31,7 +33,7 @@ export default function WarningResetHabit({habitId} : WarningResetHabitProps) {
         <div className="bg-white/10 rounded-lg p-4 flex flex-col gap-5 items-center py-12">
             <p className="text-zenith-yellow font-black text-xl text-center">Haz superado el rango máximo de fallos para este hábito (5%)</p>
             <RiErrorWarningLine className="w-20 h-20 text-zenith-yellow" />
-            <AppButton 
+            <AppButton
                 type="button"
                 onClick={ResetHabitMutate}
             >Reiniciar Hábito</AppButton>
