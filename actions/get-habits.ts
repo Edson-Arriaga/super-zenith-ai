@@ -40,7 +40,8 @@ export async function getHabits(today: Date) {
                 const startDate = new Date(today)
                 startDate.setHours(0, 0, 0 , -1)
 
-                const timezoneOffset = today.getTimezoneOffset()
+                const timezoneOffset = today.getTimezoneOffset() / 60
+                
                 const endDate = new Date(habit.startDay)
                 endDate.setHours(endDate.getHours() - timezoneOffset)
 
