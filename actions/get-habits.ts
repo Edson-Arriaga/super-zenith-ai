@@ -42,7 +42,9 @@ export async function getHabits(clientOffset: number) {
                 startDate.setHours(0, 0, 0 , -1)
                 
                 const endDate = new Date(habit.startDay)
-                
+                endDate.setMinutes(endDate.getMinutes() + clientOffset)
+                endDate.setHours(0, 0, 0, 0)
+
                 let dateAux = new Date(startDate)
                 
                 while (dateAux >= endDate) {
