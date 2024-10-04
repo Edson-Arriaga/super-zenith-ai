@@ -5,7 +5,7 @@ import { isSameDay } from "@/src/utils/isSameDay";
 import { currentUser } from "@clerk/nextjs/server";
 import { Habit } from "@prisma/client";
 
-export async function getHabits(today: Date) {
+export async function getHabits(today: Date, zoneOff: number) {
     const clerkUser = await currentUser()
 
     const user = await prisma.user.findUnique({
@@ -40,7 +40,7 @@ export async function getHabits(today: Date) {
                 const startDate = new Date(today)
                 startDate.setHours(0, 0, 0 , -1)
 
-                const timezoneOffset = today.getTimezoneOffset() * 60 * 1000; // En milisegundos
+                const timezoneOffset = zoneOff * 60 * 1000; // En milisegundos
 
                 const endDate = new Date(habit.startDay); // Esto está en UTC
                 const localEndDate = new Date(endDate.getTime() - timezoneOffset);
