@@ -3,11 +3,9 @@
 import prisma from "@/src/lib/prisma"
 import { Habit } from "@prisma/client"
 
-export async function updateDatesCompleted(habit: Habit){
+export async function updateDatesCompleted(habit: Habit, today: Date){
     let uppdatedDates : Habit['completedDates'] = []
     let message : string
-
-    const today = new Date()
     
     if(habit.completedDates.some(date => date.toLocaleDateString() === today.toLocaleDateString())){
         uppdatedDates = habit.completedDates.filter(date => date.toLocaleDateString() !== today.toLocaleDateString())

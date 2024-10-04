@@ -4,8 +4,7 @@ import prisma from "@/src/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
 import { Habit } from "@prisma/client";
 
-export async function getHabits() {
-    
+export async function getHabits(today: Date) {
     const clerkUser = await currentUser()
 
     const user = await prisma.user.findUnique({
@@ -22,9 +21,7 @@ export async function getHabits() {
         }
     })
 
-
-    const today = new Date()
-    const todayString = today.toLocaleDateString('en-CA');
+    const todayString = today.toLocaleDateString()
     
     await Promise.all(
         habits.map(async habit => {
@@ -32,26 +29,29 @@ export async function getHabits() {
                 await prisma.habit.update({
                     where: { id: habit.id },
                     data: { completed: true }
-                });
-                return;
+                })
+                return
             }
     
             if (!habit.completed || !habit.forcedRestart) {
-                let failedDates : Habit['failedDates'] = [];
-                const startDate = new Date(today);
-                startDate.setHours(0, 0, 0 , -1); // Comenzar desde el día anterior
+                let failedDates : Habit['failedDates'] = habit.failedDates
+                
+                const startDate = new Date(today)
+                startDate.setHours(0, 0, 0 , -1)
                 
                 const endDate = new Date(habit.startDay);
 
                 let dateAux = new Date(startDate);
                 
                 while (dateAux >= endDate) {
-                    // Verificar si la fecha es pasada
+                    
+                    if(habit.failedDates.some(date => date.toLocaleDateString() === dateAux.toLocaleDateString())) break
+
                     const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(dateAux.getDay()));
-                
+                    
                     if (isPlanned
                         && (!habit.completedDates.some(date => date.toLocaleDateString() === dateAux.toLocaleDateString())) // Verifica que no esté en completedDates
-                        && (failedDates.length < Math.floor(habit.plannedDays * 0.05)) // Verifica que el error sea menor al 5%
+                        && (failedDates.length < Math.floor(habit.plannedDays * 0.05))
                     ) {
                         failedDates.push(new Date(dateAux));
                     }
@@ -62,13 +62,11 @@ export async function getHabits() {
     
                 let forcedRestart = failedDates.length >= Math.floor(habit.plannedDays * 0.05);
                 
-                // Actualizar solo si hay cambios en failedDates
                 if (failedDates.length !== habit.failedDates.length) {
-                    console.log('act')
                     await prisma.habit.update({
                         where: { id: habit.id },
                         data: { failedDates, forcedRestart }
-                    });
+                    })
                 }
             }
         })
@@ -89,8 +87,8 @@ export async function getHabits() {
         const isPlannedTodayA = a.frequency === 'DAILY' || a.weeklyDays.includes(weekDay)
         const isPlannedTodayB = b.frequency === 'DAILY' || b.weeklyDays.includes(weekDay)
 
-        const isCompletedA = a.completedDates.some(date => date.toLocaleDateString('en-CA') === todayString)
-        const isCompletedB = b.completedDates.some(date => date.toLocaleDateString('en-CA') === todayString)
+        const isCompletedA = a.completedDates.some(date => date.toLocaleDateString() === todayString)
+        const isCompletedB = b.completedDates.some(date => date.toLocaleDateString() === todayString)
 
         if (isPlannedTodayA && !isPlannedTodayB) return -1
         if (!isPlannedTodayA && isPlannedTodayB) return 1
