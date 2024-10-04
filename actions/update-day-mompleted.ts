@@ -1,14 +1,15 @@
 "use server"
 
 import prisma from "@/src/lib/prisma"
+import { isSameDay } from "@/src/utils/isSameDay"
 import { Habit } from "@prisma/client"
 
 export async function updateDatesCompleted(habit: Habit, today: Date){
     let uppdatedDates : Habit['completedDates'] = []
     let message : string
     
-    if(habit.completedDates.some(date => date.toLocaleDateString() === today.toLocaleDateString())){
-        uppdatedDates = habit.completedDates.filter(date => date.toLocaleDateString() !== today.toLocaleDateString())
+    if(habit.completedDates.some(date => isSameDay(date, today))){
+        uppdatedDates = habit.completedDates.filter(date => !isSameDay(date, today))
         message = '¡No te desanimes! ¡Tu Puedes!'
     } else {
         uppdatedDates = [...habit.completedDates, today]

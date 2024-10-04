@@ -1,11 +1,14 @@
 "use server";
 
 import prisma from "@/src/lib/prisma";
+import { isSameDay } from "@/src/utils/isSameDay";
 import { currentUser } from "@clerk/nextjs/server";
 import { Habit } from "@prisma/client";
 
-export async function getHabits(today: Date) {
+export async function getHabits(clientToday: Date) {
     const clerkUser = await currentUser()
+    
+    const today = new Date(clientToday);
 
     const user = await prisma.user.findUnique({
         where: { clerkId: clerkUser?.id }
@@ -21,8 +24,6 @@ export async function getHabits(today: Date) {
         }
     })
 
-    console.log(today)
-    
     await Promise.all(
         habits.map(async habit => {
             if (habit.completedDates.length + habit.failedDates.length === habit.plannedDays) {
@@ -47,7 +48,7 @@ export async function getHabits(today: Date) {
                     
                     const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(dateAux.getDay()));
                     
-                    if (isPlanned && (!habit.completedDates.some(date => date.toLocaleDateString() === dateAux.toLocaleDateString()))){
+                    if (isPlanned && (!habit.completedDates.some(date => isSameDay(date, dateAux)))){
                         failedDates.push(new Date(dateAux));
                     }
 
@@ -84,8 +85,8 @@ export async function getHabits(today: Date) {
         const isPlannedTodayA = a.frequency === 'DAILY' || a.weeklyDays.includes(weekDay)
         const isPlannedTodayB = b.frequency === 'DAILY' || b.weeklyDays.includes(weekDay)
 
-        const isCompletedA = a.completedDates.some(date => date.toLocaleDateString() === today.toLocaleDateString())
-        const isCompletedB = b.completedDates.some(date => date.toLocaleDateString() === today.toLocaleDateString())
+        const isCompletedA = a.completedDates.some(date => isSameDay(date, today))
+        const isCompletedB = b.completedDates.some(date => isSameDay(date, today))
 
         if (isPlannedTodayA && !isPlannedTodayB) return -1
         if (!isPlannedTodayA && isPlannedTodayB) return 1
