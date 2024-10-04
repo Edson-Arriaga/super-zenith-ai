@@ -5,10 +5,11 @@ import { isSameDay } from "@/src/utils/isSameDay";
 import { currentUser } from "@clerk/nextjs/server";
 import { Habit } from "@prisma/client";
 
-export async function getHabits(clientToday: Date) {
+export async function getHabits(clientOffset: number) {
     const clerkUser = await currentUser()
     
-    const today = new Date(clientToday);
+    const today = new Date()
+    today.setMinutes(today.getMinutes() + clientOffset)
 
     const user = await prisma.user.findUnique({
         where: { clerkId: clerkUser?.id }
@@ -40,16 +41,16 @@ export async function getHabits(clientToday: Date) {
                 const startDate = new Date(today)
                 startDate.setHours(0, 0, 0 , -1)
                 
-                const endDate = new Date(habit.startDay);
-
-                let dateAux = new Date(startDate);
+                const endDate = new Date(habit.startDay)
+                
+                let dateAux = new Date(startDate)
                 
                 while (dateAux >= endDate) {
                     
                     const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(dateAux.getDay()));
                     
                     if (isPlanned && (!habit.completedDates.some(date => isSameDay(date, dateAux)))){
-                        failedDates.push(new Date(dateAux));
+                        failedDates.push(new Date(dateAux))
                     }
 
                     if(failedDates.length === Math.floor(habit.plannedDays * 0.05)) {
@@ -57,7 +58,7 @@ export async function getHabits(clientToday: Date) {
                         break
                     }
 
-                    dateAux.setDate(dateAux.getDate() - 1);
+                    dateAux.setDate(dateAux.getDate() - 1)
                 }
                 
                 if (failedDates.length !== habit.failedDates.length) {
