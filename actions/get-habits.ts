@@ -5,11 +5,8 @@ import { isSameDay } from "@/src/utils/isSameDay";
 import { currentUser } from "@clerk/nextjs/server";
 import { Habit } from "@prisma/client";
 
-export async function getHabits(clientOffset: number) {
+export async function getHabits(today: Date) {
     const clerkUser = await currentUser()
-    
-    const today = new Date()
-    today.setMinutes(today.getMinutes() + clientOffset)
 
     const user = await prisma.user.findUnique({
         where: { clerkId: clerkUser?.id }
@@ -24,6 +21,8 @@ export async function getHabits(clientOffset: number) {
             userId: user.id
         }
     })
+
+    
 
     await Promise.all(
         habits.map(async habit => {
@@ -40,11 +39,14 @@ export async function getHabits(clientOffset: number) {
                 
                 const startDate = new Date(today)
                 startDate.setHours(0, 0, 0 , -1)
+
+                const timezoneOffset = startDate.getTimezoneOffset() / 60
+
+                console.log()
                 
                 const endDate = new Date(habit.startDay)
-                endDate.setMinutes(endDate.getMinutes() + clientOffset)
-                endDate.setHours(0, 0, 0, 0)
-
+                endDate.setUTCHours(endDate.getUTCHours() - timezoneOffset)
+                
                 let dateAux = new Date(startDate)
                 
                 while (dateAux >= endDate) {

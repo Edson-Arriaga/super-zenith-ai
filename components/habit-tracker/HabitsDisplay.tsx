@@ -11,7 +11,7 @@ export default function HabitsDisplay() {
 
     const { data , isLoading, isError } = useQuery({
         queryKey: ['habits'],
-        queryFn: () => getHabits(new Date().getTimezoneOffset())
+        queryFn: () => getHabits(new Date())
     })
     
     if (isLoading) return <Loading />
