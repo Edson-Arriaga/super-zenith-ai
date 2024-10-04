@@ -2,6 +2,7 @@
 
 import prisma from "@/src/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
+import { Habit } from "@prisma/client";
 
 export async function getHabits() {
     
@@ -27,49 +28,43 @@ export async function getHabits() {
     
     await Promise.all(
         habits.map(async habit => {
-            if(habit.completedDates.length + habit.failedDates.length === habit.plannedDays){
+            if (habit.completedDates.length + habit.failedDates.length === habit.plannedDays) {
                 await prisma.habit.update({
                     where: { id: habit.id },
                     data: { completed: true }
-                })
-                return
+                });
+                return;
             }
+    
+            if (!habit.completed || !habit.forcedRestart) {
+                let failedDates : Habit['failedDates'] = [];
+                const startDate = new Date(today);
+                startDate.setHours(0, 0, 0 , -1); // Comenzar desde el día anterior
+                
+                const endDate = new Date(habit.startDay);
 
-            if(!habit.completed || !habit.forcedRestart){
-                let failedDates = [...habit.failedDates]
-                const startDate = new Date(today)
-                startDate.setDate(startDate.getDate() - 1)
+                let dateAux = new Date(startDate);
                 
-                const endDate = new Date(habit.startDay)
+                while (dateAux >= endDate) {
+                    // Verificar si la fecha es pasada
+                    const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(dateAux.getDay()));
                 
-                let dateAux = new Date(startDate)
-                
-                while(dateAux >= endDate){
-                    /**
-                     * Break because if it coincides with a failed day,
-                     * the process of calculating the failed days prior to that day
-                     * will have already been done before.
-                     */
-                    if(failedDates.some(date => date.toLocaleDateString('en-CA') === dateAux.toLocaleDateString('en-CA'))) break
-
-                    const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(dateAux.getDay()))
-                    
-                    if ( isPlanned
-                        && (!habit.completedDates.some(date => date.toLocaleDateString('en-CA') === dateAux.toLocaleDateString('en-CA'))) //Verify if the Date isn't in completedDates
-                        && (failedDates.length < Math.floor(habit.plannedDays * 0.05)) //Verify if the error has less than 5% error
+                    if (isPlanned
+                        && (!habit.completedDates.some(date => date.toLocaleDateString() === dateAux.toLocaleDateString())) // Verifica que no esté en completedDates
+                        && (failedDates.length < Math.floor(habit.plannedDays * 0.05)) // Verifica que el error sea menor al 5%
                     ) {
-                        failedDates.push(dateAux)
+                        failedDates.push(new Date(dateAux));
                     }
 
                     dateAux.setDate(dateAux.getDate() - 1);
                 }
 
-                let forcedRestart = habit.forcedRestart
-                if(failedDates.length >= Math.floor(habit.plannedDays * 0.05)){
-                    forcedRestart = true
-                }
-
+    
+                let forcedRestart = failedDates.length >= Math.floor(habit.plannedDays * 0.05);
+                
+                // Actualizar solo si hay cambios en failedDates
                 if (failedDates.length !== habit.failedDates.length) {
+                    console.log('act')
                     await prisma.habit.update({
                         where: { id: habit.id },
                         data: { failedDates, forcedRestart }
@@ -77,7 +72,8 @@ export async function getHabits() {
                 }
             }
         })
-    )
+    );
+    
 
     const newHabits = await prisma.habit.findMany({
         where: {

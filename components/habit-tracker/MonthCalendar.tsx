@@ -15,34 +15,36 @@ export default function MonthCalendar({ habit }: MonthCalendarProps) {
   // 1. Cálculo de las fechas planificadas, completadas y fallidas
   const calendarData = useMemo(() => {
     const startDay = new Date(habit.startDay);
-
+  
     const plannedDates = new Set<string>();
     const currentDate = new Date(startDay);
     let firstPlannedDate: Date | null = null;
     let lastPlannedDate: Date | null = null;
     let plannedDaysCount = 0;
-
+  
     // Crear las fechas planificadas según la frecuencia del hábito
     while (plannedDaysCount < habit.plannedDays) {
       const isPlannedDay = habit.frequency === "DAILY" || 
         (habit.frequency === "WEEKLY" && habit.weeklyDays.includes(currentDate.getDay()));
-
+  
       if (isPlannedDay) {
-        const dateString = currentDate.toISOString().split('T')[0];
+        // Aquí usamos toLocaleDateString() para ajustar a la zona horaria local
+        const dateString = currentDate.toLocaleDateString('en-CA'); // Cambia 'en-CA' según tu zona horaria
+        
         plannedDates.add(dateString);
- 
+  
         if (!firstPlannedDate) firstPlannedDate = new Date(currentDate);
         lastPlannedDate = new Date(currentDate);
         plannedDaysCount++;
       }
-
+  
       currentDate.setDate(currentDate.getDate() + 1);
     }
-
+  
     return {
       plannedDates: Array.from(plannedDates),
-      completedDates: new Set(habit.completedDates.map(date => date.toISOString().split('T')[0])),
-      failedDates: new Set(habit.failedDates.map(date => date.toISOString().split('T')[0])),
+      completedDates: new Set(habit.completedDates.map(date => new Date(date).toLocaleDateString('en-CA'))),
+      failedDates: new Set(habit.failedDates.map(date => new Date(date).toLocaleDateString('en-CA'))),
       firstPlannedDate,
       lastPlannedDate,
     };

@@ -8,10 +8,9 @@ export async function updateDatesCompleted(habit: Habit){
     let message : string
 
     const today = new Date()
-    const todayString = today.toLocaleDateString('en-CA')
     
-    if(habit.completedDates.some(date => date.getDate() === today.getDate())){
-        uppdatedDates = habit.completedDates.filter(date => date.toLocaleDateString('en-CA') !== todayString)
+    if(habit.completedDates.some(date => date.toLocaleDateString() === today.toLocaleDateString())){
+        uppdatedDates = habit.completedDates.filter(date => date.toLocaleDateString() !== today.toLocaleDateString())
         message = '¡No te desanimes! ¡Tu Puedes!'
     } else {
         uppdatedDates = [...habit.completedDates, today]
