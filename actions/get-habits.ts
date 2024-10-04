@@ -21,7 +21,7 @@ export async function getHabits(today: Date) {
         }
     })
 
-    const todayString = today.toLocaleDateString()
+    console.log(today)
     
     await Promise.all(
         habits.map(async habit => {
@@ -34,7 +34,7 @@ export async function getHabits(today: Date) {
             }
     
             if (!habit.completed || !habit.forcedRestart) {
-                let failedDates : Habit['failedDates'] = habit.failedDates
+                let failedDates : Habit['failedDates'] = []
                 
                 const startDate = new Date(today)
                 startDate.setHours(0, 0, 0 , -1)
@@ -45,27 +45,24 @@ export async function getHabits(today: Date) {
                 
                 while (dateAux >= endDate) {
                     
-                    if(habit.failedDates.some(date => date.toLocaleDateString() === dateAux.toLocaleDateString())) break
-
                     const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(dateAux.getDay()));
                     
-                    if (isPlanned
-                        && (!habit.completedDates.some(date => date.toLocaleDateString() === dateAux.toLocaleDateString())) // Verifica que no esté en completedDates
-                        && (failedDates.length < Math.floor(habit.plannedDays * 0.05))
-                    ) {
+                    if (isPlanned && (!habit.completedDates.some(date => date.toLocaleDateString() === dateAux.toLocaleDateString()))){
                         failedDates.push(new Date(dateAux));
+                    }
+
+                    if(failedDates.length === Math.floor(habit.plannedDays * 0.05)) {
+                        habit.forcedRestart = true
+                        break
                     }
 
                     dateAux.setDate(dateAux.getDate() - 1);
                 }
-
-    
-                let forcedRestart = failedDates.length >= Math.floor(habit.plannedDays * 0.05);
                 
                 if (failedDates.length !== habit.failedDates.length) {
                     await prisma.habit.update({
                         where: { id: habit.id },
-                        data: { failedDates, forcedRestart }
+                        data: { failedDates, forcedRestart: habit.forcedRestart }
                     })
                 }
             }
@@ -87,8 +84,8 @@ export async function getHabits(today: Date) {
         const isPlannedTodayA = a.frequency === 'DAILY' || a.weeklyDays.includes(weekDay)
         const isPlannedTodayB = b.frequency === 'DAILY' || b.weeklyDays.includes(weekDay)
 
-        const isCompletedA = a.completedDates.some(date => date.toLocaleDateString() === todayString)
-        const isCompletedB = b.completedDates.some(date => date.toLocaleDateString() === todayString)
+        const isCompletedA = a.completedDates.some(date => date.toLocaleDateString() === today.toLocaleDateString())
+        const isCompletedB = b.completedDates.some(date => date.toLocaleDateString() === today.toLocaleDateString())
 
         if (isPlannedTodayA && !isPlannedTodayB) return -1
         if (!isPlannedTodayA && isPlannedTodayB) return 1
@@ -99,6 +96,5 @@ export async function getHabits(today: Date) {
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     });
 
-    //console.log(newHabits)
     return newHabits
 }
