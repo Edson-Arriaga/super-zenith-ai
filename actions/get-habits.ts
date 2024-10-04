@@ -40,17 +40,17 @@ export async function getHabits(today: Date) {
                 const startDate = new Date(today)
                 startDate.setHours(0, 0, 0 , -1)
 
-                const timezoneOffset = today.getTimezoneOffset() / 60
-                
-                const endDate = new Date(habit.startDay)
-                endDate.setHours(endDate.getHours() - timezoneOffset)
+                const timezoneOffset = today.getTimezoneOffset() * 60 * 1000; // En milisegundos
+
+                const endDate = new Date(habit.startDay); // Esto está en UTC
+                const localEndDate = new Date(endDate.getTime() - timezoneOffset);
 
                 console.log('start: ' + startDate)
                 console.log('end: ' + endDate)
 
                 let dateAux = new Date(startDate)
                 
-                while (dateAux >= endDate) {
+                while (dateAux >= localEndDate) {
                     
                     const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(dateAux.getDay()));
                     
