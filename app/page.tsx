@@ -1,7 +1,15 @@
+import { auth, } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function InitialPage() {
+
+    const { userId } = auth()
+
+    if (userId) {
+        redirect('/habit-tracker')
+    }
 
     return (
         <main className="h-screen-without-header flex flex-col justify-center -mb-10 xl:p-10">
