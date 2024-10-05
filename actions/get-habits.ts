@@ -37,29 +37,32 @@ export async function getHabits(todayClient: string, zoneOff: number) {
             if (!habit.completed || !habit.forcedRestart) {
                 let failedDates : Habit['failedDates'] = []
                 
-                const startDate = new Date(today)
-
+                const startDate = new Date(habit.startDay)
                 const timezoneOffset = zoneOff / 60;
-                const endDate = new Date(habit.startDay);
-                endDate.setUTCHours(endDate.getUTCHours() - timezoneOffset)
-                endDate.setHours(0,0,0,0)
-
+                startDate.setHours(startDate.getHours() - timezoneOffset)
+                
+                const endDate = new Date(today)
+                endDate.setDate(endDate.getDate() - 1)
+                
                 const dateAux = new Date(startDate)
-                dateAux.setDate(startDate.getDate() - 1)
+                dateAux.setHours(0, 0, 0, 0)
 
-                while (dateAux.getTime() >= endDate.getTime()) {
+                console.log(habit.title + ' ' + startDate)
+                console.log(habit.title + ' ' + endDate)
+
+                while (dateAux <= endDate) {
                     const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(dateAux.getDay()));
                     
-                    if (isPlanned && (!habit.completedDates.some(date => isSameDay(date, dateAux))) && !isSameDay(startDate, endDate)){
+                    if (isPlanned && (!habit.completedDates.some(date => isSameDay(date, dateAux)))){
                         failedDates.push(new Date(dateAux.toISOString()))
                     }
-                    
+                    console.log(failedDates)
                     if(failedDates.length === Math.floor(habit.plannedDays * 0.05)) {
-                        //habit.forcedRestart = true
+                        habit.forcedRestart = true
                         break
                     }
                     
-                    dateAux.setDate(dateAux.getDate() - 1)
+                    dateAux.setDate(dateAux.getDate() + 1)
                 }
                 
                 
