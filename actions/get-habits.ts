@@ -46,7 +46,7 @@ export async function getHabits(today: Date, zoneOff: number) {
 
                 let dateAux = new Date(startDate)
                 console.log(dateAux, endDate)
-                while (dateAux >= localEndDate && !isSameDay(today, dateAux)){
+                while (dateAux >= localEndDate && !isSameDay(today, endDate)){
                     const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(dateAux.getDay()));
                     
                     if (isPlanned && (!habit.completedDates.some(date => isSameDay(date, dateAux)))){
