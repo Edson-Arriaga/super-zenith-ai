@@ -39,12 +39,13 @@ export async function getHabits(todayClient: string, zoneOff: number) {
                 
                 const startDate = new Date(today)
                 startDate.setHours(0, 0, 0 , -1)
+                console.log(startDate)
 
                 const timezoneOffset = zoneOff * 60 * 1000;
                 const endDate = new Date(habit.startDay);
                 const localEndDate = new Date(endDate.getTime() - timezoneOffset);
 
-                let dateAux = new Date(startDate)
+                const dateAux = new Date(startDate)
 
                 while (dateAux >= localEndDate && !isSameDay(today, endDate)){
                     const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(dateAux.getDay()));
