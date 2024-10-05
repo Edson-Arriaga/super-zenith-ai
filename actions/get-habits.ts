@@ -38,7 +38,7 @@ export async function getHabits(todayClient: string, zoneOff: number) {
                 let failedDates : Habit['failedDates'] = []
                 
                 const startDate = new Date(today)
-                startDate.setHours(0, 0, 0 , -1)
+                startDate.setHours(-24, 0, 0 , 0)
                 console.log(startDate)
 
                 const timezoneOffset = zoneOff * 60 * 1000;
