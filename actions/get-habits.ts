@@ -38,28 +38,29 @@ export async function getHabits(todayClient: string, zoneOff: number) {
                 let failedDates : Habit['failedDates'] = []
                 
                 const startDate = new Date(today)
-                startDate.setDate(startDate.getDate() - 1)
-                
-                //const timezoneOffset = zoneOff * 60 * 1000;
+
+                const timezoneOffset = zoneOff / 60;
                 const endDate = new Date(habit.startDay);
-                //const localEndDate = new Date(endDate.getTime() - timezoneOffset);
+                endDate.setUTCHours(endDate.getUTCHours() - timezoneOffset)
 
                 const dateAux = new Date(startDate)
+                dateAux.setDate(startDate.getDate() - 1)
 
-                console.log(dateAux, endDate)
-                while (dateAux >= endDate){
-                    const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(dateAux.getDay()));
-                    
-                    if (isPlanned && (!habit.completedDates.some(date => isSameDay(date, dateAux)))){
-                        failedDates.push(new Date(dateAux))
+                if(!isSameDay(startDate, endDate)){
+                    while (isSameDay(dateAux, endDate)) {
+                        const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(dateAux.getDay()));
+    
+                        if (isPlanned && (!habit.completedDates.some(date => isSameDay(date, dateAux)))){
+                            failedDates.push(new Date(dateAux.toISOString()))
+                        }
+    
+                        if(failedDates.length === Math.floor(habit.plannedDays * 0.05)) {
+                            habit.forcedRestart = true
+                            break
+                        }
+    
+                        dateAux.setDate(dateAux.getDate() - 1)
                     }
-
-                    if(failedDates.length === Math.floor(habit.plannedDays * 0.05)) {
-                        habit.forcedRestart = true
-                        break
-                    }
-
-                    dateAux.setDate(dateAux.getDate() - 1)
                 }
                 
                 if (failedDates.length !== habit.failedDates.length) {
