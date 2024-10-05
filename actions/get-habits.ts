@@ -5,7 +5,7 @@ import { isSameDay } from "@/src/utils/isSameDay";
 import { currentUser } from "@clerk/nextjs/server";
 import { Habit } from "@prisma/client";
 
-export async function getHabits(today: Date, zoneOff: number) {
+export async function getHabits(todayClient: string, zoneOff: number) {
     const clerkUser = await currentUser()
 
     const user = await prisma.user.findUnique({
@@ -22,7 +22,7 @@ export async function getHabits(today: Date, zoneOff: number) {
         }
     })
 
-    
+    const today = new Date(todayClient)
 
     await Promise.all(
         habits.map(async habit => {
@@ -45,7 +45,7 @@ export async function getHabits(today: Date, zoneOff: number) {
                 const localEndDate = new Date(endDate.getTime() - timezoneOffset);
 
                 let dateAux = new Date(startDate)
-                console.log(dateAux, endDate)
+
                 while (dateAux >= localEndDate && !isSameDay(today, endDate)){
                     const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(dateAux.getDay()));
                     
