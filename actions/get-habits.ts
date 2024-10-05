@@ -45,7 +45,7 @@ export async function getHabits(todayClient: string, zoneOff: number) {
                 endDate.setDate(endDate.getDate() - 1)
                 
                 const dateAux = new Date(startDate)
-                dateAux.setHours(0, 0, 0, 0)
+                dateAux.setHours(timezoneOffset, 0, 0, 0)
 
                 console.log(habit.title + ' ' + startDate)
                 console.log(habit.title + ' ' + endDate)
