@@ -38,16 +38,16 @@ export async function getHabits(todayClient: string, zoneOff: number) {
                 let failedDates : Habit['failedDates'] = []
                 
                 const startDate = new Date(today)
-                startDate.setHours(-24, 0, 0 , 0)
-                console.log(startDate)
-
-                const timezoneOffset = zoneOff * 60 * 1000;
+                startDate.setDate(startDate.getDate() - 1)
+                
+                //const timezoneOffset = zoneOff * 60 * 1000;
                 const endDate = new Date(habit.startDay);
-                const localEndDate = new Date(endDate.getTime() - timezoneOffset);
+                //const localEndDate = new Date(endDate.getTime() - timezoneOffset);
 
                 const dateAux = new Date(startDate)
 
-                while (dateAux >= localEndDate && !isSameDay(today, endDate)){
+                console.log(dateAux, endDate)
+                while (dateAux >= endDate){
                     const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(dateAux.getDay()));
                     
                     if (isPlanned && (!habit.completedDates.some(date => isSameDay(date, dateAux)))){
