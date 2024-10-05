@@ -51,11 +51,11 @@ export async function getHabits(todayClient: string, zoneOff: number) {
                 while (dateAux >= endDate) {
                     const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(dateAux.getDay()));
                     
-                    if (isPlanned && (!habit.completedDates.some(date => isSameDay(date, dateAux)))){
+                    if (isPlanned && (!habit.completedDates.some(date => isSameDay(date, dateAux))) && !isSameDay(dateAux, endDate)){
                         failedDates.push(new Date(dateAux.toISOString()))
                     }
 
-                    if(failedDates.length === Math.floor(habit.plannedDays * 0.05) && !isSameDay(dateAux, endDate)) {
+                    if(failedDates.length === Math.floor(habit.plannedDays * 0.05)) {
                         habit.forcedRestart = true
                         break
                     }
