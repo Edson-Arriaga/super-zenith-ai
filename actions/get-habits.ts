@@ -5,7 +5,7 @@ import { isSameDay } from "@/src/utils/isSameDay";
 import { currentUser } from "@clerk/nextjs/server";
 import { Habit } from "@prisma/client";
 
-export async function getHabits(todayClient: string, zoneOff: number) {
+export async function getHabits(today: Date, zoneOff: number) {
     const clerkUser = await currentUser()
 
     const user = await prisma.user.findUnique({
@@ -22,8 +22,6 @@ export async function getHabits(todayClient: string, zoneOff: number) {
         }
     })
 
-    const today = new Date(todayClient)
-
     await Promise.all(
         habits.map(async habit => {
             if (habit.completedDates.length + habit.failedDates.length === habit.plannedDays) {
@@ -37,32 +35,29 @@ export async function getHabits(todayClient: string, zoneOff: number) {
             if (!habit.completed || !habit.forcedRestart) {
                 let failedDates : Habit['failedDates'] = []
                 
-                const startDate = new Date(habit.startDay)
                 const timezoneOffset = zoneOff / 60;
-                startDate.setHours(startDate.getHours() - timezoneOffset)
-                
-                const endDate = new Date(today)
-                endDate.setDate(endDate.getDate() - 1)
-                
-                const dateAux = new Date(startDate)
-                dateAux.setHours(timezoneOffset, 0, 0, 0)
 
-                console.log(habit.title + ' ' + startDate)
-                console.log(habit.title + ' ' + endDate)
-
-                while (dateAux <= endDate) {
-                    const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(dateAux.getDay()));
+                const startDate = new Date(today)
+                startDate.setDate(startDate.getDate() - 1)
+    
+                const endDate = new Date(habit.startDay)
+                endDate.setHours(endDate.getHours() - timezoneOffset)
+                endDate.setHours(timezoneOffset, 0, 0, 0)
+                
+                console.log(startDate, endDate)
+                while (startDate >= endDate) {
+                    const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(startDate.getDay()));
                     
-                    if (isPlanned && (!habit.completedDates.some(date => isSameDay(date, dateAux)))){
-                        failedDates.push(new Date(dateAux.toISOString()))
+                    if (isPlanned && (!habit.completedDates.some(date => isSameDay(date, startDate)))){
+                        failedDates.push(new Date(startDate.toISOString()))
                     }
-                    console.log(failedDates)
+                    
                     if(failedDates.length === Math.floor(habit.plannedDays * 0.05)) {
                         habit.forcedRestart = true
                         break
                     }
                     
-                    dateAux.setDate(dateAux.getDate() + 1)
+                    startDate.setDate(startDate.getDate() - 1)
                 }
                 
                 
