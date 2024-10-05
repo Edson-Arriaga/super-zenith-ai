@@ -2,7 +2,7 @@ import prisma from "@/src/lib/prisma"
 import { NextResponse } from "next/server"
 
 export async function POST(req : Request){
-    const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET_USER_DELETED
+    const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET_USER_CREATED
 
     if (!WEBHOOK_SECRET) {
       throw new Error('Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local')
