@@ -2,7 +2,7 @@ import prisma from "@/src/lib/prisma"
 import { NextResponse } from "next/server"
 
 export async function POST(req : Request){
-    const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET_USER_CREATED
+    const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET_USER_CREATED  
 
     if (!WEBHOOK_SECRET) {
       throw new Error('Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local')
@@ -17,19 +17,11 @@ export async function POST(req : Request){
 
         const clerkId = payload.data.id;
 
-        
-        await prisma.habit.deleteMany({
-            where: { user: {
-                clerkId
-            }}
+        await prisma.user.create({
+            data: { clerkId }
         })
 
-        await prisma.user.delete({
-            where: { clerkId }
-        })
-        
-
-        return NextResponse.json({ message: "User deleted successfully" })
+        return NextResponse.json({ message: "User created successfully" })
     } catch (error) {
         console.error("Error processing webhook:", error);
     }

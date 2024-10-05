@@ -17,11 +17,19 @@ export async function POST(req : Request){
 
         const clerkId = payload.data.id;
 
-        await prisma.user.create({
-            data: { clerkId }
+        
+        await prisma.habit.deleteMany({
+            where: { user: {
+                clerkId
+            }}
         })
 
-        return NextResponse.json({ message: "User created successfully" })
+        await prisma.user.delete({
+            where: { clerkId }
+        })
+        
+
+        return NextResponse.json({ message: "User deleted successfully" })
     } catch (error) {
         console.error("Error processing webhook:", error);
     }
