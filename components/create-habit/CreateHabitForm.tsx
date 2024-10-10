@@ -49,7 +49,7 @@ export default function CreateHabitForm() {
     if(isPending) return <Loading/>
     
     return (
-        <form noValidate className="space-y-5 max-w-sm mx-auto" onSubmit={handleSubmit(handleCreateHabitForm)}>
+        <form noValidate className="flex flex-col gap-5 max-w-sm mx-auto" onSubmit={handleSubmit(handleCreateHabitForm)}>
             <input 
                 type="text"
                 placeholder="Titulo"
@@ -136,7 +136,7 @@ export default function CreateHabitForm() {
 
             <select 
                 defaultValue=""
-                className="bg-zenith-dark-purple rounded-lg w-full p-2 border border-zenith-yellow text-white placeholder:text-gray-400 focus:bg-zenith-purple"
+                className="mb-5 bg-zenith-dark-purple rounded-lg w-full p-2 border border-zenith-yellow text-white placeholder:text-gray-400 focus:bg-zenith-purple"
                 {...register('plannedDays', {
                     required: 'La duración es obligatoria'
                 })}
@@ -147,7 +147,12 @@ export default function CreateHabitForm() {
                 <option className="bg-zenith-yellow text-zenith-purple" value="66">66 Días (Definitivo)</option>
             </select>
 
+            {errors.plannedDays && (
+                <ErrorMessage>{errors.plannedDays.message}</ErrorMessage>
+            )}
+
             <AppButton type='submit'>Crear hábito</AppButton>
+
         </form>
     )
 }
