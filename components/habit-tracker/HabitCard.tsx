@@ -42,7 +42,7 @@ export default function HabitCard({ habit } : HabitCardProps) {
     const queryClient = useQueryClient()
 
     const { mutate : updateDatesCompletedMutate, isPending : isPendingUpdate } = useMutation({
-        mutationFn: () => updateDatesCompleted(habit, new Date()),
+        mutationFn: () => updateDatesCompleted(habit, new Date() , new Date().getTimezoneOffset()),
         onSuccess: (data) => {
             queryClient.invalidateQueries({queryKey: ['habits']})
             toast.success(data, { icon: () => <NotificationIcon />})

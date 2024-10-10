@@ -95,17 +95,14 @@ export async function getHabits(today: Date, zoneOff: number) {
         const isCompletedA = a.completedDates.some(date => isSameDay(date, today))
         const isCompletedB = b.completedDates.some(date => isSameDay(date, today))
 
-        const isForcedRestartA = a.completedDates.some(date => isSameDay(date, today))
-        const isForcedRestartB = b.completedDates.some(date => isSameDay(date, today))
-
-        if(isForcedRestartA && !isForcedRestartB) return -1
-        if(!isForcedRestartA && isForcedRestartB) return 1
-
-        if (isPlannedTodayA && !isPlannedTodayB) return -1
-        if (!isPlannedTodayA && isPlannedTodayB) return 1
+        if(!a.forcedRestart && b.forcedRestart) return -1
+        if(a.forcedRestart && !b.forcedRestart) return 1
 
         if (!isCompletedA && isCompletedB) return -1
         if (isCompletedA && !isCompletedB) return 1
+
+        if (isPlannedTodayA && !isPlannedTodayB) return -1
+        if (!isPlannedTodayA && isPlannedTodayB) return 1
 
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     });

@@ -4,15 +4,20 @@ import prisma from "@/src/lib/prisma"
 import { isSameDay } from "@/src/utils/isSameDay"
 import { Habit } from "@prisma/client"
 
-export async function updateDatesCompleted(habit: Habit, today: Date){
+export async function updateDatesCompleted(habit: Habit, today: Date, zoneOff: number){
     let uppdatedDates : Habit['completedDates'] = []
     let message : string
+
+    const adjustedDate = new Date(today)
+    const timezoneOffset = zoneOff / 60
+    adjustedDate.setHours(adjustedDate.getHours() - timezoneOffset)
+    adjustedDate.setHours(timezoneOffset, 0, 0, 0)
     
-    if(habit.completedDates.some(date => isSameDay(date, today))){
-        uppdatedDates = habit.completedDates.filter(date => !isSameDay(date, today))
+    if(habit.completedDates.some(date => isSameDay(date, adjustedDate))){
+        uppdatedDates = habit.completedDates.filter(date => !isSameDay(date, adjustedDate))
         message = '¡No te desanimes! ¡Tu Puedes!'
     } else {
-        uppdatedDates = [...habit.completedDates, today]
+        uppdatedDates = [...habit.completedDates, adjustedDate]
         message = '¡Felicidades! ¡Sigue Así!'
     }
 
