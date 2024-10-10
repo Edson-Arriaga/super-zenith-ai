@@ -44,16 +44,18 @@ export async function getHabits(today: Date, zoneOff: number) {
                 endDate.setHours(endDate.getHours() - timezoneOffset)
                 endDate.setHours(timezoneOffset, 0, 0, 0)
 
-                while (startDate >= endDate) {
-                    const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(startDate.getDay()));
+                const auxDate = new Date(startDate)
+
+                while (auxDate >= endDate) {
+                    const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(auxDate.getDay()));
                     
                     if(habit.frequency === 'WEEKLY'){
-                        console.log(startDate.getDay(), habit.weeklyDays)
+                        console.log(auxDate.getDay(), habit.weeklyDays)
                     }
 
-                    if (isPlanned && (!habit.completedDates.some(date => isSameDay(date, startDate)))){
-                        //startDate.setHours(startDate.getHours() - timezoneOffset)
-                        failedDates.push(new Date(startDate))
+                    if (isPlanned && (!habit.completedDates.some(date => isSameDay(date, auxDate)))){
+                        auxDate.setHours(auxDate.getHours())
+                        failedDates.push(new Date(auxDate))
                     }
                     
                     if(failedDates.length === Math.floor(habit.plannedDays * 0.05)) {
@@ -61,7 +63,7 @@ export async function getHabits(today: Date, zoneOff: number) {
                         //break
                     }
                     
-                    startDate.setDate(startDate.getDate() - 1)
+                    auxDate.setDate(auxDate.getDate() - 1)
                 }
                 
                 
