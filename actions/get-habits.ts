@@ -56,8 +56,8 @@ export async function getHabits(today: Date, zoneOff: number) {
                     }
                     
                     if(failedDates.length === Math.floor(habit.plannedDays * 0.05)) {
-                        habit.forcedRestart = true
-                        break
+                        //habit.forcedRestart = true
+                        //break
                     }
                     
                     startDate.setDate(startDate.getDate() - 1)
