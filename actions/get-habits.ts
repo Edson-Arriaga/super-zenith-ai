@@ -54,7 +54,7 @@ export async function getHabits(today: Date, zoneOff: number) {
                     }
 
                     if (isPlanned && (!habit.completedDates.some(date => isSameDay(date, auxDate)))){
-                        auxDate.setHours(auxDate.getHours())
+                        auxDate.setHours(auxDate.getHours() + timezoneOffset)
                         failedDates.push(new Date(auxDate))
                     }
                     
