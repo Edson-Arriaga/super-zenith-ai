@@ -41,6 +41,7 @@ export async function getHabits(today: Date, zoneOff: number) {
                 startDate.setDate(startDate.getDate() - 1)
     
                 const endDate = new Date(habit.startDay)
+                endDate.setHours(endDate.getHours() - timezoneOffset)
                 endDate.setHours(timezoneOffset, 0, 0, 0)
 
                 while (startDate >= endDate) {
