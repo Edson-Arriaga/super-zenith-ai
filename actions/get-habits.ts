@@ -52,7 +52,8 @@ export async function getHabits(today: Date, zoneOff: number) {
                     }
 
                     if (isPlanned && (!habit.completedDates.some(date => isSameDay(date, startDate)))){
-                        failedDates.push(new Date(startDate.toISOString()))
+                        //startDate.setHours(startDate.getHours() - timezoneOffset)
+                        failedDates.push(new Date(startDate))
                     }
                     
                     if(failedDates.length === Math.floor(habit.plannedDays * 0.05)) {
