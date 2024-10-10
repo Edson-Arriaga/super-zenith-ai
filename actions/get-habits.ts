@@ -46,10 +46,10 @@ export async function getHabits(today: Date, zoneOff: number) {
 
                 console.log(startDate, endDate)
                 while (startDate >= endDate) {
-                    const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(today.getDay()));
+                    const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(startDate.getDay()));
                     
                     if (isPlanned && (!habit.completedDates.some(date => isSameDay(date, startDate)))){
-                        failedDates.push(new Date(startDate))
+                        failedDates.push(new Date(startDate.toISOString()))
                     }
                     
                     if(failedDates.length === Math.floor(habit.plannedDays * 0.05)) {
@@ -88,6 +88,12 @@ export async function getHabits(today: Date, zoneOff: number) {
 
         const isCompletedA = a.completedDates.some(date => isSameDay(date, today))
         const isCompletedB = b.completedDates.some(date => isSameDay(date, today))
+
+        const isForcedRestartA = a.completedDates.some(date => isSameDay(date, today))
+        const isForcedRestartB = b.completedDates.some(date => isSameDay(date, today))
+
+        if(isForcedRestartA && !isForcedRestartB) return -1
+        if(!isForcedRestartA && isForcedRestartB) return 1
 
         if (isPlannedTodayA && !isPlannedTodayB) return -1
         if (!isPlannedTodayA && isPlannedTodayB) return 1
