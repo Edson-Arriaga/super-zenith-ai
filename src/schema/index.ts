@@ -9,7 +9,8 @@ export const HabitSchema = z.object({
     description: z.string().trim().optional(),
     category: z.nativeEnum(Category, {message: 'La categoría es obligatoria'}),
     frequency: z.nativeEnum(Frequency, {message: 'La Frecuencia es obligatoria'}),
-    weeklyDays: z.array(z.number())
+    weeklyDays: z.array(z.number()),
+    plannedDays: z.number(),
 }).superRefine((data, ctx) => {
     if (data.frequency === 'WEEKLY' && data.weeklyDays.length === 0) {
         ctx.addIssue({

@@ -21,7 +21,7 @@ export default function CreateHabitForm() {
 
     const router = useRouter()
 
-    const {mutate , isPending} = useMutation({
+    const { mutate , isPending } = useMutation({
         mutationFn: createHabit,
         onSuccess: (data) => {
             toast.success(data, { icon: () => <NotificationIcon />})
@@ -34,6 +34,7 @@ export default function CreateHabitForm() {
 
     async function handleCreateHabitForm(data : HabitFormData){
         data.weeklyDays = !data.weeklyDays ? [] : data.weeklyDays.map(day => +day)
+        data.plannedDays = +data.plannedDays
         
         const result = HabitSchema.safeParse(data)
         if(!result.success){
@@ -52,7 +53,7 @@ export default function CreateHabitForm() {
             <input 
                 type="text"
                 placeholder="Titulo"
-                className="bg-white/20 rounded-lg w-full p-2 border border-white/50 text-white placeholder:text-gray-400"
+                className="bg-zenith-dark-purple rounded-lg w-full p-2 border text-white border-zenith-yellow focus:bg-zenith-purple"
                 {...register('title', {
                     required: 'El titulo es obligatorio'
                 })}
@@ -63,7 +64,7 @@ export default function CreateHabitForm() {
             )}
 
             <textarea 
-                className="bg-white/20 rounded-lg w-full p-2 border border-white/50 text-white placeholder:text-gray-400"
+                className="bg-zenith-dark-purple rounded-lg w-full p-2 border text-white border-zenith-yellow focus:bg-zenith-purple"
                 placeholder="Descripción (Opcional)"
                 {...register('description')}
             >
@@ -72,7 +73,7 @@ export default function CreateHabitForm() {
 
             <select 
                 defaultValue=""
-                className="bg-white/20 rounded-lg w-full p-2 border border-white/50 text-white placeholder:text-gray-400"
+                className="bg-zenith-dark-purple rounded-lg w-full p-2 border border-zenith-yellow text-white placeholder:text-gray-400 focus:bg-zenith-purple"
                 {...register('category', {
                     required: 'Selecciona una categoria'
                 })}
@@ -93,7 +94,7 @@ export default function CreateHabitForm() {
             
             <select 
                 defaultValue=""
-                className="bg-white/20 rounded-lg w-full p-2 border border-white/50 text-white placeholder:text-gray-400"
+                className="bg-zenith-dark-purple rounded-lg w-full p-2 border border-zenith-yellow text-white placeholder:text-gray-400 focus:bg-zenith-purple"
                 {...register('frequency', {
                     required: 'La frecuencia es obligatoria'
                 })}
@@ -132,6 +133,19 @@ export default function CreateHabitForm() {
             {errors.weeklyDays && (
                 <ErrorMessage>{errors.weeklyDays.message}</ErrorMessage>
             )}
+
+            <select 
+                defaultValue=""
+                className="bg-zenith-dark-purple rounded-lg w-full p-2 border border-zenith-yellow text-white placeholder:text-gray-400 focus:bg-zenith-purple"
+                {...register('plannedDays', {
+                    required: 'La duración es obligatoria'
+                })}
+            >
+                <option className="bg-zenith-yellow text-zenith-purple" value="" disabled>-- Duración --</option>
+                <option className="bg-zenith-yellow text-zenith-purple" value="30">30 Días (Corto)</option>
+                <option className="bg-zenith-yellow text-zenith-purple" value="45">45 Días (Intermedio)</option>
+                <option className="bg-zenith-yellow text-zenith-purple" value="66">66 Días (Definitivo)</option>
+            </select>
 
             <AppButton type='submit'>Crear hábito</AppButton>
         </form>
