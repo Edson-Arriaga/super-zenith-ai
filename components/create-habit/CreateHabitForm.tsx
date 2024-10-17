@@ -24,8 +24,12 @@ export default function CreateHabitForm() {
     const { mutate , isPending } = useMutation({
         mutationFn: createHabit,
         onSuccess: (data) => {
-            toast.success(data, { icon: () => <NotificationIcon />})
-            router.push('/habit-tracker')
+            toast.success(data.message, { icon: () => <NotificationIcon />})
+            if(data.completedAchievement === 0) {
+                router.push('/habit-tracker?achievements=0')
+            } else {
+                router.push('/habit-tracker')
+            }
         },
         onError: (error) => {
             toast.error(error.message)
@@ -55,7 +59,8 @@ export default function CreateHabitForm() {
                 placeholder="Titulo"
                 className="bg-zenith-dark-purple rounded-lg w-full p-2 border text-white border-zenith-yellow focus:bg-zenith-purple"
                 {...register('title', {
-                    required: 'El titulo es obligatorio'
+                    required: 'El titulo es obligatorio',
+                    maxLength: {value: 40, message: 'El titulo debe contener menos de 50 caracteres'}
                 })}
             />
 
@@ -113,21 +118,26 @@ export default function CreateHabitForm() {
             )}
             
             {frecuency === 'WEEKLY' && (
-                <div className="grid grid-cols-5 place-items-center">
+                <div className="grid grid-cols-5 gap-4">
                     {weeklyDaysCheckBoxes.map(weekDay => (
-                        <div key={weekDay.value} className="flex gap-2">
-                            <label className="text-zenith-yellow font-black" htmlFor={weekDay.day}>{weekDay.day}</label>
+                        <div key={weekDay.value} className="flex flex-col items-center">
                             <input 
                                 id={weekDay.day}
                                 type="checkbox"
+                                className="appearance-none w-6 h-6 border border-zenith-yellow rounded-md bg-zenith-dark-purple checked:bg-zenith-yellow checked:border-zenith-purple focus:ring-2 focus:ring-zenith-yellow focus:outline-none transition duration-200 cursor-pointer"
                                 {...register('weeklyDays', {
                                     required: 'Selecciona la frecuencia a la semana'
                                 })}
                                 value={weekDay.value}
                             />
+                            <label 
+                                htmlFor={weekDay.day} 
+                                className="text-zenith-yellow font-bold text-xs mt-2 transition-all hover:text-zenith-purple cursor-pointer">
+                                {weekDay.day}
+                            </label>
                         </div>
                     ))}
-                </div>
+                </div>            
             )}
 
             {errors.weeklyDays && (
@@ -142,9 +152,9 @@ export default function CreateHabitForm() {
                 })}
             >
                 <option className="bg-zenith-yellow text-zenith-purple" value="" disabled>-- Duración --</option>
-                <option className="bg-zenith-yellow text-zenith-purple" value="30">30 Días (Corto)</option>
-                <option className="bg-zenith-yellow text-zenith-purple" value="45">45 Días (Intermedio)</option>
-                <option className="bg-zenith-yellow text-zenith-purple" value="66">66 Días (Definitivo)</option>
+                <option className="bg-zenith-yellow text-zenith-purple" value="30">30 Días (Corta)</option>
+                <option className="bg-zenith-yellow text-zenith-purple" value="45">45 Días (Intermedia)</option>
+                <option className="bg-zenith-yellow text-zenith-purple" value="66">66 Días (Definitiva)</option>
             </select>
 
             {errors.plannedDays && (
@@ -152,7 +162,6 @@ export default function CreateHabitForm() {
             )}
 
             <AppButton type='submit'>Crear hábito</AppButton>
-
         </form>
     )
 }

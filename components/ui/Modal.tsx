@@ -9,14 +9,14 @@ type ModalProps = {
 }
 
 export default function Modal({children, isModalOpen, setIsModalOpen} : ModalProps) {
-    
+
     useEffect(() => {
         if(isModalOpen){
             document.documentElement.style.overflow = 'hidden'
             if(window.innerWidth >= 1028){
                 document.body.style.paddingRight = '15px'
             }
-        } 
+        }
 
         return () => {
             document.documentElement.style.overflow = ''

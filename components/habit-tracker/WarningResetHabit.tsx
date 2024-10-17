@@ -1,33 +1,21 @@
 import { RiErrorWarningLine } from "react-icons/ri";
 
-import { resetHabit } from "@/actions/reset-habit";
-import { Habit } from "@prisma/client";
-import { toast } from "react-toastify";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import NotificationIcon from "../ui/NotificationIcon";
-import Loading from "../ui/Loading";
+import { UseMutateFunction } from "@tanstack/react-query";
 import AppButton from "../ui/AppButton";
 
 
 type WarningResetHabitProps = {
-    habitId : Habit['id'], 
+    resetHabitMutate: UseMutateFunction<{
+        message: string;
+        completedAchievement: number | undefined;
+    }, Error, void, unknown>
 }
 
-export default function WarningResetHabit({habitId} : WarningResetHabitProps) {
-    const queryClient = useQueryClient()
+export default function WarningResetHabit({resetHabitMutate} : WarningResetHabitProps) {
 
-    const { mutate : ResetHabitMutate, isPending } = useMutation({
-        mutationFn: () => resetHabit(habitId),
-        onSuccess: (data) => {
-            queryClient.invalidateQueries({queryKey: ['habits']})
-            toast.success(data, { icon: () => <NotificationIcon />});
-        },
-        onError: (error) => {
-            toast.error(error.message)
-        }
-    })
-
-    if(isPending) return <Loading />
+    const handleClick = () => {
+        resetHabitMutate()
+    }
 
     return (
         <div className="bg-white/10 rounded-lg p-4 flex flex-col gap-5 items-center py-12">
@@ -35,7 +23,7 @@ export default function WarningResetHabit({habitId} : WarningResetHabitProps) {
             <RiErrorWarningLine className="w-20 h-20 text-zenith-yellow" />
             <AppButton
                 type="button"
-                onClick={ResetHabitMutate}
+                onClick={handleClick}
             >Reiniciar Hábito</AppButton>
         </div>
     )

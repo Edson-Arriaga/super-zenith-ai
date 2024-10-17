@@ -1,6 +1,7 @@
 "use server"
 
 import prisma from "@/src/lib/prisma"
+import { calcAchievements } from "@/src/utils/calcAchievements"
 import { isSameDay } from "@/src/utils/isSameDay"
 import { Habit } from "@prisma/client"
 
@@ -34,6 +35,19 @@ export async function updateDatesCompleted(habit: Habit, today: Date, zoneOff: n
     const longestStreak = (habit.longestStreak < uppdatedDates.length) ? uppdatedDates.length : habit.longestStreak 
     const completed = level === 5
 
+    let newAchievements : number[] = []
+    //Achievements
+    if(completed){
+        const user = await prisma.user.findUnique({
+            where: { id: habit.userId },
+            select: { completedAchievements: true, completedHabits: true }
+        })
+
+        if(user){
+            newAchievements = await calcAchievements({user, habit})
+        }
+    }
+
     await prisma.habit.update({
         where: {
             id: habit.id
@@ -46,5 +60,8 @@ export async function updateDatesCompleted(habit: Habit, today: Date, zoneOff: n
         }
     })
 
-    return message
+    return {
+        message,
+        newAchievements
+    }
 }

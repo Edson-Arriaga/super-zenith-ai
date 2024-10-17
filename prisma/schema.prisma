@@ -11,8 +11,9 @@ model User {
   id Int @id @default(autoincrement())
   clerkId String @unique
   habits Habit[]
-  streak Int @default(0)
   zenithPoints Int @default(5)
+  completedHabits Int @default(0)
+  completedAchievements Int[]
   plan Plan @default(FREE)
 }
 enum Plan {

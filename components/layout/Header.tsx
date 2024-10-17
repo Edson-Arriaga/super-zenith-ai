@@ -5,6 +5,7 @@ import { useState } from "react";
 import { SignedIn, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function Header() {
     
@@ -30,15 +31,25 @@ export default function Header() {
                 </button>
 
                 {isMenuActive && (
-                    <div className="fixed w-screen h-screen bg-zenith-dark-purple inset-0 z-50">
-                        <nav className="flex flex-col gap-10 w-full h-full justify-center items-center">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1, duration: 0.5 }}
+                        className="fixed w-screen h-screen bg-zenith-dark-purple inset-0 z-50"
+                    >
+                        <nav className="flex flex-col gap-20 w-full h-full justify-center items-center">
                             <Link 
                                 href={'/habit-tracker'}
                                 className="text-zenith-yellow font-black text-3xl"
                                 onClick={() => setIsMenuActive(false)}
                             >-- Habit Tracker --</Link>
+                            <Link 
+                                href={'/achievements'}
+                                className="text-zenith-yellow font-black text-3xl"
+                                onClick={() => setIsMenuActive(false)}
+                            >-- Logros --</Link>
                         </nav>
-                    </div>
+                    </motion.div>
                 )}
             </header>
         </SignedIn>

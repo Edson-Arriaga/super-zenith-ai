@@ -7,4 +7,4 @@ export const categories = [
   { id: 6, name: "Productividad", value: "PRODUCTIVITY" },
   { id: 7, name: "Creatividad", value: "CREATIVITY" }
 ];
-  
+
