@@ -26,27 +26,22 @@ export async function POST(request : NextRequest){
 
     if(!event) throw new Error("There was an error")
 
-
-    const user = await currentUser()
-    if(!user) throw new Error("There was an error")
-    
-
     switch(event.type){
         case 'payment_intent.succeeded':
-            prisma.user.update({
-                where: {clerkId: user?.id},
-                data: {plan: 'PREMIUM'}
-            })
-
+            await prisma.user.update({
+                where: { stripeCustomerId: event.data.object.customer as string },
+                data: { plan: 'PREMIUM' }
+            });
+            
             break
 
         case 'customer.subscription.deleted':
             prisma.user.update({
-                where: {clerkId: user?.id},
+                where: {stripeCustomerId: event.data.object.customer as string},
                 data: {plan: 'FREE'}
             })
 
-            break;
+            break
 
         default:
             console.log(`Unhandled event type ${event.type}`)

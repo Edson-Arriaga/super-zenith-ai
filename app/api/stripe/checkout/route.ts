@@ -1,3 +1,5 @@
+import prisma from '@/src/lib/prisma'
+import { currentUser } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
 import { Stripe } from 'stripe'
 
@@ -11,8 +13,29 @@ export async function POST(request : NextRequest){
     }
 
     const stripe = new Stripe(secretKey)
-    
+
+    const clerkUser = await currentUser()
+    if(!clerkUser) throw new Error("There was an error")
+    const user = await prisma.user.findUnique({where: {clerkId : clerkUser.id}})
+
+    let stripeCustomerId = user?.stripeCustomerId
+
+    if (!stripeCustomerId) {
+        const customer = await stripe.customers.create({
+            email: clerkUser.primaryEmailAddress?.emailAddress,
+            name: ''
+        })
+
+        stripeCustomerId = customer.id
+
+        await prisma.user.update({
+            where: { clerkId: clerkUser.id },
+            data: { stripeCustomerId }
+        })
+    }
+
     const session = await stripe.checkout.sessions.create({
+        customer: stripeCustomerId,
         mode: isRecurring ? 'subscription' : 'payment',
         payment_method_types: ['card'],
         line_items: [
