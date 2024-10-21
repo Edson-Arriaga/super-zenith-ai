@@ -1,7 +1,7 @@
 import prisma from "@/src/lib/prisma"
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 
-export async function POST(req : Request){
+export async function POST(req : NextRequest){
     const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET_USER_DELETED
 
     if (!WEBHOOK_SECRET) {

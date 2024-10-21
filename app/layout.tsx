@@ -42,21 +42,20 @@ export default function RootLayout({
                 }
             }}>
                 <body className={`${nunito.className} antialiased flex flex-col lg:flex-row bg-zenith-dark-purple`}>
+                    <Header />
 
-                <Header />
+                    <Aside />
 
-                <Aside />
+                    <section className="flex-grow lg:ml-24 px-3 sm:px-10 md:px-5 lg:px-14 xl:px-10 mb-10">
+                        <QueryClientProvider>
+                            {children}
+                        </QueryClientProvider>
+                    </section>
 
-                <section className="flex-grow lg:ml-24 px-3 sm:px-10 md:px-5 lg:px-14 xl:px-10 mb-10">
-                    <QueryClientProvider>
-                        {children}
-                    </QueryClientProvider>
-                </section>
-
-                <ToastContainer 
-                    position="top-center"
-                    pauseOnHover={false}
-                />
+                    <ToastContainer 
+                        position="top-center"
+                        pauseOnHover={false}
+                    />
                 </body>
             </ClerkProvider>
         </html>  
