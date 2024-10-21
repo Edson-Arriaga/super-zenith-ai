@@ -36,6 +36,11 @@
 
 .cl-button{
   color: var(--zenith-yellow);
+  
+}
+
+.cl-formButtonPrimary{
+  color: var(--zenith-purple);
 }
 
 .cl-button:hover{

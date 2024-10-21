@@ -7,7 +7,6 @@ import { revalidatePath } from "next/cache"
 
 export async function createHabit(data : HabitFormData){
     const clerkUser = await currentUser()
-
     const user = await prisma.user.findUnique({ where: { clerkId: clerkUser?.id } })
 
     if (!user) {

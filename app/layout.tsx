@@ -16,7 +16,10 @@ const nunito = Nunito({
 
 export const metadata: Metadata = {
     title: "Super Zenith AI",
-    description: "La App que te ayudará a convertirte en tu mejor versión."
+    description: "La App que te ayudará a convertirte en tu mejor versión.",
+    icons: {
+        icon: '/images/zenith-logo.png'
+    }
 };
 
 export default function RootLayout({

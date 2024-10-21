@@ -1,3 +1,6 @@
+import prisma from "@/src/lib/prisma";
+import { useAuth } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
@@ -23,39 +26,28 @@ export async function POST(request : NextRequest){
     }
 
     if(!event) throw new Error("There was an error")
+
+
+    const user = await currentUser()
+    if(!user) throw new Error("There was an error")
     
 
     switch(event.type){
-        case 'invoice.payment_succeeded':
-            const inv1 = event.data.object
-            console.log(`Invoice was successful: ${inv1.id}`);
-            break
-        
-        case 'invoice.payment_failed':
-            const inv2 = event.data.object
-            console.log(`Invoice payment failed: ${inv2.id}`)
-            break
-
         case 'payment_intent.succeeded':
-            const pay1 = event.data.object
-            console.log(`Payment was successful: ${pay1.id}`)
-            break
+            prisma.user.update({
+                where: {clerkId: user?.id},
+                data: {plan: 'PREMIUM'}
+            })
 
-        case 'payment_intent.payment_failed':
-            const pay2 = event.data.object
-            console.log(`Payment failed: ${pay2.id}`)
             break
 
         case 'customer.subscription.deleted':
-            const cus1 = event.data.object
-            console.log(`Subsicrion deleted: ${cus1.id}`)
-            break;
+            prisma.user.update({
+                where: {clerkId: user?.id},
+                data: {plan: 'FREE'}
+            })
 
-        case 'customer.subscription.updated':
-            
-            const cus2 = event.data.object
-            console.log(`subscription updated: ${cus2.id}`)
-            break
+            break;
 
         default:
             console.log(`Unhandled event type ${event.type}`)

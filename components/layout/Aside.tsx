@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { BiSolidMedal } from "react-icons/bi";
 import { HiCalendarDays } from "react-icons/hi2";
+import { FaFileInvoiceDollar } from "react-icons/fa6";
 import PropOver from "./PropOver";
 
 export default function Aside() {
@@ -35,11 +36,21 @@ export default function Aside() {
                         <Link
                             className="relative"
                             href='/achievements'
-                            onMouseEnter={() => setPropOverActive(3)}
+                            onMouseEnter={() => setPropOverActive(2)}
                             onMouseLeave={() => setPropOverActive(0)}
                             >
                             <BiSolidMedal className="w-12 h-12 hover:scale-105 hover:cursor-pointer text-yellow-400 border-x-2 border-zenith-yellow p-1 rounded-lg hover:text-zenith-yellow hover:bg-white/10 transition-all" />
-                            {propOverActive === 3 && <PropOver>Logros</PropOver>}
+                            {propOverActive === 2 && <PropOver>Logros</PropOver>}
+                        </Link>
+
+                        <Link
+                            className="relative"
+                            href='/plans'
+                            onMouseEnter={() => setPropOverActive(3)}
+                            onMouseLeave={() => setPropOverActive(0)}
+                        >
+                            <FaFileInvoiceDollar className="w-12 h-12 hover:scale-105 hover:cursor-pointer text-yellow-400 border-x-2 border-zenith-yellow p-2 rounded-lg hover:text-zenith-yellow hover:bg-white/10 transition-all" />
+                            {propOverActive === 3 && <PropOver>Planes</PropOver>}
                         </Link>
                     </nav>
                     
