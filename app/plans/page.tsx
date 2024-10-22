@@ -1,3 +1,4 @@
+import { getUser } from '@/actions/get-user';
 import CheckoutButton from '@/components/plans/CheckoutButton';
 import PlanFeature from '@/components/plans/PlanFeature';
 import PageTitle from '@/components/ui/PageTitle';
@@ -18,6 +19,7 @@ async function getStipePlans(){
 export default async function PlansPage() {
     
     const plans = await getStipePlans()
+    const user = await getUser()
     
     return (
         <main className='items-center justify-center text-white max-w-7xl mx-auto -mb-10'>
@@ -39,9 +41,9 @@ export default async function PlansPage() {
                     </ul>
 
                     <button
-                        className='w-full text-base xl:text-lg capitalize text-zenith-yellow py-3 rounded-lg text-center lg:hover:scale-[1.025] border-t-2 border-b-2 border-r-1 border-l-1 border-zenith-yellow transition-all font-black lg:hover:bg-white/10 opacity-50'
+                        className='w-full text-base xl:text-lg capitalize text-zenith-yellow py-3 rounded-lg text-center border-t-2 border-b-2 border-r-1 border-l-1 border-zenith-yellow transition-all font-black opacity-50'
                         disabled
-                    >Comprar Ahora</button>
+                    >{user.plan === 'PREMIUM' ? 'Ya eres premium' : 'Plan Actual'}</button>
                 </li>
 
                 {plans.map(plan => (
@@ -62,7 +64,7 @@ export default async function PlansPage() {
                             <PlanFeature>Funciones disponibles</PlanFeature>
                         </ul>
                         
-                        <CheckoutButton planId={plan.id} isRecurring={plan.recurring ? true : false}/>
+                        <CheckoutButton planId={plan.id} isRecurring={plan.recurring ? true : false} planUser={user.plan}/>
                     </li>
                 ))}
             </ul>

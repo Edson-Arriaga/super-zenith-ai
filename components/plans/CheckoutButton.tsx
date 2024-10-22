@@ -1,6 +1,14 @@
 "use client"
 
-export default function CheckoutButton({planId, isRecurring} : {planId : string, isRecurring: boolean | null}) {
+import { User } from "@prisma/client"
+
+type CheckoutButtonProps = {
+    planId : string, 
+    isRecurring: boolean | null
+    planUser: User['plan']
+}
+
+export default function CheckoutButton({planId, isRecurring, planUser} : CheckoutButtonProps) {
     const handleClick = async () => {
         const res = await fetch('/api/stripe/checkout', {
             method: 'POST',
@@ -16,8 +24,11 @@ export default function CheckoutButton({planId, isRecurring} : {planId : string,
 
     return (
         <button
-            className='w-full text-base xl:text-lg capitalize text-zenith-yellow py-3 rounded-lg text-center lg:hover:scale-[1.025] border-t-2 border-b-2 border-r-1 border-l-1 border-zenith-yellow transition-all font-black lg:hover:bg-white/10'
+            className='w-full text-base xl:text-lg capitalize text-zenith-yellow py-3 rounded-lg text-center lg:hover:scale-[1.025] border-t-2 border-b-2 border-r-1 border-l-1 border-zenith-yellow transition-all font-black lg:hover:bg-white/10 disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-transparent'
             onClick={handleClick}
-        >Comprar Ahora</button>
+            disabled={planUser === 'PREMIUM'}
+        >
+            {planUser === 'PREMIUM' ? 'Ya Eres Premium' : 'Comprar Ahora'}
+        </button>
     )
 }
