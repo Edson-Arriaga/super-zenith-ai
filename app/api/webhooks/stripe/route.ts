@@ -36,7 +36,7 @@ export async function POST(request : NextRequest){
         case 'invoice.payment_failed':
             await updatePlan('FREE', event.data.object.customer)
             break
-        
+
         default:
             console.log(`Unhandled event type ${event.type}`)
     }
@@ -50,7 +50,7 @@ async function updatePlan (newPlan: User['plan'], customer: string | Stripe.Cust
         where: { stripeCustomerId: customer as string },
     })
 
-    if (userInvoice?.plan === 'PREMIUM') {
+    if (userInvoice?.plan !== newPlan) {
         await prisma.user.update({
             where: { stripeCustomerId: customer as string },
             data: { plan: newPlan}
