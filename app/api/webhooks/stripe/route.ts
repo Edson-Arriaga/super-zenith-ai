@@ -1,4 +1,5 @@
 import prisma from "@/src/lib/prisma";
+import { User } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
@@ -28,29 +29,31 @@ export async function POST(request : NextRequest){
     switch(event.type){
         case 'payment_intent.succeeded':
         case 'invoice.payment_succeeded':
-            const user = await prisma.user.findUnique({
-                where: { stripeCustomerId: event.data.object.customer as string },
-            })
-
-            if (user?.plan !== 'PREMIUM') {
-                await prisma.user.update({
-                    where: { stripeCustomerId: event.data.object.customer as string },
-                    data: { plan: 'PREMIUM' }
-                })
-            }
+            await updatePlan('PREMIUM', event.data.object.customer)
             break
 
         case 'customer.subscription.deleted':
-            await prisma.user.update({
-                where: {stripeCustomerId: event.data.object.customer as string},
-                data: {plan: 'FREE'}
-            })
-
+        case 'invoice.payment_failed':
+            await updatePlan('FREE', event.data.object.customer)
             break
-
+        
         default:
             console.log(`Unhandled event type ${event.type}`)
     }
 
     return NextResponse.json({received: true});
+}
+
+
+async function updatePlan (newPlan: User['plan'], customer: string | Stripe.Customer | Stripe.DeletedCustomer | null){
+    const userInvoice = await prisma.user.findUnique({
+        where: { stripeCustomerId: customer as string },
+    })
+
+    if (userInvoice?.plan === 'PREMIUM') {
+        await prisma.user.update({
+            where: { stripeCustomerId: customer as string },
+            data: { plan: newPlan}
+        })
+    }
 }
