@@ -48,6 +48,11 @@ export default function Header() {
                                 className="text-zenith-yellow font-black text-3xl"
                                 onClick={() => setIsMenuActive(false)}
                             >-- Logros --</Link>
+                            <Link 
+                                href={'/plans'}
+                                className="text-zenith-yellow font-black text-3xl"
+                                onClick={() => setIsMenuActive(false)}
+                            >-- Planes --</Link>
                         </nav>
                     </motion.div>
                 )}
