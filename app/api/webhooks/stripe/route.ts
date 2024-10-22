@@ -27,15 +27,21 @@ export async function POST(request : NextRequest){
 
     switch(event.type){
         case 'payment_intent.succeeded':
-            await prisma.user.update({
+        case 'invoice.payment_succeeded':
+            const user = await prisma.user.findUnique({
                 where: { stripeCustomerId: event.data.object.customer as string },
-                data: { plan: 'PREMIUM' }
-            });
-            
+            })
+
+            if (user?.plan !== 'PREMIUM') {
+                await prisma.user.update({
+                    where: { stripeCustomerId: event.data.object.customer as string },
+                    data: { plan: 'PREMIUM' }
+                })
+            }
             break
 
         case 'customer.subscription.deleted':
-            prisma.user.update({
+            await prisma.user.update({
                 where: {stripeCustomerId: event.data.object.customer as string},
                 data: {plan: 'FREE'}
             })

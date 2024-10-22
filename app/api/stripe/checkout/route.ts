@@ -22,8 +22,7 @@ export async function POST(request : NextRequest){
 
     if (!stripeCustomerId) {
         const customer = await stripe.customers.create({
-            email: clerkUser.primaryEmailAddress?.emailAddress,
-            name: ''
+            email: clerkUser.primaryEmailAddress?.emailAddress
         })
 
         stripeCustomerId = customer.id
