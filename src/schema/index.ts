@@ -19,6 +19,17 @@ export const HabitSchema = z.object({
             message: 'Selecciona al menos un día a la semana',
         });
     }
-});
+})
 
 export type HabitFormData = z.infer<typeof HabitSchema>
+
+export const HabitsAdviceSchema = z.object({
+    introduction: z.string(),
+    habits_advice: z.array(z.object({
+        habit: z.string(),
+        advice: z.string()
+    })),
+    habits_together: z.string()
+})
+
+export type HabitsAdvice = z.infer<typeof HabitsAdviceSchema>

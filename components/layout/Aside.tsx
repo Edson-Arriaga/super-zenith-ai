@@ -3,15 +3,30 @@
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BiSolidMedal } from "react-icons/bi";
 import { HiCalendarDays } from "react-icons/hi2";
 import { FaFileInvoiceDollar } from "react-icons/fa6";
+import { AiFillThunderbolt } from "react-icons/ai";
 import PropOver from "./PropOver";
+import { useQuery } from "@tanstack/react-query";
+import getZenithPoints from "@/actions/get-zenith-points";
 
 export default function Aside() {
     
     const [propOverActive, setPropOverActive] = useState(0)
+
+    const [zenithPoints, setZenithPoints] = useState<number>()
+
+
+    const {data} = useQuery({
+        queryKey: ['zenith-points'],
+        queryFn: () => getZenithPoints(new Date())
+    })
+
+    useEffect(() => {
+        setZenithPoints(data)
+    }, [data])
     
     return (
         <>
@@ -53,6 +68,26 @@ export default function Aside() {
                             {propOverActive === 3 && <PropOver>Planes</PropOver>}
                         </Link>
                     </nav>
+
+                    {zenithPoints !== undefined && (
+                        <section className="flex flex-col gap-2 mb-5">
+                            <div className="shadow-inner shadow-black p-1 rounded-full grid hover:bg-zenith-purple transition-colors"> 
+                                <AiFillThunderbolt 
+                                    className={`${zenithPoints < 3 && 'opacity-35'} text-zenith-yellow`} 
+                                    size={25}/>
+                            </div>
+                            <div className="shadow-inner shadow-black p-1 rounded-full grid hover:bg-zenith-purple transition-colors"> 
+                                <AiFillThunderbolt 
+                                className={`${zenithPoints < 2 && 'opacity-35'} text-zenith-yellow`} 
+                                size={25}/>
+                            </div>
+                            <div className="shadow-inner shadow-black p-1 rounded-full grid hover:bg-zenith-purple transition-colors"> 
+                            <AiFillThunderbolt 
+                                className={`${zenithPoints < 1 && 'opacity-35'} text-zenith-yellow`} 
+                                size={25}/>
+                            </div>
+                        </section>
+                    )}
                     
                     <div className="relative shadow-inner shadow-black rounded-full hover:bg-zenith-purple p-8 transition-colors">
                         <Image

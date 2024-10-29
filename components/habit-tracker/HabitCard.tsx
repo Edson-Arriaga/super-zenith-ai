@@ -1,30 +1,25 @@
 "use client"
 
-import { toast } from "react-toastify";
 import { GoTrash } from "react-icons/go";
 import { RxCross2 } from "react-icons/rx";
 import { IoMdCheckmark } from "react-icons/io";
 import { CgMenuGridO } from "react-icons/cg";
 import { Habit } from "@prisma/client";
 import MonthCalendar from "./MonthCalendar";
-import { updateDatesCompleted } from "@/actions/update-day-mompleted";
 import { useState } from "react";
 import { categories_ES } from "@/src/locales/categories";
 import { CircularProgressbarWithChildren, buildStyles } from "react-circular-progressbar";
 import 'react-circular-progressbar/dist/styles.css';
 import { categoryIcons } from "@/src/dictionaries/categoryIcons";
-import { deleteHabit } from "@/actions/delete-habit";
 import AppButton from "../ui/AppButton";
-import { resetHabit } from "@/actions/reset-habit";
-import NotificationIcon from "../ui/NotificationIcon";
-import Modal from "../ui/Modal";
 import ConfettiDecor from "../ui/ConfettiDecor";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Loading from "../ui/Loading";
 import WarningResetHabit from "./WarningResetHabit";
 import { isSameDay } from "@/src/utils/isSameDay";
-import { useRouter } from "next/navigation";
 import AchievementModal from "./AchievementModal";
+import HabitDetailsModal from "./HabitDetailsModal";
+import DeleteModal from "./DeleteModal";
+import useHabitActions from "@/src/hooks/useHabitActions";
 
 type HabitCardProps = {
     habit: Habit
@@ -32,60 +27,24 @@ type HabitCardProps = {
 
 export default function HabitCard({ habit } : HabitCardProps) {
 
-    const [isConfettiActive, setIsConfettiActive] = useState(false)
-
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
     const [isHabitDetailsModalOpen, setHabitDetailsModalOpen] = useState(false)
 
+    const {
+        updateDatesCompletedMutate,
+        deleteHabitMutate,
+        resetHabitMutate,
+        isPending,
+        isConfettiActive,
+        setIsConfettiActive,
+        newAchievements,
+    } = useHabitActions(habit)
+
     const today = new Date()
     const isTodayCompleted = habit.completedDates.some(date => isSameDay(date, today))
+    const isPlannedToday = habit.frequency === 'DAILY' || habit.weeklyDays.includes(today.getDay())
 
-    const isPlannedToday = habit.frequency === 'DAILY' || habit.weeklyDays.includes(today.getDay());
-
-    const queryClient = useQueryClient()
-
-    const [newAchievements, setNewAchievements] = useState<number[]>()
-
-    const router = useRouter()
-
-    const { mutate : updateDatesCompletedMutate, isPending : isPendingUpdate } = useMutation({
-        mutationFn: () => updateDatesCompleted(habit, new Date() , new Date().getTimezoneOffset()),
-        onSuccess: (data) => {
-            queryClient.invalidateQueries({queryKey: ['habits']})
-            toast.success(data.message, { icon: () => <NotificationIcon />})
-            
-            if(!isTodayCompleted) setIsConfettiActive(true)
-
-            if(data.newAchievements.length !== 0){
-                const newAchievements = data.newAchievements.join(',')
-                router.push(`habit-tracker?achievements=${newAchievements}`)
-                setNewAchievements(data.newAchievements)
-            }
-            
-        },
-        onError: () => toast.error('Error Al Actualizar El Hábito')
-    })
-
-    const { mutate : deleteHabitMutate, isPending : isPendingDelete } = useMutation({
-        mutationFn: () => deleteHabit(habit.id),
-        onSuccess: (data) => {
-            queryClient.invalidateQueries({queryKey: ['habits']})
-            toast.success(data, { icon: () => <NotificationIcon />})
-        },
-        onError: () => toast.error('Error Al Eliminar El Hábito')
-    })
-
-    const { mutate : resetHabitMutate, isPending : isPendingReset} = useMutation({
-        mutationFn: () => resetHabit(habit.id),
-        onSuccess: (data) => {
-            queryClient.invalidateQueries({queryKey: ['habits']})
-            toast.success(data.message, { icon: () => <NotificationIcon />})
-            router.push('habit-tracker?achievements=7')
-        },
-        onError: () => toast.error('Error Al Reiniciar El Hábito')
-    })
-
-    if(isPendingUpdate || isPendingDelete || isPendingReset) return <Loading />;
+    if(isPending) return <Loading />
 
     return (
         <>
@@ -168,51 +127,21 @@ export default function HabitCard({ habit } : HabitCardProps) {
                 )}
             </div>
             
-            <Modal isModalOpen={isDeleteModalOpen} setIsModalOpen={setIsDeleteModalOpen}>
-                <div className="flex flex-col gap-5 w-full">
-                    <p className="text-zenith-yellow font-bold pr-6 text-xl">¿Estás seguro que quieres eliminar el hábito?</p>
-                    <AppButton
-                        type="button" 
-                        onClick={() => {
-                            setIsDeleteModalOpen(false)
-                            deleteHabitMutate()
-                        }}
-                    >
-                        Eliminar
-                    </AppButton>
-                </div>
-            </Modal>
+            <DeleteModal 
+                isDeleteModalOpen={isDeleteModalOpen} 
+                setIsDeleteModalOpen={setIsDeleteModalOpen} 
+                deleteHabitMutate={deleteHabitMutate}
+            />
 
-            <Modal isModalOpen={isHabitDetailsModalOpen} setIsModalOpen={setHabitDetailsModalOpen}>
-                <div className="flex flex-col gap-5">
-                    <h1 className="font-boldm text-white capitalize text-xl">{habit.title}</h1>
-                    <div className="bg-black/30 p-4 rounded-lg">
-                        <h2 className="text-white">Descripción:</h2>
-                        <p className="text-zenith-yellow text-justify">{habit.description}</p>
-                    </div>
-                    <div className="bg-black/30 p-4 rounded-lg flex items-center justify-between">
-                        <p className="text-red-500 font-black text-lg">Fallos cometidos: </p>
-                        <div className="w-24">
-                            <CircularProgressbarWithChildren value={habit.failedDates.length} maxValue={Math.floor(habit.plannedDays * 0.05)} styles={buildStyles({pathColor: '#dc2626', trailColor: '#28094f'})}>
-                                <div className="text-red-500 text-2xl">
-                                    <strong>{habit.failedDates.length} / {Math.floor(habit.plannedDays * 0.05)}</strong>
-                                </div>
-                            </CircularProgressbarWithChildren>
-                        </div>
-                    </div>
-                    <p className="text-sm -mt-4 ml-1 text-red-500 font-black">Si tienes un 5% de fallos cometidos, tu hábito tendrá que ser forzosamente reiniciado.</p>
-                    <div className="flex justify-between bg-black/30 p-4 rounded-lg">
-                        <h2 className="text-white capitalize">Racha máxima alcanzada: </h2>
-                        <p className="font-black text-zenith-yellow">{habit.longestStreak}</p>
-                    </div>
-                    <div className="flex justify-between bg-black/30 p-4 rounded-lg">
-                        <h2 className="text-white capitalize">Duración: </h2>
-                        <p className="font-black text-zenith-yellow">{habit.plannedDays} días</p>
-                    </div>
-                </div>
-            </Modal>
+            <HabitDetailsModal 
+                isHabitDetailsModalOpen={isHabitDetailsModalOpen}
+                setHabitDetailsModalOpen={setHabitDetailsModalOpen}
+                habit={habit}
+            />
 
-            {isConfettiActive && <ConfettiDecor isConfettiActive={isConfettiActive} setIsConfettiActive={setIsConfettiActive}/>}
+            {isConfettiActive && (
+                <ConfettiDecor isConfettiActive={isConfettiActive} setIsConfettiActive={setIsConfettiActive}/>
+            )}
         
             {newAchievements && <AchievementModal/>}
         </>

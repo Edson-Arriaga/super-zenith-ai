@@ -12,7 +12,8 @@ model User {
   clerkId String @unique
   stripeCustomerId String? @unique
   habits Habit[]
-  zenithPoints Int @default(5)
+  zenithPoints Int @default(3)
+  zenithPointsLastDepletionDate DateTime?
   completedHabits Int @default(0)
   completedAchievements Int[]
   plan Plan @default(FREE)

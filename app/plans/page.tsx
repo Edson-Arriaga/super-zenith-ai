@@ -22,21 +22,26 @@ export default async function PlansPage() {
     const user = await getUser()
     
     return (
-        <main className='items-center justify-center text-white max-w-7xl mx-auto -mb-10'>
+        <main className='items-center justify-center text-white max-w-7xl mx-auto mb-10'>
             <PageTitle>Planes</PageTitle>
-            <ul className='grid grid-cols-2 lg:grid-cols-3 gap-5 text-center'>
+            <ul className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 text-center'>
                 <li className='bg-purple-800 bg-opacity-50 px-4 py-5 rounded-lg flex flex-col justify-between gap-3 border-r-2 border-l-2 border-zenith-yellow hover:scale-[1.02] transition-transform'>
-                    <h1 className='text-3xl font-black text-zenith-yellow italic'>Plan Gratis</h1>
-                    
-                    <p className='text-white text-4xl font-bold'>$ 0 MXN</p>
+                    <div className='h-32 flex flex-col items-center justify-center gap-3'>
+                        <h1 className='text-3xl font-black text-zenith-yellow italic'>Plan Gratis</h1>
+                        <p className='text-white text-4xl font-bold italic'>$ 0 MXN</p>
+                    </div>
 
                     <div className='w-full h-1 bg-zenith-yellow rounded-full'/>
 
-                    <ul className=' p-2 py-5 rounded-lg flex flex-col gap-5'>
+                    <ul className=' p-2 py-5 rounded-lg flex flex-col gap-3'>
                         <PlanFeature>Funciones disponibles</PlanFeature>
+                        <div className='w-1/2 h-[1.5px] bg-zenith-yellow rounded-full opacity-50'/>
                         <PlanFeature>Funciones disponibles</PlanFeature>
+                        <div className='w-1/2 h-[1.5px] bg-zenith-yellow rounded-full opacity-50'/>
+                        <PlanFeature>Funciones</PlanFeature>
+                        <div className='w-1/2 h-[1.5px] bg-zenith-yellow rounded-full opacity-50'/>
                         <PlanFeature>Funciones disponibles</PlanFeature>
-                        <PlanFeature>Funciones disponibles</PlanFeature>
+                        <div className='w-1/2 h-[1.5px] bg-zenith-yellow rounded-full opacity-50'/>
                         <PlanFeature>Funciones disponibles</PlanFeature>
                     </ul>
 
@@ -51,16 +56,22 @@ export default async function PlansPage() {
                         key={plan.id}
                         className='bg-purple-800 bg-opacity-50 px-4 py-5 rounded-lg flex flex-col justify-between gap-3 border-r-2 border-l-2 border-zenith-yellow hover:scale-[1.02] transition-transform'
                     >
-                        <h1 className='text-3xl font-black text-zenith-yellow italic'>{plan.nickname}</h1>
-                        <p className='text-white text-4xl font-bold italic'>$ {plan.unit_amount! / 100} <span className='uppercase'>{plan.currency}</span></p>
+                        <div className='h-32 flex flex-col items-center justify-center gap-3'>
+                            <h1 className='text-3xl font-black text-zenith-yellow italic'>{plan.nickname}</h1>
+                            <p className='text-white text-4xl font-bold italic'>$ {plan.unit_amount! / 100} <span className='uppercase'>{plan.currency}</span></p>
+                        </div>
                         
                         <div className='w-full h-1 bg-zenith-yellow rounded-full'/>
 
-                        <ul className=' p-2 py-5 rounded-lg flex flex-col gap-5'>
+                        <ul className=' p-2 py-5 rounded-lg flex flex-col gap-3'>
                             <PlanFeature>Funciones disponibles</PlanFeature>
+                            <div className='w-1/2 h-[1.5px] bg-zenith-yellow rounded-full animate-pulse'/>
                             <PlanFeature>Funciones disponibles</PlanFeature>
+                            <div className='w-1/2 h-[1.5px] bg-zenith-yellow rounded-full animate-pulse'/>
+                            <PlanFeature>Funciones</PlanFeature>
+                            <div className='w-1/2 h-[1.5px] bg-zenith-yellow rounded-full animate-pulse'/>
                             <PlanFeature>Funciones disponibles</PlanFeature>
-                            <PlanFeature>Funciones disponibles</PlanFeature>
+                            <div className='w-1/2 h-[1.5px] bg-zenith-yellow rounded-full animate-pulse'/>
                             <PlanFeature>Funciones disponibles</PlanFeature>
                         </ul>
                         

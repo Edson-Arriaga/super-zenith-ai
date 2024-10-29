@@ -60,7 +60,7 @@ export default function CreateHabitForm() {
                 className="bg-zenith-dark-purple rounded-lg w-full p-2 border text-white border-zenith-yellow focus:bg-zenith-purple"
                 {...register('title', {
                     required: 'El titulo es obligatorio',
-                    maxLength: {value: 40, message: 'El titulo debe contener menos de 50 caracteres'}
+                    maxLength: {value: 40, message: 'El titulo debe contener menos de 40 caracteres'}
                 })}
             />
 
