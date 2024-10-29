@@ -25,7 +25,7 @@ export default async function AchievementsPage() {
                 {achievements.map(achievement => (
                     <div
                         key={achievement.id}
-                        className={`${!userAchievements.includes(achievement.id) && 'opacity-50'}  bg-purple-800 bg-opacity-50 backdrop-filter backdrop-blur-lg rounded-lg p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-purple-700 relative overflow-hidden`}
+                        className={`${!userAchievements.includes(achievement.id) && 'opacity-50'}  bg-purple-800 bg-opacity-50 rounded-lg p-6 shadow-lg hover:shadow-sm hover:shadow-zenith-yellow transition-all duration-300 transform hover:-translate-y-1 border border-purple-700 relative overflow-hidden`}
                     >
                     <div className="absolute inset-0 bg-gradient-to-br opacity-30 z-0"></div>
                         <div className="relative z-10">

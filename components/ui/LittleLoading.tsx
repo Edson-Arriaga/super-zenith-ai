@@ -19,7 +19,7 @@ export default function LittleLoading() {
               ease: "linear",
             }}
           >
-            <div className="relative w-10 h-10">
+            <div className="relative w-9 h-9">
               <Image
                 src="/images/zenith-logo.png"
                 alt="Zenith Logo"

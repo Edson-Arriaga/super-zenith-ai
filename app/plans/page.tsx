@@ -25,7 +25,7 @@ export default async function PlansPage() {
         <main className='items-center justify-center text-white max-w-7xl mx-auto mb-10'>
             <PageTitle>Planes</PageTitle>
             <ul className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 text-center'>
-                <li className='bg-purple-800 bg-opacity-50 px-4 py-5 rounded-lg flex flex-col justify-between gap-3 border-r-2 border-l-2 border-zenith-yellow hover:scale-[1.02] transition-transform'>
+                <li className='bg-purple-800 bg-opacity-50 px-4 py-5 rounded-lg flex flex-col justify-between gap-3 hover:scale-[1.02] transition-transform border border-purple-700'>
                     <div className='h-32 flex flex-col items-center justify-center gap-3'>
                         <h1 className='text-3xl font-black text-zenith-yellow italic'>Plan Gratis</h1>
                         <p className='text-white text-4xl font-bold italic'>$ 0 MXN</p>
@@ -54,7 +54,7 @@ export default async function PlansPage() {
                 {plans.map(plan => (
                     <li 
                         key={plan.id}
-                        className='bg-purple-800 bg-opacity-50 px-4 py-5 rounded-lg flex flex-col justify-between gap-3 border-r-2 border-l-2 border-zenith-yellow hover:scale-[1.02] transition-transform'
+                        className='relative bg-purple-800 bg-opacity-50 px-4 py-5 rounded-lg flex flex-col justify-between gap-3 hover:scale-[1.02] transition-transform border border-purple-700'
                     >
                         <div className='h-32 flex flex-col items-center justify-center gap-3'>
                             <h1 className='text-3xl font-black text-zenith-yellow italic'>{plan.nickname}</h1>
@@ -76,8 +76,11 @@ export default async function PlansPage() {
                         </ul>
                         
                         <CheckoutButton planId={plan.id} isRecurring={plan.recurring ? true : false} planUser={user.plan}/>
+                        <div className="absolute top-10 left-0 w-24 h-24 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full opacity-20 blur-xl"></div>
+                        <div className="absolute top-10 right-0 w-24 h-24 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full opacity-20 blur-xl"></div>
                     </li>
                 ))}
+
             </ul>
         </main>
     )

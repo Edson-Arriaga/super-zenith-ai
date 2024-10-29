@@ -1,6 +1,8 @@
 "use client"
 
 import { User } from "@prisma/client"
+import { useState } from "react"
+import LittleLoading from "../ui/LittleLoading"
 
 type CheckoutButtonProps = {
     planId : string, 
@@ -9,7 +11,11 @@ type CheckoutButtonProps = {
 }
 
 export default function CheckoutButton({planId, isRecurring, planUser} : CheckoutButtonProps) {
+    
+    const [isLoading, setIsLoading] = useState(false)
+
     const handleClick = async () => {
+        setIsLoading(true)
         const res = await fetch('/api/stripe/checkout', {
             method: 'POST',
             body: JSON.stringify({
@@ -28,7 +34,14 @@ export default function CheckoutButton({planId, isRecurring, planUser} : Checkou
             onClick={handleClick}
             disabled={planUser === 'PREMIUM'}
         >
-            {planUser === 'PREMIUM' ? 'Ya Eres Premium' : 'Comprar Ahora'}
+            {isLoading ? (
+                <LittleLoading />
+            ): (
+                <>
+                    {planUser === 'PREMIUM' ? 'Ya Eres Premium' : 'Comprar Ahora'}
+                </>
+            )}
+            
         </button>
     )
 }
