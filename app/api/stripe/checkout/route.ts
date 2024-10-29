@@ -15,24 +15,11 @@ export async function POST(request : NextRequest){
     const stripe = new Stripe(secretKey)
 
     const clerkUser = await currentUser()
-    if(!clerkUser) throw new Error("There was an error")
-    const user = await prisma.user.findUnique({where: {clerkId : clerkUser.id}})
-
-    let stripeCustomerId = user?.stripeCustomerId
-
-    if (!stripeCustomerId) {
-        const customer = await stripe.customers.create()
-
-        stripeCustomerId = customer.id
-
-        await prisma.user.update({
-            where: { clerkId: clerkUser.id },
-            data: { stripeCustomerId }
-        })
+    if(!clerkUser){
+        throw new Error('Clerk User no encontrado')
     }
 
     const session = await stripe.checkout.sessions.create({
-        customer: stripeCustomerId,
         mode: isRecurring ? 'subscription' : 'payment',
         payment_method_types: ['card'],
         line_items: [
@@ -42,7 +29,17 @@ export async function POST(request : NextRequest){
             }
         ],
         success_url: `${process.env.FRONTEND_URL}/successful-payment`,
-        cancel_url: `${process.env.FRONTEND_URL}/plans`
+        cancel_url: `${process.env.FRONTEND_URL}/plans`,
+        metadata: {clerkId: clerkUser.id}
+    })
+
+    const retrievedSession = await stripe.checkout.sessions.retrieve(session.id)
+    console.log(retrievedSession)
+    const stripeCustomerId = retrievedSession.customer as string
+
+    await prisma.user.update({
+        where: { clerkId: clerkUser.id },
+        data: { stripeCustomerId }
     })
 
     return NextResponse.json({url: session.url})

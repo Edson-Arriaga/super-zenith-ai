@@ -36,7 +36,20 @@ export async function POST(request : NextRequest){
         case 'invoice.payment_failed':
             await updatePlan('FREE', event.data.object.customer)
             break
+            
+        case 'checkout.session.completed': 
+            const session = event.data.object as Stripe.Checkout.Session;
+            const clerkId = session.metadata?.clerkId;
+            const stripeCustomerId = session.customer as string;
 
+            if (clerkId && stripeCustomerId) {
+                await prisma.user.update({
+                    where: { clerkId },
+                    data: { stripeCustomerId }
+                })
+            }
+            break
+        
         default:
             console.log(`Unhandled event type ${event.type}`)
     }
