@@ -6,11 +6,10 @@ import LittleLoading from "../ui/LittleLoading"
 
 type CheckoutButtonProps = {
     planId : string, 
-    isRecurring: boolean | null
     planUser: User['plan']
 }
 
-export default function CheckoutButton({planId, isRecurring, planUser} : CheckoutButtonProps) {
+export default function CheckoutButton({planId, planUser} : CheckoutButtonProps) {
     
     const [isLoading, setIsLoading] = useState(false)
 
@@ -19,8 +18,7 @@ export default function CheckoutButton({planId, isRecurring, planUser} : Checkou
         const res = await fetch('/api/stripe/checkout', {
             method: 'POST',
             body: JSON.stringify({
-                planId,
-                isRecurring
+                planId
             }),
             headers: {'Content-Type': 'application/json'}
         })

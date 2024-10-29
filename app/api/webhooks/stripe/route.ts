@@ -37,7 +37,7 @@ export async function POST(request : NextRequest){
             await updatePlan('FREE', event.data.object.customer)
             break
             
-        case 'checkout.session.completed': 
+        case 'checkout.session.async_payment_succeeded': 
             const session = event.data.object as Stripe.Checkout.Session;
             const clerkId = session.metadata?.clerkId;
             const stripeCustomerId = session.customer as string;

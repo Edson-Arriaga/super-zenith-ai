@@ -10,7 +10,9 @@ async function getStipePlans(){
     if (!secretKey) throw new Error('No pudimos encontrar la clave de stripe');
 
     const stripe = new Stripe(secretKey)  
-    const plans = await stripe.prices.list()
+    const plans = await stripe.prices.list({
+        active: true
+    })
     const orderedPlans = plans.data.sort((a, b) => (a.unit_amount ?? 0) - (b.unit_amount ?? 0))
     
     return orderedPlans
@@ -75,7 +77,7 @@ export default async function PlansPage() {
                             <PlanFeature>Funciones disponibles</PlanFeature>
                         </ul>
                         
-                        <CheckoutButton planId={plan.id} isRecurring={plan.recurring ? true : false} planUser={user.plan}/>
+                        <CheckoutButton planId={plan.id} planUser={user.plan}/>
                         <div className="absolute top-10 left-0 w-24 h-24 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full opacity-20 blur-xl"></div>
                         <div className="absolute top-10 right-0 w-24 h-24 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full opacity-20 blur-xl"></div>
                     </li>
