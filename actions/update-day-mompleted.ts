@@ -46,19 +46,27 @@ export async function updateDatesCompleted(habit: Habit, today: Date, zoneOff: n
         if(user){
             newAchievements = await calcAchievements({user, habit})
         }
-    }
 
-    await prisma.habit.update({
-        where: {
-            id: habit.id
-        },
-        data: {
-            completedDates: uppdatedDates,
-            longestStreak,
-            completed,
-            level
-        }
-    })
+        await prisma.habit.update({
+            where: { id: habit.id },
+            data: {
+                completed: true,
+                completedDates: []
+            }
+        })
+    } else {
+        await prisma.habit.update({
+            where: {
+                id: habit.id
+            },
+            data: {
+                completedDates: uppdatedDates,
+                longestStreak,
+                completed,
+                level
+            }
+        })
+    }
 
     return {
         message,
