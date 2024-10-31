@@ -27,9 +27,11 @@ export async function getHabits(today: Date, zoneOff: number) {
 
                 const startDate = new Date(today)
                 startDate.setDate(startDate.getDate() - 1)
+                startDate.setHours(startDate.getHours() - timezoneOffset)
                 startDate.setHours(timezoneOffset, 0, 0, 0)
     
                 const endDate = new Date(habit.startDay)
+                endDate.setHours(endDate.getHours() - timezoneOffset)
                 endDate.setHours(timezoneOffset, 0, 0, 0)
 
                 while (startDate >= endDate) {
@@ -90,7 +92,7 @@ export async function getHabits(today: Date, zoneOff: number) {
 
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     })
-
+    
     return {
         newHabits,
         newAchievements
