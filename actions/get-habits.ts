@@ -3,42 +3,33 @@
 import prisma from "@/src/lib/prisma";
 import { calcAchievements } from "@/src/utils/calcAchievements";
 import { isSameDay } from "@/src/utils/isSameDay";
-import { currentUser } from "@clerk/nextjs/server";
 import { Habit } from "@prisma/client";
+import { getUser } from "./get-user";
 
 export async function getHabits(today: Date, zoneOff: number) {
-    const clerkUser = await currentUser()
-
-    const user = await prisma.user.findUnique({
-        where: { clerkId: clerkUser?.id }
-    })
-
-    if (!user) {
-        throw new Error('Usuario no encontrado')
-    }
+    const user = await getUser()
 
     const habits = await prisma.habit.findMany({
         where: {
             userId: user.id
         }
-    })
+    })  
 
     let newAchievements : number[] = []
 
-    await Promise.all(
+    const newHabits = await Promise.all(
         habits.map(async habit => {
-            if (!habit.completed || !habit.forcedRestart) {
+            if (!habit.completed && !habit.forcedRestart) {
                 let failedDates : Habit['failedDates'] = []
+                let forcedRestart : Habit['forcedRestart'] = habit.forcedRestart
                 
-                const timezoneOffset = zoneOff / 60;
+                const timezoneOffset = zoneOff / 60
 
                 const startDate = new Date(today)
                 startDate.setDate(startDate.getDate() - 1)
-                startDate.setHours(startDate.getHours() - timezoneOffset)
                 startDate.setHours(timezoneOffset, 0, 0, 0)
     
                 const endDate = new Date(habit.startDay)
-                endDate.setHours(endDate.getHours() - timezoneOffset)
                 endDate.setHours(timezoneOffset, 0, 0, 0)
 
                 while (startDate >= endDate) {
@@ -49,38 +40,34 @@ export async function getHabits(today: Date, zoneOff: number) {
                     }
                     
                     if(failedDates.length === Math.floor(habit.plannedDays * 0.05)) {
-                        habit.forcedRestart = true
+                        forcedRestart = true
                         break
                     }
                     
                     startDate.setDate(startDate.getDate() - 1)
                 }
                 
-                if (habit.completedDates.length + failedDates.length === habit.plannedDays && !habit.forcedRestart && !habit.completed){
+                if ((habit.completedDates.length + failedDates.length) === habit.plannedDays){
                     newAchievements = await calcAchievements({user, habit})
 
                     await prisma.habit.update({
                         where: { id: habit.id },
                         data: { failedDates, completed: true }
                     })
-                    return
+                    return {...habit, failedDates, completed : true}
                 }
 
                 if (failedDates.length !== habit.failedDates.length) {
                     await prisma.habit.update({
                         where: { id: habit.id },
-                        data: { failedDates, forcedRestart: habit.forcedRestart }
+                        data: { failedDates, forcedRestart }
                     })
+                    return {...habit, failedDates, forcedRestart}
                 }
             }
+            return habit
         })
     )
-
-    const newHabits = await prisma.habit.findMany({
-        where: {
-            userId: user.id
-        }
-    })
 
     //SORT HABITS
     const weekDay = today.getDay()
