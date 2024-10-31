@@ -55,7 +55,8 @@ export async function getHabits(today: Date, zoneOff: number) {
                     await prisma.habit.update({
                         where: { id: habit.id },
                         data: {
-                            completed: true, 
+                            completed: true,
+                            failedDates,
                             completedDates: [...habit.completedDates, ...failedDates] 
                         }
                     })

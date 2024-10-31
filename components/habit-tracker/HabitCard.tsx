@@ -103,7 +103,11 @@ export default function HabitCard({ habit } : HabitCardProps) {
                 </section>
                         
                 <div className="w-36 mx-auto pb-5 flex-grow mt-3">
-                    <CircularProgressbarWithChildren value={habit.forcedRestart ? habit.completedDates.length : habit.completedDates.length + habit.failedDates.length} maxValue={habit.plannedDays} styles={buildStyles({pathColor: '#fcc919', trailColor: '#380e6a'})}>
+                    <CircularProgressbarWithChildren value={
+                        habit.forcedRestart || habit.completed ? habit.completedDates.length : habit.completedDates.length + habit.failedDates.length}
+                        maxValue={habit.plannedDays} 
+                        styles={buildStyles({pathColor: '#fcc919', trailColor: '#380e6a'})}
+                    >
                         <img width={40} height={40} src="/images/zenith-logo.png" alt="Logo Zenith" />
                         <div className="mt-2 text-sm">
                             <strong>{habit.forcedRestart ? habit.completedDates.length : habit.completedDates.length + habit.failedDates.length} / {habit.plannedDays}</strong> días
