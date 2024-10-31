@@ -56,8 +56,8 @@ export async function getHabits(today: Date, zoneOff: number) {
                         where: { id: habit.id },
                         data: {
                             completed: true,
-                            failedDates : [],
-                            completedDates: [...habit.completedDates, ...failedDates] 
+                            failedDates,
+                            completedDates: [...habit.completedDates]
                         }
                     })
                     return {...habit, failedDates, completed : true}

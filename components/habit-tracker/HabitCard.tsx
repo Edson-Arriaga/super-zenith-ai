@@ -104,7 +104,11 @@ export default function HabitCard({ habit } : HabitCardProps) {
                         
                 <div className="w-36 mx-auto pb-5 flex-grow mt-3">
                     <CircularProgressbarWithChildren value={
-                        habit.forcedRestart ? habit.completedDates.length : habit.completedDates.length + habit.failedDates.length}
+                        (habit.forcedRestart)
+                        ? habit.completedDates.length 
+                        : (habit.completed)
+                        ? habit.plannedDays
+                        : habit.completedDates.length + habit.failedDates.length}
                         maxValue={habit.plannedDays} 
                         styles={buildStyles({pathColor: '#fcc919', trailColor: '#380e6a'})}
                     >
