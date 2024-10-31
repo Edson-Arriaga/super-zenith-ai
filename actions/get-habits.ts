@@ -21,7 +21,7 @@ export async function getHabits(today: Date, zoneOff: number) {
         habits.map(async habit => {
             if (!habit.completed && !habit.forcedRestart) {
                 let failedDates : Habit['failedDates'] = []
-                let forcedRestart : Habit['forcedRestart'] = habit.forcedRestart
+                let forcedRestart : Habit['forcedRestart'] = false
                 
                 const timezoneOffset = zoneOff / 60
 
@@ -49,12 +49,15 @@ export async function getHabits(today: Date, zoneOff: number) {
                     startDate.setDate(startDate.getDate() - 1)
                 }
                 
-                if ((habit.completedDates.length + failedDates.length) === habit.plannedDays){
+                if ((habit.completedDates.length + failedDates.length) === habit.plannedDays && !forcedRestart){
                     newAchievements = await calcAchievements({user, habit})
 
                     await prisma.habit.update({
                         where: { id: habit.id },
-                        data: { failedDates, completed: true }
+                        data: {
+                            completed: true, 
+                            completedDates: [...habit.completedDates, ...failedDates] 
+                        }
                     })
                     return {...habit, failedDates, completed : true}
                 }

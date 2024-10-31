@@ -17,7 +17,7 @@ export default function ConfettiDecor({isConfettiActive, setIsConfettiActive} : 
     }, [isConfettiActive]);
     
     return (
-        <div className="fixed inset-0">
+        <div className="fixed inset-0 z-50">
             <Confetti recycle={false} numberOfPieces={300} wind={0.05}/>
         </div>
     )
