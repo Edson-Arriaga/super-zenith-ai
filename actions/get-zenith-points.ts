@@ -9,7 +9,6 @@ export default async function getZenithPoints(today: Date){
 
     if(user.zenithPointsLastDepletionDate){
         if((today.getDate() !== user.zenithPointsLastDepletionDate.getDate())){
-            console.log('No es el mismo dia')
             userPoints = 3
 
             await prisma.user.update({

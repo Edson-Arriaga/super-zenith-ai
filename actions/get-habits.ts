@@ -41,7 +41,7 @@ export async function getHabits(today: Date, zoneOff: number) {
                         failedDates.push(new Date(startDate))
                     }
                     
-                    if(failedDates.length === Math.floor(habit.plannedDays * 0.05)) {
+                    if(failedDates.length === Math.floor((habit.plannedDays * 0.05) + 1)) {
                         forcedRestart = true
                         break
                     }
@@ -57,6 +57,8 @@ export async function getHabits(today: Date, zoneOff: number) {
                         data: {
                             completed: true,
                             failedDates,
+                            longestStreak: habit.plannedDays,
+                            level: 5,
                             completedDates: []
                         }
                     })
@@ -82,14 +84,17 @@ export async function getHabits(today: Date, zoneOff: number) {
         const isPlannedTodayA = a.frequency === 'DAILY' || a.weeklyDays.includes(weekDay)
         const isPlannedTodayB = b.frequency === 'DAILY' || b.weeklyDays.includes(weekDay)
 
-        const isCompletedA = a.completedDates.some(date => isSameDay(date, today))
-        const isCompletedB = b.completedDates.some(date => isSameDay(date, today))
+        const isCompletedTodayA = a.completedDates.some(date => isSameDay(date, today))
+        const isCompletedTodayB = b.completedDates.some(date => isSameDay(date, today))
 
         if(!a.forcedRestart && b.forcedRestart) return -1
         if(a.forcedRestart && !b.forcedRestart) return 1
 
-        if (!isCompletedA && isCompletedB) return -1
-        if (isCompletedA && !isCompletedB) return 1
+        if (!a.completed && b.completed) return -1
+        if (a.completed && !b.completed) return 1
+
+        if (!isCompletedTodayA && isCompletedTodayB) return -1
+        if (isCompletedTodayA && !isCompletedTodayB) return 1
 
         if (isPlannedTodayA && !isPlannedTodayB) return -1
         if (!isPlannedTodayA && isPlannedTodayB) return 1

@@ -51,6 +51,8 @@ export async function updateDatesCompleted(habit: Habit, today: Date, zoneOff: n
             where: { id: habit.id },
             data: {
                 completed: true,
+                longestStreak,
+                level,
                 completedDates: []
             }
         })
@@ -62,7 +64,6 @@ export async function updateDatesCompleted(habit: Habit, today: Date, zoneOff: n
             data: {
                 completedDates: uppdatedDates,
                 longestStreak,
-                completed,
                 level
             }
         })

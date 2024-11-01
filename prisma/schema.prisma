@@ -14,6 +14,7 @@ model User {
   habits Habit[]
   zenithPoints Int @default(3)
   zenithPointsLastDepletionDate DateTime?
+  lastAdvicePrompt Json?
   completedHabits Int @default(0)
   completedAchievements Int[]
   plan Plan @default(FREE)

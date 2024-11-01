@@ -3,9 +3,23 @@ import PageTitle from "@/components/ui/PageTitle";
 import AppButton from "@/components/ui/AppButton";
 import HabitsDisplay from "@/components/habit-tracker/HabitsDisplay";
 import AIButton from "@/components/habit-tracker/AIButton";
+import prisma from "@/src/lib/prisma";
+import { currentUser } from "@clerk/nextjs/server";
 
-export default function HabitTrackerPage() {
-    
+async function isAIButtonDisable(){
+    const clerkUser = await currentUser()
+    if(!clerkUser) throw new Error('Clerk User Not Found')
+    const habitsLength = await prisma.habit.count({
+        where: {
+            user: {
+                clerkId : clerkUser.id
+            }
+        }
+    })
+    return habitsLength < 2
+}
+
+export default async function HabitTrackerPage() {
     return (
         <main>
             <PageTitle>Habit Tracker</PageTitle>
@@ -18,7 +32,7 @@ export default function HabitTrackerPage() {
                         </div>
                     </AppButton>
 
-                    <AIButton />
+                    <AIButton habitsIsEmpty={await isAIButtonDisable()}/>
                 </div>
                 
                 <HabitsDisplay />

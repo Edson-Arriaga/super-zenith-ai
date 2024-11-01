@@ -30,6 +30,8 @@ export async function createHabit(data : HabitFormData){
         }
     })
 
+    revalidatePath('/habit-tracker')
+
     return {
         message: "Habito Creado Correctamente",
         completedAchievement

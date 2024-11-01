@@ -21,9 +21,9 @@ export default function HabitDetailsModal({isHabitDetailsModalOpen, setHabitDeta
                 <div className="bg-black/30 p-4 rounded-lg flex items-center justify-between">
                     <p className="text-red-500 font-black text-lg">Fallos cometidos: </p>
                     <div className="w-24">
-                        <CircularProgressbarWithChildren value={habit.failedDates.length} maxValue={Math.floor(habit.plannedDays * 0.05)} styles={buildStyles({pathColor: '#dc2626', trailColor: '#28094f'})}>
+                        <CircularProgressbarWithChildren value={habit.failedDates.length} maxValue={Math.floor((habit.plannedDays * 0.05 + 1))} styles={buildStyles({pathColor: '#dc2626', trailColor: '#28094f'})}>
                             <div className="text-red-500 text-2xl">
-                                <strong>{habit.failedDates.length} / {Math.floor(habit.plannedDays * 0.05)}</strong>
+                                <strong>{habit.failedDates.length} / {Math.floor((habit.plannedDays * 0.05) + 1)}</strong>
                             </div>
                         </CircularProgressbarWithChildren>
                     </div>
