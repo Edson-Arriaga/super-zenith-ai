@@ -13,7 +13,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { storeLastAdvicePrompt } from "@/actions/store-last-advice-prompt";
 import NotificationIcon from "../ui/NotificationIcon";
 import LastPromptAdviceModal from "./LastPromptAdviceModal";
-import { JsonValue } from "@prisma/client/runtime/library";
 
 export default function AIButton({habitsIsEmpty} : {habitsIsEmpty: boolean}) {
 
