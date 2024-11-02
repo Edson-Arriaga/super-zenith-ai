@@ -38,15 +38,17 @@ export async function updateDatesCompleted(habit: Habit, today: Date, zoneOff: n
     let newAchievements : number[] = []
     //Achievements
     if(completed){
+        message = 'Felicidades por haber completado un hábito nuevo.'
+
         const user = await prisma.user.findUnique({
             where: { id: habit.userId },
             select: { completedAchievements: true, completedHabits: true }
         })
 
-        if(user){
-            newAchievements = await calcAchievements({user, habit})
-        }
-
+        if(!user) throw new Error('Clerk User Not Found')
+        
+        newAchievements = await calcAchievements({user, habit})
+        
         await prisma.habit.update({
             where: { id: habit.id },
             data: {
@@ -56,6 +58,33 @@ export async function updateDatesCompleted(habit: Habit, today: Date, zoneOff: n
                 completedDates: []
             }
         })
+        
+        //Server validation
+        const habitCoincidence = await prisma.completedHabitHistory.findUnique({where: {id: habit.id}})
+      
+        if(!habitCoincidence){
+            await prisma.completedHabitHistory.create({
+                data: {
+                    id: habit.id,
+                    title: habit.title,
+                    description: habit.description,
+                    frequency: habit.frequency,
+                    category: habit.category,
+                    plannedDays: habit.plannedDays,
+                    completedDay: new Date(),
+                    startDay: habit.startDay,
+                    weeklyDays: habit.weeklyDays,
+                    userId: habit.userId
+                }
+            })
+        } else {
+            await prisma.completedHabitHistory.update({
+                where: { id: habit.id },
+                data: {
+                    timesCompleted: habitCoincidence.timesCompleted + 1
+                }
+            })
+        }
     } else {
         await prisma.habit.update({
             where: {

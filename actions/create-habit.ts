@@ -2,16 +2,11 @@
 
 import prisma from "@/src/lib/prisma"
 import { HabitFormData } from "@/src/schema"
-import { currentUser } from "@clerk/nextjs/server"
 import { revalidatePath } from "next/cache"
+import { getUser } from "./get-user"
 
 export async function createHabit(data : HabitFormData){
-    const clerkUser = await currentUser()
-    const user = await prisma.user.findUnique({ where: { clerkId: clerkUser?.id } })
-
-    if (!user) {
-        throw new Error('Usuario no encontrado')
-    }
+    const user = await getUser()
 
     let completedAchievement
 

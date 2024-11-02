@@ -32,7 +32,6 @@ export default function useHabitActions(habit: Habit) {
                 router.push(`habit-tracker?achievements=${newAchievements}`)
                 setNewAchievements(data.newAchievements)
             }
-            
         },
         onError: () => toast.error('Error Al Actualizar El Hábito')
     })
@@ -51,7 +50,7 @@ export default function useHabitActions(habit: Habit) {
         onSuccess: (data) => {
             queryClient.invalidateQueries({queryKey: ['habits']})
             toast.success(data.message, { icon: () => <NotificationIcon />})
-            router.push('habit-tracker?achievements=7')
+            router.push(`habit-tracker?achievements=${data.completedAchievement}`)
         },
         onError: () => toast.error('Error Al Reiniciar El Hábito')
     })

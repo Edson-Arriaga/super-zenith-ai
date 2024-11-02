@@ -12,6 +12,7 @@ model User {
   clerkId String @unique
   stripeCustomerId String? @unique
   habits Habit[]
+  completedHabitsHistory CompletedHabitHistory[]
   zenithPoints Int @default(3)
   zenithPointsLastDepletionDate DateTime?
   lastAdvicePrompt Json?
@@ -39,6 +40,23 @@ model Habit {
   plannedDays Int @default(66)
   forcedRestart Boolean @default(false)
   completed Boolean @default(false)
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CompletedHabitHistory {
+  id Int @id @default(autoincrement())
+  title String
+  description String?
+  category Category
+  frequency Frequency
+  weeklyDays Int[]
+  startDay DateTime
+  completedDay DateTime
+  timesCompleted Int @default(1)
+  plannedDays Int
   user User @relation(fields: [userId], references: [id])
   userId Int
   createdAt DateTime @default(now())

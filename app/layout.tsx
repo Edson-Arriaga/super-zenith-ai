@@ -45,20 +45,20 @@ export default function RootLayout({
                 }
             }}>
                 <QueryClientProvider>
-                <body className={`${nunito.className} antialiased flex flex-col lg:flex-row bg-zenith-dark-purple`}>
-                    <Header />
+                    <body className={`${nunito.className} antialiased flex flex-col lg:flex-row bg-zenith-dark-purple`}>
+                        <Header />
 
-                    <Aside />
+                        <Aside />
 
-                    <section className="flex-grow lg:ml-24 px-3 sm:px-10 md:px-5 lg:px-14 xl:px-10 mb-10">
-                        {children}
-                    </section>
+                        <section className="flex-grow lg:ml-24 px-3 sm:px-10 md:px-5 lg:px-14 xl:px-10 mb-10">
+                            {children}
+                        </section>
 
-                    <ToastContainer 
-                        position="top-center"
-                        pauseOnHover={false}
-                    />
-                </body>
+                        <ToastContainer 
+                            position="top-center"
+                            pauseOnHover={false}
+                        />
+                    </body>
                 </QueryClientProvider>
             </ClerkProvider>
         </html>  

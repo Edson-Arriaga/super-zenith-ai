@@ -25,8 +25,8 @@ export default function CreateHabitForm() {
         mutationFn: createHabit,
         onSuccess: (data) => {
             toast.success(data.message, { icon: () => <NotificationIcon />})
-            if(data.completedAchievement === 0) {
-                router.push('/habit-tracker?achievements=0')
+            if(data.completedAchievement !== undefined){
+                router.push(`habit-tracker?achievements=${data.completedAchievement}`)
             } else {
                 router.push('/habit-tracker')
             }

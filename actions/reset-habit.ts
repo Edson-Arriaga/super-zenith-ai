@@ -1,19 +1,13 @@
 "use server"
 
 import prisma from "@/src/lib/prisma";
-import { currentUser } from "@clerk/nextjs/server";
 import { Habit } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { getUser } from "./get-user";
 
 export async function resetHabit(habitId : Habit['id']){
 
-    const clerkUser = await currentUser()
-
-    const user = await prisma.user.findUnique({ where: { clerkId: clerkUser?.id } })
-
-    if (!user) {
-        throw new Error('Usuario no encontrado')
-    }
+    const user = await getUser()
 
     let completedAchievement
 
