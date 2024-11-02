@@ -2,13 +2,14 @@
 
 import prisma from "@/src/lib/prisma";
 import { getUser } from "./get-user";
+import { isSameDay } from "@/src/utils/isSameDay";
 
 export default async function getZenithPoints(today: Date){
     const user = await getUser()
     let userPoints = user.zenithPoints
 
     if(user.zenithPointsLastDepletionDate){
-        if((today.getDate() !== user.zenithPointsLastDepletionDate.getDate())){
+        if(!isSameDay(today, user.zenithPointsLastDepletionDate)){
             userPoints = 3
 
             await prisma.user.update({

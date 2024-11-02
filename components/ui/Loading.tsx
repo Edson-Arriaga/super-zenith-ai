@@ -10,15 +10,20 @@ const motivationalPhrases = [
   "La consistencia es la clave del éxito",
   "Cada día es una nueva oportunidad",
   "Tus hábitos definen tu destino",
+  "Transforma tus sueños en realidad",
+  "Sé constante, sé imparable",
+  "La disciplina supera a la motivación",
+  "Cada esfuerzo cuenta",
+  "Hoy es el mejor día para empezar",
 ]
 
 export default function Loading() {
-  const [currentPhrase, setCurrentPhrase] = useState(0)
+  const [currentPhrase, setCurrentPhrase] = useState(Math.floor(Math.random() * motivationalPhrases.length))
   const [progress, setProgress] = useState(0)
 
   useEffect(() => {
     const phraseInterval = setInterval(() => {
-      setCurrentPhrase((prev) => (prev + 1) % motivationalPhrases.length)
+      setCurrentPhrase(Math.floor(Math.random() * motivationalPhrases.length))
     }, 3000)
 
     const progressInterval = setInterval(() => {

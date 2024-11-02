@@ -25,6 +25,7 @@ export default function AIButton({habitsIsEmpty} : {habitsIsEmpty: boolean}) {
     async function handleClick(){
         setIsLoading(true)
         const points = await substractZenithPoint()
+        queryClient.invalidateQueries({queryKey: ['zenith-points']})
 
         if(points !== 0){
             const response = await generateHabitAdvice()
@@ -33,7 +34,6 @@ export default function AIButton({habitsIsEmpty} : {habitsIsEmpty: boolean}) {
             if(success){
                 setHabitsAdvice(data)
                 setIsAIModalOpen(true)
-                queryClient.invalidateQueries({queryKey: ['zenith-points']})
                 if(points === 1) {
                     const response = await storeLastAdvicePrompt(data)
                     toast.success(response, { icon: () => <NotificationIcon />})
@@ -44,7 +44,6 @@ export default function AIButton({habitsIsEmpty} : {habitsIsEmpty: boolean}) {
         } else {
             setIsLastPromptAdviceModalOpen(true)
         }
-        
         setIsLoading(false)
     }
 

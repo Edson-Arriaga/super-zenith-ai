@@ -3,11 +3,12 @@
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BiSolidMedal } from "react-icons/bi";
 import { HiCalendarDays } from "react-icons/hi2";
 import { FaFileInvoiceDollar } from "react-icons/fa6";
 import { AiFillThunderbolt } from "react-icons/ai";
+import { FaHistory } from "react-icons/fa";
 import PropOver from "./PropOver";
 import { useQuery } from "@tanstack/react-query";
 import getZenithPoints from "@/actions/get-zenith-points";
@@ -16,17 +17,11 @@ export default function Aside() {
     
     const [propOverActive, setPropOverActive] = useState(0)
 
-    const [zenithPoints, setZenithPoints] = useState<number>()
-
-
-    const {data} = useQuery({
+    const {data : zenithPoints } = useQuery({
         queryKey: ['zenith-points'],
-        queryFn: () => getZenithPoints(new Date())
+        queryFn: () => getZenithPoints(new Date()),
+        placeholderData: 0
     })
-
-    useEffect(() => {
-        setZenithPoints(data)
-    }, [data])
     
     return (
         <>
@@ -60,12 +55,22 @@ export default function Aside() {
 
                         <Link
                             className="relative"
-                            href='/plans'
+                            href='/completed-habits-history'
                             onMouseEnter={() => setPropOverActive(3)}
+                            onMouseLeave={() => setPropOverActive(0)}
+                            >
+                            <FaHistory className="w-12 h-12 hover:scale-105 hover:cursor-pointer text-yellow-400 border-x-2 border-zenith-yellow p-2 rounded-lg hover:text-zenith-yellow hover:bg-white/10 transition-all" />
+                            {propOverActive === 3 && <PropOver>Historial De Hábitos Comp...</PropOver>}
+                        </Link>
+
+                        <Link
+                            className="relative"
+                            href='/plans'
+                            onMouseEnter={() => setPropOverActive(4)}
                             onMouseLeave={() => setPropOverActive(0)}
                         >
                             <FaFileInvoiceDollar className="w-12 h-12 hover:scale-105 hover:cursor-pointer text-yellow-400 border-x-2 border-zenith-yellow p-2 rounded-lg hover:text-zenith-yellow hover:bg-white/10 transition-all" />
-                            {propOverActive === 3 && <PropOver>Planes</PropOver>}
+                            {propOverActive === 4 && <PropOver>Planes</PropOver>}
                         </Link>
                     </nav>
 
@@ -91,10 +96,10 @@ export default function Aside() {
                     
                     <div className="relative shadow-inner shadow-black rounded-full hover:bg-zenith-purple p-8 transition-colors">
                         <Image
-                        className="p-2"
-                        fill
-                        src="/images/zenith-logo.png"
-                        alt="Zenith Logo" 
+                            className="p-2"
+                            fill
+                            src="/images/zenith-logo.png"
+                            alt="Zenith Logo" 
                         />
                     </div>
                 </aside>

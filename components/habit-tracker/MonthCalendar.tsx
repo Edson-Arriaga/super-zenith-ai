@@ -15,32 +15,28 @@ export default function MonthCalendar({ habit }: MonthCalendarProps) {
   // 1. Cálculo de las fechas planificadas, completadas y fallidas
   const calendarData = useMemo(() => {
     const startDay = new Date(habit.startDay);
-  
     const plannedDates = new Set<string>();
     const currentDate = new Date(startDay);
     let firstPlannedDate: Date | null = null;
     let lastPlannedDate: Date | null = null;
     let plannedDaysCount = 0;
-  
+
     // Crear las fechas planificadas según la frecuencia del hábito
     while (plannedDaysCount < habit.plannedDays) {
       const isPlannedDay = habit.frequency === "DAILY" || 
         (habit.frequency === "WEEKLY" && habit.weeklyDays.includes(currentDate.getDay()));
-  
+      
       if (isPlannedDay) {
-        // Aquí usamos toLocaleDateString() para ajustar a la zona horaria local
-        const dateString = currentDate.toLocaleDateString('en-CA'); // Cambia 'en-CA' según tu zona horaria
-        
+        const dateString = currentDate.toLocaleDateString('en-CA');
         plannedDates.add(dateString);
-  
+
         if (!firstPlannedDate) firstPlannedDate = new Date(currentDate);
         lastPlannedDate = new Date(currentDate);
         plannedDaysCount++;
       }
-  
       currentDate.setDate(currentDate.getDate() + 1);
     }
-  
+
     return {
       plannedDates: Array.from(plannedDates),
       completedDates: new Set(habit.completedDates.map(date => new Date(date).toLocaleDateString('en-CA'))),
@@ -57,14 +53,25 @@ export default function MonthCalendar({ habit }: MonthCalendarProps) {
     const days = [];
     const today = new Date();
 
+    // Días del mes anterior
     for (let i = 0; i < firstDay.getDay(); i++) {
-      days.push(null);
+      const previousDate = new Date(firstDay);
+      previousDate.setDate(firstDay.getDate() - (firstDay.getDay() - i));
+      days.push({
+        date: previousDate.getDate(),
+        fullDate: previousDate.toISOString().split('T')[0],
+        isPlanned: false,
+        isCompleted: false,
+        isFailed: false,
+        isToday: false,
+        isOtherMonth: true, // Indica que pertenece a otro mes
+      });
     }
 
+    // Días del mes actual
     for (let i = 1; i <= lastDay.getDate(); i++) {
       const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
       const dateString = date.toISOString().split('T')[0];
-      
       days.push({
         date: i,
         fullDate: dateString,
@@ -72,6 +79,22 @@ export default function MonthCalendar({ habit }: MonthCalendarProps) {
         isCompleted: calendarData.completedDates.has(dateString),
         isFailed: calendarData.failedDates.has(dateString),
         isToday: date.toDateString() === today.toDateString(),
+        isOtherMonth: false,
+      });
+    }
+
+    // Días del próximo mes
+    for (let i = 1; days.length % 7 !== 0; i++) {
+      const nextDate = new Date(lastDay);
+      nextDate.setDate(lastDay.getDate() + i);
+      days.push({
+        date: nextDate.getDate(),
+        fullDate: nextDate.toISOString().split('T')[0],
+        isPlanned: false,
+        isCompleted: false,
+        isFailed: false,
+        isToday: false,
+        isOtherMonth: true,
       });
     }
 
@@ -154,6 +177,7 @@ export default function MonthCalendar({ habit }: MonthCalendarProps) {
               <div
                 key={index}
                 className={`h-8 w-8 rounded-full flex items-center justify-center text-xs ${
+                  day.isOtherMonth ? "opacity-50" : 
                   day.isCompleted
                     ? "bg-zenith-yellow text-zenith-purple"
                     : day.isFailed
