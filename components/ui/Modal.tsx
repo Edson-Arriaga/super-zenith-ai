@@ -28,7 +28,7 @@ export default function Modal({children, isModalOpen, setIsModalOpen} : ModalPro
     
     return (
         <div 
-            className="fixed inset-0 w-screen h-screen z-50 flex items-center justify-center bg-black/50"
+            className="fixed inset-0 w-screen h-screen z-50 flex items-center justify-center bg-black/25 backdrop-blur-sm"
             onClick={() => setIsModalOpen(false)}
         >
             <motion.div 

@@ -11,7 +11,7 @@ type AppButtonProps = {
 
 export default function AppButton({children, type, href, onClick, className, disabled} : AppButtonProps) {
     
-    const buttonStyle = `w-full text-base xl:text-lg capitalize text-zenith-yellow py-3 rounded-lg text-center lg:hover:scale-[1.025] border-t-2 border-b-2 border-r-1 border-l-1 border-zenith-yellow transition-all font-black lg:hover:bg-white/10 ${className}`
+    const buttonStyle = `w-full text-base xl:text-lg capitalize text-zenith-yellow py-3 rounded-lg text-center lg:hover:scale-[1.025] border-t-2 border-b-2 border-r-1 border-l-1 border-zenith-yellow transition-all duration-500 font-black lg:hover:bg-purple-500/10 ${className}`
     
     return (
         <>

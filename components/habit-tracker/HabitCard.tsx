@@ -49,10 +49,10 @@ export default function HabitCard({ habit } : HabitCardProps) {
     return (
         <>
             <div className={`
-                ${!isPlannedToday && 'opacity-50 scale-95 lg:hover:scale-100'}
-                ${isTodayCompleted ? 'border-green-600 bg-green-600/20' : 'border-zenith-yellow'}
-                ${habit.completed && 'border-zenith-yellow bg-yellow-600/90'}
-                text-white p-5 rounded-lg transition-all lg:hover:scale-[1.02] ease border-x-2`}
+                text-white p-5 rounded-lg lg:hover:scale-[1.02] duration-300 shadow-lg transition-all
+                ${(!isPlannedToday && !habit.completed && !habit.forcedRestart) && 'opacity-50 scale-95 lg:hover:scale-100'}
+                ${isTodayCompleted ? ' bg-green-600 bg-opacity-40' : 'bg-purple-500 bg-opacity-10'}
+                ${habit.completed && ' bg-yellow-600 bg-opacity-90'}`}
             >
 
                 <section className="grid grid-cols-6">
@@ -69,7 +69,7 @@ export default function HabitCard({ habit } : HabitCardProps) {
                         <div className="grid grid-cols-2 gap-2 w-28">
                             <div className="text-end">
                                 <button
-                                    className="px-4 py-2 bg-white/15 hover:bg-white/40 transition-colors rounded-lg disabled:cursor-not-allowed "
+                                    className="px-4 py-2 bg-white/15 hover:bg-white/25 transition-colors rounded-lg disabled:cursor-not-allowed "
                                     onClick={() => updateDatesCompletedMutate()}
                                     disabled={!isPlannedToday || habit.completed}
                                 >
@@ -92,7 +92,7 @@ export default function HabitCard({ habit } : HabitCardProps) {
 
                             <div className="col-start-2 text-end">
                                 <button
-                                    className="px-4 py-2 bg-white/15 hover:bg-white/40 transition-colors rounded-lg"
+                                    className="px-4 py-2 bg-white/15 hover:bg-white/25 transition-colors rounded-lg"
                                     onClick={() => setHabitDetailsModalOpen(true)}
                                 >
                                     <CgMenuGridO className="w-5 h-5"/>

@@ -49,18 +49,18 @@ export default function AIButton({habitsIsEmpty} : {habitsIsEmpty: boolean}) {
 
     return (
         <>
-            <AppButton className="w-20 col-span-2 relative disabled:opacity-40 disabled:cursor-not-allowed" onClick={handleClick} disabled={habitsIsEmpty}>
-                {isLoading ? (
-                    <LittleLoading/>
-                ) : (
-                    <div className="flex justify-center items-center">
-                        <IoSparklesOutline className="animate-pulse absolute"/>
-                        
-                        <IoSparklesOutline className="animate-ping absolute"/>
-
-                    </div>
-                )}
-            </AppButton>
+            <button className="col-span-3 flex justify-center transition-transform rounded-lg h-full relative disabled:opacity-40 disabled:cursor-not-allowed" onClick={handleClick} disabled={habitsIsEmpty}>
+                <div className="relative flex justify-center items-center hover:scale-105 transition-all duration-500 text-zenith-yellow hover:text-zenith-purple hover:bg-yellow-600 hover:bg-opacity-90 h-[20px] w-[20px] p-7 rounded-full border-2 border-dotted border-zenith-yellow hover:border-transparent">
+                    {isLoading ? (
+                        <LittleLoading/>
+                    ) : (
+                        <>
+                            <IoSparklesOutline className="animate-pulse absolute" size={20}/>
+                            <IoSparklesOutline className="animate-ping absolute" size={20}/>
+                        </>
+                    )}
+                </div>
+            </button>
         
             <AIModal isAIModalOpen={isAIModalOpen} setIsAIModalOpen={setIsAIModalOpen} habitsAdvice={habitsAdvice}/>
 

@@ -24,10 +24,10 @@ export default async function PlansPage() {
     const user = await getUser()
     
     return (
-        <main className='items-center justify-center text-white max-w-7xl mx-auto -mb-10'>
+        <main className='items-center justify-center text-white max-w-7xl mx-auto h-screen'>
             <PageTitle>Planes</PageTitle>
             <ul className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 text-center'>
-                <li className='bg-purple-800 bg-opacity-50 px-4 py-5 rounded-lg flex flex-col justify-between gap-3 hover:scale-[1.02] transition-transform border border-purple-700'>
+                <li className='bg-purple-500 bg-opacity-10 px-4 py-5 rounded-lg flex flex-col justify-between gap-3 hover:scale-[1.01] duration-300 hover:-translate-y-1 shadow-lg hover:shadow-sm hover:shadow-zenith-yellow transition-all'>
                     <div className='h-32 flex flex-col items-center justify-center gap-3'>
                         <h1 className='text-3xl font-black text-zenith-yellow italic'>Plan Gratis</h1>
                         <p className='text-white text-4xl font-bold italic'>$ 0 MXN</p>
@@ -36,15 +36,15 @@ export default async function PlansPage() {
                     <div className='w-full h-1 bg-zenith-yellow rounded-full'/>
 
                     <ul className=' p-2 py-5 rounded-lg flex flex-col gap-3'>
-                        <PlanFeature>Funciones disponibles</PlanFeature>
+                        <PlanFeature>Crea un máximo de 2 hábitos</PlanFeature>
                         <div className='w-1/2 h-[1.5px] bg-zenith-yellow rounded-full opacity-50'/>
-                        <PlanFeature>Funciones disponibles</PlanFeature>
+                        <PlanFeature>3 puntos zenith al día</PlanFeature>
                         <div className='w-1/2 h-[1.5px] bg-zenith-yellow rounded-full opacity-50'/>
-                        <PlanFeature>Funciones</PlanFeature>
+                        <PlanFeature>Solo hábitos con una duración de 45 días</PlanFeature>
                         <div className='w-1/2 h-[1.5px] bg-zenith-yellow rounded-full opacity-50'/>
-                        <PlanFeature>Funciones disponibles</PlanFeature>
+                        <PlanFeature>SIN niveles en los hábitos</PlanFeature>
                         <div className='w-1/2 h-[1.5px] bg-zenith-yellow rounded-full opacity-50'/>
-                        <PlanFeature>Funciones disponibles</PlanFeature>
+                        <PlanFeature>SIN historial de hábitos completos</PlanFeature>
                     </ul>
 
                     <button
@@ -56,7 +56,7 @@ export default async function PlansPage() {
                 {plans.map(plan => (
                     <li 
                         key={plan.id}
-                        className='relative bg-purple-800 bg-opacity-50 px-4 py-5 rounded-lg flex flex-col justify-between gap-3 hover:scale-[1.02] transition-transform border border-purple-700'
+                        className='relative bg-purple-500 bg-opacity-10 px-4 py-5 rounded-lg flex flex-col justify-between gap-3 hover:scale-[1.01] duration-300 hover:-translate-y-1 shadow-lg hover:shadow-sm hover:shadow-zenith-yellow transition-all'
                     >
                         <div className='h-32 flex flex-col items-center justify-center gap-3'>
                             <h1 className='text-3xl font-black text-zenith-yellow italic'>{plan.nickname}</h1>
@@ -66,15 +66,15 @@ export default async function PlansPage() {
                         <div className='w-full h-1 bg-zenith-yellow rounded-full'/>
 
                         <ul className=' p-2 py-5 rounded-lg flex flex-col gap-3'>
-                            <PlanFeature>Funciones disponibles</PlanFeature>
+                            <PlanFeature>Crea hasta 10 hábitos</PlanFeature>
                             <div className='w-1/2 h-[1.5px] bg-zenith-yellow rounded-full animate-pulse'/>
-                            <PlanFeature>Funciones disponibles</PlanFeature>
+                            <PlanFeature>10 puntos zenith al día</PlanFeature>
                             <div className='w-1/2 h-[1.5px] bg-zenith-yellow rounded-full animate-pulse'/>
-                            <PlanFeature>Funciones</PlanFeature>
+                            <PlanFeature>Crea hábitos con las 3 duraciones disponibles</PlanFeature>
                             <div className='w-1/2 h-[1.5px] bg-zenith-yellow rounded-full animate-pulse'/>
-                            <PlanFeature>Funciones disponibles</PlanFeature>
+                            <PlanFeature>Niveles en los hábitos</PlanFeature>
                             <div className='w-1/2 h-[1.5px] bg-zenith-yellow rounded-full animate-pulse'/>
-                            <PlanFeature>Funciones disponibles</PlanFeature>
+                            <PlanFeature>Historial de hábitos completos</PlanFeature>
                         </ul>
                         
                         <CheckoutButton planId={plan.id} planUser={user.plan}/>

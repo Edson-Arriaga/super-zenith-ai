@@ -18,14 +18,14 @@ export default async function AchievementsPage() {
     }
 
     return (
-        <main>
+        <main className="mb-16">
             <PageTitle>Logros</PageTitle>
             <p className="text-center text-zenith-yellow capitalize text-2xl mb-10 -mt-4">logros completados: <span className="font-bold text-3xl">{userAchievements.length} / {achievements.length}</span></p>
             <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-zenith-yellow">
                 {achievements.map(achievement => (
                     <div
                         key={achievement.id}
-                        className={`${!userAchievements.includes(achievement.id) && 'opacity-50'}  bg-purple-800 bg-opacity-50 rounded-lg p-6 shadow-lg hover:shadow-sm hover:shadow-zenith-yellow transition-all duration-300 transform hover:-translate-y-1 border border-purple-700 relative overflow-hidden`}
+                        className={`${!userAchievements.includes(achievement.id) && 'opacity-50'}  bg-purple-500 bg-opacity-10 rounded-lg p-6 shadow-lg hover:shadow-sm hover:shadow-zenith-yellow transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden`}
                     >
                     <div className="absolute inset-0 bg-gradient-to-br opacity-30 z-0"></div>
                         <div className="relative z-10">

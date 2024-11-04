@@ -6,7 +6,7 @@ export default function PlanFeature({children} : {children: React.ReactNode}) {
             <div>
                 <PiSealCheckDuotone className="text-zenith-yellow" size={30}/>
             </div>
-            <p className='text-lg w-10/12 font-black text-left'>{children}</p>
+            <p className='text-lg w-10/12 font-black text-left'>{children}.</p>
         </li>
     )
 }

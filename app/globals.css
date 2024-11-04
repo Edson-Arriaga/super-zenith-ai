@@ -7,7 +7,7 @@
   --zenith-yellow: #fcc919;
   --zenith-dark-yellow: #a48512;
   
-  --zenith-light-purple: #7434ca;
+  --zenith-light-purple: #650cdb;
   --zenith-purple: #4b02aa;
   --zenith-dark-purple: #28094f;
 }
@@ -73,4 +73,8 @@
   background: var(--zenith-dark-purple);
   color: var(--zenith-yellow);
   outline: 1px solid var(--zenith-dark-yellow);
+}
+
+.main-bg{
+  background-image: linear-gradient(to right, #28094f, #2f095f, #350970, #3c0881, #420692, #420692, #420692, #420692, #3c0881, #350970, #2f095f, #28094f);
 }
