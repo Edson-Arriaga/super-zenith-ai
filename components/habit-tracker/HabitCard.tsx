@@ -20,6 +20,7 @@ import AchievementModal from "./AchievementModal";
 import HabitDetailsModal from "./HabitDetailsModal";
 import DeleteModal from "./DeleteModal";
 import useHabitActions from "@/src/hooks/useHabitActions";
+import Image from "next/image";
 
 type HabitCardProps = {
     habit: Habit
@@ -111,7 +112,9 @@ export default function HabitCard({ habit } : HabitCardProps) {
                         maxValue={habit.plannedDays} 
                         styles={buildStyles({pathColor: '#fcc919', trailColor: '#380e6a'})}
                     >
-                        <img width={40} height={40} src="/images/zenith-logo.png" alt="Logo Zenith" />
+                        <div className="relative w-10 h-10">
+                            <Image fill src="/images/zenith-logo.png" alt="Logo Zenith" />
+                        </div>
                         <div className="mt-2 text-sm">
                             <strong>{
                                 (habit.completed)

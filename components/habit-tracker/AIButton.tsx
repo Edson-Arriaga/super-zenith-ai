@@ -1,7 +1,6 @@
 "use client"
 
 import { IoSparklesOutline } from "react-icons/io5";
-import AppButton from "../ui/AppButton";
 import generateHabitAdvice from "@/actions/generate-habit-advice";
 import { useState } from "react";
 import { HabitsAdvice, HabitsAdviceSchema } from "@/src/schema";
