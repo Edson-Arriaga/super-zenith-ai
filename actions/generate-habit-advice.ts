@@ -1,16 +1,17 @@
 "use server"
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { getUser } from "./get-user";
 import prisma from "@/src/lib/prisma";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 export default async function generateHabitAdvice(){
-
-    const user = await getUser()
+    const clerkUser = await currentUser()
+    if(!clerkUser) redirect('/sign-up')
     
     const habits = await prisma.habit.findMany({
         where: {
-            userId: user.id
+            user: { clerkId: clerkUser.id}
         },
         select: {
             title: true

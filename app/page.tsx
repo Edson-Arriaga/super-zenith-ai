@@ -1,18 +1,17 @@
-import { auth, } from "@clerk/nextjs/server";
+import { getUser } from "@/actions/get-user";
+import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function InitialPage() {
 
-    const { userId } = auth()
-
-    if (userId) {
-        redirect('/habit-tracker')
-    }
+    const user = await getUser()
+    if(user.plan === 'PREMIUM') redirect('/habit-tracker')
+    else redirect('/plans')
 
     return (
-        <main className="h-screen-without-header flex flex-col justify-center -mb-10 xl:p-10">
+        <main className="h-screen flex flex-col justify-center -mb-10 xl:p-10">
             <div className="flex items-center lg:mx-20 my-24 lg:my-16">
                 <Image
                     width={2100}
@@ -26,7 +25,7 @@ export default async function InitialPage() {
             <section className="flex flex-col lg:flex-row items-center justify-center gap-5 flex-grow lg:mx-20">
                 <Link 
                     href='/sign-in' 
-                    className="relative w-full uppercase text-zenith-purple bg-zenith-yellow py-3 xl:py-4 rounded-lg text-center hover:bg-zenith-dark-yellow font-black border-b-4 border-r-4 border-zenith-dark-purple transition-colors text-lg lg:text-2xl">
+                    className="relative w-9/12 uppercase text-zenith-purple bg-zenith-yellow py-3 xl:py-4 rounded-lg text-center hover:bg-zenith-dark-yellow font-black border-b-4 border-r-4 border-zenith-dark-purple transition-colors text-lg lg:text-2xl">
 
                         <div className="absolute w-32 h-32 -top-[125px] hover:brightness-75">
                             <Image
@@ -37,13 +36,11 @@ export default async function InitialPage() {
                         </div>
                         
                         <p>Iniciar Sesión</p>
-
-                    
                 </Link>
 
                 <Link 
                     href='/sign-up'
-                    className="uppercase text-center text-zenith-yellow ring-1 ring-zenith-yellow py-3 xl:py-4 rounded-lg font-black w-full hover:bg-white/10 text-lg lg:text-2xl"
+                    className="uppercase w-9/12 text-center text-zenith-yellow ring-1 ring-zenith-yellow py-3 xl:py-4 rounded-lg font-black hover:bg-white/10 text-lg lg:text-2xl"
                 >Registrarse</Link>
 
             </section>

@@ -2,11 +2,12 @@
 
 import prisma from "@/src/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 export async function getUser(){
     const clerkUser = await currentUser()
-    if(!clerkUser) throw new Error('Clerk User not founded')
+    if(!clerkUser) redirect('/sign-in')
     const user = await prisma.user.findUnique({where: {clerkId: clerkUser.id}})
-    if(!user) throw new Error('User not founded')
+    if(!user) redirect('/sign-in')
     return user
 }

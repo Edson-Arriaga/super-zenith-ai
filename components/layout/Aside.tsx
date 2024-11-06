@@ -23,7 +23,8 @@ export default function Aside() {
     const {data : zenithPoints } = useQuery({
         queryKey: ['zenith-points'],
         queryFn: () => getZenithPoints(new Date()),
-        placeholderData: 0
+        placeholderData: 0,
+        enabled: (pathName !== '/') && (pathName !== '/sign-up')
     })
     
     return (
