@@ -1,5 +1,4 @@
 import { getUser } from "@/actions/get-user";
-import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
