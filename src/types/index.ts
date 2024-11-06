@@ -1,16 +1,15 @@
 import { IconType } from "react-icons";
 
 export type Achievement = {
-    id: number;
-    name: string;
-    description: string;
-    icon: IconType;
-    color: string;
+    id: number
+    name: string
+    description: string
+    color: string
 }
 
 export type NavItem = {
-    id: number,
-    pageName: string,
-    href: string,
+    id: number
+    pageName: string
+    href: string
     icon: IconType
 }
