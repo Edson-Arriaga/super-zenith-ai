@@ -23,6 +23,8 @@ export default function Header() {
         enabled: (pathName !== '/') && (pathName !== '/sign-up')
     })
 
+    console.log(zenithPoints)
+
     return (
         <SignedIn>
             <header className="flex items-center justify-between px-2 lg:hidden h-20 border-b-2 border-zenith-yellow shadow-sm shadow-zenith-yellow">
