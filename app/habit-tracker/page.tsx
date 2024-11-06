@@ -21,7 +21,7 @@ async function isAIButtonDisable(){
 
 export default async function HabitTrackerPage() {
     return (
-        <main className="mb-10">
+        <div className="mb-10">
             <section className="flex flex-col lg:flex-row justify-between items-center lg:-mb-10 lg:mt-0 gap-5">
                 <PageTitle>Habit Tracker</PageTitle>
                 
@@ -38,6 +38,6 @@ export default async function HabitTrackerPage() {
             </section>
                 
             <HabitsDisplay />
-        </main>
+        </div>
     )
 }

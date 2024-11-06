@@ -24,7 +24,7 @@ export default async function PlansPage() {
     const user = await getUser()
     
     return (
-        <main className='items-center justify-center text-white max-w-7xl mx-auto h-screen'>
+        <div className='max-w-7xl mx-auto mb-10'>
             <PageTitle>Planes</PageTitle>
             <ul className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 text-center'>
                 <li className='bg-purple-500 bg-opacity-10 px-4 py-5 rounded-lg flex flex-col justify-between gap-3 hover:scale-[1.01] duration-300 hover:-translate-y-1 shadow-lg hover:shadow-sm hover:shadow-zenith-yellow transition-all'>
@@ -35,16 +35,16 @@ export default async function PlansPage() {
 
                     <div className='w-full h-1 bg-zenith-yellow rounded-full'/>
 
-                    <ul className=' p-2 py-5 rounded-lg flex flex-col gap-3'>
+                    <ul className=' p-2 py-5 rounded-lg flex flex-col gap-3 text-white'>
                         <PlanFeature>Crea un máximo de 2 hábitos</PlanFeature>
                         <div className='w-1/2 h-[1.5px] bg-zenith-yellow rounded-full opacity-50'/>
                         <PlanFeature>3 puntos zenith al día</PlanFeature>
                         <div className='w-1/2 h-[1.5px] bg-zenith-yellow rounded-full opacity-50'/>
                         <PlanFeature>Solo hábitos con una duración de 45 días</PlanFeature>
                         <div className='w-1/2 h-[1.5px] bg-zenith-yellow rounded-full opacity-50'/>
-                        <PlanFeature>SIN niveles en los hábitos</PlanFeature>
+                        <PlanFeature notIncluded>SIN niveles en los hábitos</PlanFeature>
                         <div className='w-1/2 h-[1.5px] bg-zenith-yellow rounded-full opacity-50'/>
-                        <PlanFeature>SIN historial de hábitos completos</PlanFeature>
+                        <PlanFeature notIncluded>SIN historial de hábitos completos</PlanFeature>
                     </ul>
 
                     <button
@@ -65,7 +65,7 @@ export default async function PlansPage() {
                         
                         <div className='w-full h-1 bg-zenith-yellow rounded-full'/>
 
-                        <ul className=' p-2 py-5 rounded-lg flex flex-col gap-3'>
+                        <ul className=' p-2 py-5 rounded-lg flex flex-col gap-3 text-white'>
                             <PlanFeature>Crea hasta 10 hábitos</PlanFeature>
                             <div className='w-1/2 h-[1.5px] bg-zenith-yellow rounded-full animate-pulse'/>
                             <PlanFeature>10 puntos zenith al día</PlanFeature>
@@ -84,6 +84,6 @@ export default async function PlansPage() {
                 ))}
 
             </ul>
-        </main>
+        </div>
     )
 }

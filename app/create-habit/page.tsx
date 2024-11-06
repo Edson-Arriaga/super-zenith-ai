@@ -4,9 +4,9 @@ import PageTitle from "@/components/ui/PageTitle"
 
 export default function CreateHabitPage() {
     return (
-        <main>
+        <div className="mb-10">
             <PageTitle>Crea un hábito nuevo</PageTitle>
             <CreateHabitForm />
-        </main>
+        </div>
     )
 }

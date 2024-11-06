@@ -9,12 +9,12 @@ export default async function CompletedHabitsHistoryPage() {
     const habitHistory = await getHabitHistory()
 
     return (    
-        <main className="h-full">
+        <div className="mb-10">
             <PageTitle>
                 Historial de hábitos completos
             </PageTitle>
 
-            <div className="overflow-x-auto">
+            <section className="overflow-x-auto">
                 <table className="text-zenith-yellow border border-zenith-yellow w-full lg:w-[50rem] mx-auto">
                     <thead className="border border-zenith-yellow bg-purple-900 bg-opacity-50 text-lg">
                         <tr>
@@ -47,7 +47,7 @@ export default async function CompletedHabitsHistoryPage() {
                         ))}
                     </tbody>
                 </table>
-            </div>
-        </main>
+            </section>
+        </div>
     )
 }

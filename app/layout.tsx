@@ -50,9 +50,9 @@ export default function RootLayout({
 
                         <Aside />
 
-                        <section className="flex-grow lg:ml-24 px-3 sm:px-10 md:px-5 lg:px-14 xl:px-10 h-full">
+                        <main className="flex-grow lg:ml-24 px-3 sm:px-10 md:px-5 lg:px-14 xl:px-10 h-full">
                             {children}
-                        </section>
+                        </main>
 
                         <ToastContainer 
                             position="top-center"

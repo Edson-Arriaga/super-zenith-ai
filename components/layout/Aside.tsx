@@ -61,7 +61,7 @@ export default function Aside() {
                         onMouseLeave={() => setPropOverActive(0)}
                         >
                         <FaHistory className="w-12 h-12 hover:scale-105 hover:cursor-pointer text-yellow-400 border-x-2 border-zenith-yellow p-2 rounded-lg hover:text-zenith-yellow hover:bg-white/10 transition-all duration-500" />
-                        {propOverActive === 3 && <PropOver>Historial De Hábitos Comp...</PropOver>}
+                        {propOverActive === 3 && <PropOver>Hábitos Completos</PropOver>}
                     </Link>
 
                     <Link

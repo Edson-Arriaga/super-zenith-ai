@@ -18,7 +18,7 @@ export default async function AchievementsPage() {
     }
 
     return (
-        <main className="mb-16">
+        <div className="mb-10">
             <PageTitle>Logros</PageTitle>
             <p className="text-center text-zenith-yellow capitalize text-2xl mb-10 -mt-4">logros completados: <span className="font-bold text-3xl">{userAchievements.length} / {achievements.length}</span></p>
             <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-zenith-yellow">
@@ -31,7 +31,7 @@ export default async function AchievementsPage() {
                         <div className="relative z-10">
                                 <div className="flex items-center justify-between mb-4">
                                     <h2 className="text-2xl font-semibold">{achievement.name}</h2>
-                                    <div className={`${achievement.color} w-16 h-16 rounded-full bg-gradient-to-br flex items-center justify-center`}>
+                                    <div className={`w-16 h-16 rounded-full bg-gradient-to-br flex items-center justify-center ${achievement.color}`}>
                                         <achievement.icon className="w-10 h-10 text-white" />
                                     </div>
                                 </div>
@@ -41,6 +41,6 @@ export default async function AchievementsPage() {
                     </div>
                 ))}
             </section>
-        </main>
+        </div>
     )
 }

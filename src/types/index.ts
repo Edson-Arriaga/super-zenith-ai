@@ -7,3 +7,10 @@ export type Achievement = {
     icon: IconType;
     color: string;
 }
+
+export type NavItem = {
+    id: number,
+    pageName: string,
+    href: string,
+    icon: IconType
+}
