@@ -4,6 +4,7 @@ import prisma from "@/src/lib/prisma"
 import { calcAchievements } from "@/src/utils/calcAchievements"
 import { isSameDay } from "@/src/utils/isSameDay"
 import { Habit } from "@prisma/client"
+import updateCompletedHabitHistory from "./update-completed-habit-History"
 
 export async function updateDatesCompleted(habit: Habit, today: Date, zoneOff: number){
     let uppdatedDates : Habit['completedDates'] = []
@@ -45,45 +46,21 @@ export async function updateDatesCompleted(habit: Habit, today: Date, zoneOff: n
             select: { completedAchievements: true, completedHabits: true }
         })
 
-        if(!user) throw new Error('Clerk User Not Found')
+        if(user){
+            newAchievements = await calcAchievements({user, habit})
         
-        newAchievements = await calcAchievements({user, habit})
-        
-        await prisma.habit.update({
-            where: { id: habit.id },
-            data: {
-                completed: true,
-                longestStreak,
-                level,
-                completedDates: []
-            }
-        })
-        
-        //Server validation
-        const habitCoincidence = await prisma.completedHabitHistory.findUnique({where: {id: habit.id}})
-      
-        if(!habitCoincidence){
-            await prisma.completedHabitHistory.create({
-                data: {
-                    id: habit.id,
-                    title: habit.title,
-                    description: habit.description,
-                    frequency: habit.frequency,
-                    category: habit.category,
-                    plannedDays: habit.plannedDays,
-                    completedDay: new Date(),
-                    startDay: habit.startDay,
-                    weeklyDays: habit.weeklyDays,
-                    userId: habit.userId
-                }
-            })
-        } else {
-            await prisma.completedHabitHistory.update({
+            await prisma.habit.update({
                 where: { id: habit.id },
                 data: {
-                    timesCompleted: habitCoincidence.timesCompleted + 1
+                    completed: true,
+                    longestStreak,
+                    level,
+                    completedDates: []
                 }
             })
+            
+            //Server validation
+            await updateCompletedHabitHistory(habit)   
         }
     } else {
         await prisma.habit.update({
