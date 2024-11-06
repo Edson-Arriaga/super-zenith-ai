@@ -2,14 +2,26 @@
 
 import { AiOutlineMenu } from "react-icons/ai";
 import { useState } from "react";
-import { SignedIn, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { usePathname } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import getZenithPoints from "@/actions/get-zenith-points";
 
 export default function Header() {
     
     const [isMenuActive, setIsMenuActive] = useState(false)
+
+    const pathName = usePathname()
+
+    const {data : zenithPoints } = useQuery({
+        queryKey: ['zenith-points'],
+        queryFn: () => getZenithPoints(new Date()),
+        placeholderData: 0,
+        enabled: (pathName !== '/') && (pathName !== '/sign-up')
+    })
 
     return (
         <SignedIn>
@@ -48,6 +60,11 @@ export default function Header() {
                                 className="text-zenith-yellow font-black text-3xl"
                                 onClick={() => setIsMenuActive(false)}
                             >-- Logros --</Link>
+                            <Link 
+                                href={'/completed-habits-history'}
+                                className="text-zenith-yellow font-black text-3xl"
+                                onClick={() => setIsMenuActive(false)}
+                            >-- Historial De Hábitos Completos --</Link>
                             <Link 
                                 href={'/plans'}
                                 className="text-zenith-yellow font-black text-3xl"

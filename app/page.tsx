@@ -1,17 +1,26 @@
-import { getUser } from "@/actions/get-user";
+import prisma from "@/src/lib/prisma";
+import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function InitialPage() {
 
-    const user = await getUser()
-    if(user.plan === 'PREMIUM') redirect('/habit-tracker')
-    else redirect('/plans')
+    const clerkUser = await currentUser()
+    let user
+
+    if(clerkUser){
+        user = await prisma.user.findUnique({where: {clerkId: clerkUser.id}})
+    }
+
+    if(user){
+        if(user.plan === 'PREMIUM') redirect('/habit-tracker')
+        else redirect('/plans')
+    }
 
     return (
-        <main className="h-screen flex flex-col justify-center -mb-10 xl:p-10">
-            <div className="flex items-center lg:mx-20 my-24 lg:my-16">
+        <main className="h-screen flex flex-col justify-center -mb-10 xl:p-10 lg:-ml-24">
+            <div className="flex items-center xl:mx-20 my-24 xl:my-16">
                 <Image
                     width={2100}
                     height={650}

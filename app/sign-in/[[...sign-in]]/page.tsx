@@ -16,12 +16,12 @@ export default function SignInPage() {
     if (!isMounted) return null;
 
     return (
-        <main className="flex flex-col mb-10 items-center xl:justify-normal xl:flex-row xl:h-screen xl:mb-0 xl:gap-36">
+        <main className="flex flex-col mb-10 items-center lg:justify-center lg:flex-row lg:h-screen lg:mb-0 lg:gap-36 lg:-ml-24">
             <section className="relative text-center flex">
-                <PageTitle>Iniciar sesión</PageTitle>
-                <TbArrowWaveRightUp size={150} className="hidden xl:block absolute rotate-45 text-zenith-yellow animate-pulse top-12 -right-36 z-50"/>
+                <PageTitle><span className="lg:text-5xl xl:text-6xl">Iniciar sesión</span></PageTitle>
+                <TbArrowWaveRightUp size={150} className="hidden lg:block absolute rotate-45 text-zenith-yellow animate-pulse top-12 -right-36 z-50"/>
                 
-                <PiArrowArcLeftBold size={80} className="block xl:hidden absolute -rotate-[80deg] w-full text-zenith-yellow animate-pulse top-28 -left-36 z-50"/>
+                <PiArrowArcLeftBold size={80} className="block lg:hidden absolute -rotate-[80deg] w-full text-zenith-yellow animate-pulse top-28 -left-36 z-50"/>
             </section>
             <SignIn />
         </main>
