@@ -3,7 +3,6 @@ import { AiFillThunderbolt } from "react-icons/ai";
 import ZenithPointsModal from "./ZenithPointsModal";
 import { getUser } from "@/actions/get-user";
 import { useQuery } from "@tanstack/react-query";
-import LittleLoading from "../ui/LittleLoading";
 import { toast } from "react-toastify";
 
 export default function ZenithPointsButton({zenithPoints} : {zenithPoints: number}) {

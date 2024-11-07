@@ -1,9 +1,8 @@
 "use client"
 
-import { AiFillThunderbolt, AiOutlineMenu } from "react-icons/ai";
+import { AiOutlineMenu } from "react-icons/ai";
 import { useState } from "react";
 import { SignedIn, UserButton } from "@clerk/nextjs";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";

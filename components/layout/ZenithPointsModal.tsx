@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import Modal from "../ui/Modal";
 import { User } from "@prisma/client";
 import { AiFillThunderbolt } from "react-icons/ai";

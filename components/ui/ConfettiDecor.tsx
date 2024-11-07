@@ -10,11 +10,11 @@ export default function ConfettiDecor({isConfettiActive, setIsConfettiActive} : 
     
     useEffect(() => {
         const timeout = setTimeout(() => {
-            setIsConfettiActive(false);
-        }, 4500);
+            setIsConfettiActive(false)
+        }, 4500)
 
-        return () => clearTimeout(timeout);
-    }, [isConfettiActive]);
+        return () => clearTimeout(timeout)
+    }, [isConfettiActive])
     
     return (
         <div className="fixed inset-0 z-50">
