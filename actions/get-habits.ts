@@ -5,7 +5,7 @@ import { calcAchievements } from "@/src/utils/calcAchievements";
 import { isSameDay } from "@/src/utils/isSameDay";
 import { Habit } from "@prisma/client";
 import { getUser } from "./get-user";
-import updateCompletedHabitHistory from "./update-completed-habit-History";
+import updateCompletedHabitHistory from "./update-completed-habit-history";
 
 export async function getHabits(today: Date, zoneOff: number) {
     const user = await getUser()
