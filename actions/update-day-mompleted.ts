@@ -4,7 +4,7 @@ import prisma from "@/src/lib/prisma"
 import { calcAchievements } from "@/src/utils/calcAchievements"
 import { isSameDay } from "@/src/utils/isSameDay"
 import { Habit } from "@prisma/client"
-import updateCompletedHabitHistory from "./update-completed-habit-History"
+import updateCompletedHabitHistory from "./update-completed-habit-history"
 
 export async function updateDatesCompleted(habit: Habit, today: Date, zoneOff: number){
     let uppdatedDates : Habit['completedDates'] = []
