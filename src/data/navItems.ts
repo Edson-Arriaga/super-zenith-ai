@@ -23,7 +23,7 @@ export const navItems : NavItem[] = [
         icon: FaHistory
     },
     {
-        id: 1,
+        id: 3,
         pageName: 'Planes',
         href: '/plans',
         icon: FaFileInvoiceDollar

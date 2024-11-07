@@ -52,10 +52,9 @@ export default function HabitCard({ habit } : HabitCardProps) {
             <div className={`
                 text-white p-5 rounded-lg lg:hover:scale-[1.02] duration-300 shadow-lg transition-all
                 ${(!isPlannedToday && !habit.completed && !habit.forcedRestart) && 'opacity-50 scale-95 lg:hover:scale-100'}
-                ${isTodayCompleted ? ' bg-green-600 bg-opacity-40' : 'bg-purple-500 bg-opacity-10'}
-                ${habit.completed && ' bg-yellow-600 bg-opacity-90'}`}
+                ${isTodayCompleted ? ' bg-green-600/40' : 'bg-purple-500/10'}
+                ${habit.completed && ' bg-yellow-600/90'}`}
             >
-
                 <section className="grid grid-cols-6">
                     <article className="space-y-5 col-span-4">
                         <h1 className={`${habit.completed && 'text-zenith-yellow'} flex-grow capitalize text-2xl font-black`}>{habit.title}</h1>

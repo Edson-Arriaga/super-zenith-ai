@@ -1,6 +1,6 @@
 "use client"
 
-import { AiOutlineMenu } from "react-icons/ai";
+import { AiFillThunderbolt, AiOutlineMenu } from "react-icons/ai";
 import { useState } from "react";
 import { SignedIn, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
@@ -10,6 +10,8 @@ import { useQuery } from "@tanstack/react-query";
 import getZenithPoints from "@/actions/get-zenith-points";
 import NavHeaderItem from "./NavHeaderItem";
 import { navItems } from "@/src/data/navItems";
+import ZenithPointsButton from "./ZenithPointsButton";
+import GettingStartButton from "./GettingStartButton";
 
 export default function Header() {
     
@@ -33,13 +35,17 @@ export default function Header() {
                     <UserButton appearance={{elements: { rootBox: "w-14 h-14 pt-[1px]", avatarBox: "w-14 h-14"}}}/>
                 </div>
 
-                <div className="relative w-14 h-14">
-                    <Image
-                        fill
-                        src="/images/zenith-logo.png"
-                        alt="Zenith Logo" 
-                    />
-                </div>
+                <section className="flex gap-5 justify-center">
+                    <div>
+                    <GettingStartButton/> 
+
+                    </div>
+                    {zenithPoints !== undefined && (
+                        <div>
+                            <ZenithPointsButton zenithPoints={zenithPoints}/>
+                        </div>
+                    )}
+                </section>
 
                 <button type="button" onClick={() => setIsMenuActive(true)}>
                     <AiOutlineMenu className="text-zenith-yellow h-14 w-14"/>
@@ -58,6 +64,8 @@ export default function Header() {
                                     key={navItem.id} 
                                     navItem={navItem} 
                                     setIsMenuActive={setIsMenuActive}
+                                    pathName={pathName}
+                                    iconSmall={navItem.href === '/plans' || navItem.href === '/completed-habits-history'}
                                 />
                             ))}
                         </nav>

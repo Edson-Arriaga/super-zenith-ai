@@ -10,7 +10,11 @@ export default async function getZenithPoints(today: Date){
 
     if(user.zenithPointsLastDepletionDate){
         if(!isSameDay(today, user.zenithPointsLastDepletionDate)){
-            userPoints = 3
+            if(user.plan === 'PREMIUM'){
+                userPoints = 10
+            } else {
+                userPoints = 3
+            }
 
             await prisma.user.update({
                 where: {

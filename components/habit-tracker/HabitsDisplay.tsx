@@ -20,7 +20,7 @@ export default function HabitsDisplay() {
     
     if(data) return (
         <>
-            <section className="mt-10">
+            <section className="mt-10 max-w-screen-2xl mx-auto">
                 {data.newHabits.length ? (
                     <ul className="grid gap-5 md:grid-cols-2 md:gap-10 lg:gap-5 xl:gap-8 xl:grid-cols-3">
                         {data.newHabits.map((habit, i) => (

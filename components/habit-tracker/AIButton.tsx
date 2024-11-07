@@ -48,7 +48,11 @@ export default function AIButton({habitsIsEmpty} : {habitsIsEmpty: boolean}) {
 
     return (
         <>
-            <button className="col-span-3 flex justify-center transition-transform rounded-lg h-full relative disabled:opacity-40 disabled:cursor-not-allowed" onClick={handleClick} disabled={habitsIsEmpty}>
+            <button 
+                className="col-span-3 flex justify-center transition-transform rounded-lg h-full relative disabled:opacity-40 disabled:cursor-not-allowed" 
+                onClick={handleClick} 
+                disabled={habitsIsEmpty}
+            >
                 <div className="relative flex justify-center items-center hover:scale-105 transition-all duration-500 text-zenith-yellow hover:text-zenith-purple hover:bg-yellow-600 hover:bg-opacity-90 h-[20px] w-[20px] p-7 rounded-full border-2 border-dotted border-zenith-yellow hover:border-transparent">
                     {isLoading ? (
                         <LittleLoading/>

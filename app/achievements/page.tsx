@@ -10,7 +10,7 @@ export default async function AchievementsPage() {
     const userAchievements : User['completedAchievements'] = user.completedAchievements
 
     return (
-        <div className="mb-10">
+        <div className="mb-10 max-w-screen-2xl mx-auto">
             <PageTitle>Logros</PageTitle>
             <p className="text-center text-zenith-yellow capitalize text-2xl mb-10 -mt-4">logros completados: <span className="font-bold text-3xl">{userAchievements.length} / {achievements.length}</span></p>
             <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-zenith-yellow">
