@@ -18,8 +18,6 @@ export default function ZenithPointsModal({isGettingStartModalOpen, setIsGetting
         .fill(false)
         .map((_, index) => index < zenithPoints)
 
-        console.log(totalZenithPointsArray)
-
     return (
         <Modal isModalOpen={isGettingStartModalOpen} setIsModalOpen={setIsGettingStartModalOpen}>
             <div className="text-zenith-yellow mt-10 space-y-5">

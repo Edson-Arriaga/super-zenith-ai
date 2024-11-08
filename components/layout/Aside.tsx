@@ -18,7 +18,7 @@ export default function Aside() {
         queryKey: ['zenith-points'],
         queryFn: () => getZenithPoints(new Date()),
         placeholderData: 0,
-        enabled: (pathName !== '/') && (pathName !== '/sign-up')
+        enabled: (pathName !== '/') && (pathName !== '/sign-up') && (pathName !== '/sign-in')
     })
     
     return (

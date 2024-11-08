@@ -6,8 +6,8 @@ import { redirect } from "next/navigation";
 
 export async function getUser(){
     const clerkUser = await currentUser()
-    if(!clerkUser) redirect('/sign-in')
-    const user = await prisma.user.findUnique({where: {clerkId: clerkUser.id}})
-    if(!user) redirect('/sign-in')
+    const user = await prisma.user.findUnique({where: {clerkId: clerkUser!.id}})
+    if(!user) return redirect('/sign-in')
+    
     return user
 }

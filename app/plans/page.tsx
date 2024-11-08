@@ -20,8 +20,8 @@ async function getStipePlans(){
 
 export default async function PlansPage() {
     
-    const plans = await getStipePlans()
     const user = await getUser()
+    const plans = await getStipePlans()
     
     return (
         <div className='max-w-7xl mx-auto mb-10'>
