@@ -9,7 +9,6 @@ import NavAsideItem from "./NavAsideItem";
 import { navItems } from "@/src/data/navItems";
 import ZenithPointsButton from "./ZenithPointsButton";
 import GettingStartButton from "./GettingStartButton";
-import getToday from "@/src/utils/getToday";
 
 export default function Aside() {
     const pathName = usePathname()
