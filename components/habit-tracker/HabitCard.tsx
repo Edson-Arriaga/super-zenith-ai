@@ -38,6 +38,8 @@ export default function HabitCard({ habit } : {habit: Habit}) {
     } = useHabitActions(habit)
 
     const today = new Date()
+    const timezoneOffset = today.getTimezoneOffset() / 60
+    today.setHours(today.getHours() - timezoneOffset)
  
     const isTodayCompleted = habit.completedDates.some(date => isSameDay(date, today))
     const isPlannedToday = habit.frequency === 'DAILY' || habit.weeklyDays.includes(today.getDay())
