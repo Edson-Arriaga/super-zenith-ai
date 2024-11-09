@@ -1,7 +1,5 @@
 import getHabitHistory from "@/actions/get-habit-history"
 import PageTitle from "@/components/ui/PageTitle"
-import { categories_ES } from "@/src/locales/categories"
-import { frequency_ES } from "@/src/locales/frequency"
 import { CgDetailsMore } from "react-icons/cg"
 import Link from "next/link"
 
