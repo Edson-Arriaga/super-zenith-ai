@@ -22,11 +22,7 @@ import DeleteModal from "./DeleteModal";
 import useHabitActions from "@/src/hooks/useHabitActions";
 import Image from "next/image";
 
-type HabitCardProps = {
-    habit: Habit
-}
-
-export default function HabitCard({ habit } : HabitCardProps) {
+export default function HabitCard({ habit } : {habit: Habit}) {
 
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
     const [isHabitDetailsModalOpen, setHabitDetailsModalOpen] = useState(false)
