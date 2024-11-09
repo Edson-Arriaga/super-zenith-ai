@@ -7,12 +7,13 @@ import Loading from '../ui/Loading';
 import { getHabits } from '@/actions/get-habits';
 import { useQuery } from '@tanstack/react-query';
 import AchievementModal from "./AchievementModal";
+import getToday from "@/src/utils/getToday";
 
 export default function HabitsDisplay() {
     
     const { data , isLoading, isError } = useQuery({    
         queryKey: ['habits'],
-        queryFn: () => getHabits(new Date(), new Date().getTimezoneOffset())
+        queryFn: () => getHabits(getToday(), new Date().getTimezoneOffset())
     })
 
     if (isLoading) return <Loading />
