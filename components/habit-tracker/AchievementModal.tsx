@@ -52,7 +52,7 @@ export default function AchievementModal() {
                                 <span className="block">FELICIDADES!</span> Haz completado un nuevo logro, sigue así
                             </h1>
                             <section className="bg-black/20 flex flex-col items-center p-4 rounded-lg">
-                                <div className={`${ach.color} w-16 h-16 rounded-full bg-gradient-to-b flex items-center justify-center`}>
+                                <div className={`w-16 h-16 rounded-full bg-gradient-to-b flex items-center justify-center`}>
                                 <Icon className="w-10 h-10 text-white" />
                                 </div>
                                 <h2 className="font-bold text-xl">{ach.name}</h2>
