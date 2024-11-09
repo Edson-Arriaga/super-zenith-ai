@@ -8,19 +8,20 @@ import { deleteHabit } from "@/actions/delete-habit";
 import { resetHabit } from "@/actions/reset-habit";
 import { isSameDay } from "../utils/isSameDay";
 import NotificationIcon from "@/components/ui/NotificationIcon"
+import getToday from "../utils/getToday"
 
 export default function useHabitActions(habit: Habit) {
     const [isConfettiActive, setIsConfettiActive] = useState(false)
     const [newAchievements, setNewAchievements] = useState<number[]>()
 
-    const today = new Date();
+    const today = getToday();
     const isTodayCompleted = habit.completedDates.some(date => isSameDay(date, today));
 
     const queryClient = useQueryClient()
     const router = useRouter()
 
     const { mutate : updateDatesCompletedMutate, isPending : isPendingUpdate } = useMutation({
-        mutationFn: () => updateDatesCompleted(habit, new Date() , new Date().getTimezoneOffset()),
+        mutationFn: () => updateDatesCompleted(habit, today , new Date().getTimezoneOffset()),
         onSuccess: (data) => {
             queryClient.invalidateQueries({queryKey: ['habits']})
             toast.success(data.message, { icon: () => <NotificationIcon />})

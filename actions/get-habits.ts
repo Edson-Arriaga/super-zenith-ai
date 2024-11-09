@@ -29,11 +29,11 @@ export async function getHabits(today: Date, zoneOff: number) {
                 const startDate = new Date(today)
                 startDate.setDate(startDate.getDate() - 1)
                 startDate.setHours(startDate.getHours() - timezoneOffset)
-                startDate.setHours(timezoneOffset, 0, 0, 0)
+                //startDate.setHours(timezoneOffset, 0, 0, 0)
     
                 const endDate = new Date(habit.startDay)
                 endDate.setHours(endDate.getHours() - timezoneOffset)
-                endDate.setHours(timezoneOffset, 0, 0, 0)
+                //endDate.setHours(timezoneOffset, 0, 0, 0)
 
                 while (startDate >= endDate) {
                     const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(startDate.getDay()));

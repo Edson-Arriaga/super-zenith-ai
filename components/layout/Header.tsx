@@ -11,6 +11,7 @@ import NavHeaderItem from "./NavHeaderItem";
 import { navItems } from "@/src/data/navItems";
 import ZenithPointsButton from "./ZenithPointsButton";
 import GettingStartButton from "./GettingStartButton";
+import getToday from "@/src/utils/getToday";
 
 export default function Header() {
     
@@ -20,7 +21,7 @@ export default function Header() {
 
     const {data : zenithPoints } = useQuery({
         queryKey: ['zenith-points'],
-        queryFn: () => getZenithPoints(new Date()),
+        queryFn: () => getZenithPoints(getToday()),
         placeholderData: 0,
         enabled: (pathName !== '/') && (pathName !== '/sign-up') && (pathName !== '/sign-in')
     })

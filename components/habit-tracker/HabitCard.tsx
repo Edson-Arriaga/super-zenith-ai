@@ -21,6 +21,7 @@ import HabitDetailsModal from "./HabitDetailsModal";
 import DeleteModal from "./DeleteModal";
 import useHabitActions from "@/src/hooks/useHabitActions";
 import Image from "next/image";
+import getToday from "@/src/utils/getToday";
 
 export default function HabitCard({ habit } : {habit: Habit}) {
 
@@ -37,9 +38,7 @@ export default function HabitCard({ habit } : {habit: Habit}) {
         newAchievements,
     } = useHabitActions(habit)
 
-    const today = new Date()
-    const timezoneOffset = today.getTimezoneOffset() / 60
-    today.setHours(today.getHours() - timezoneOffset)
+    const today = getToday()
  
     const isTodayCompleted = habit.completedDates.some(date => isSameDay(date, today))
     const isPlannedToday = habit.frequency === 'DAILY' || habit.weeklyDays.includes(today.getDay())

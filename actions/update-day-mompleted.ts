@@ -11,8 +11,9 @@ export async function updateDatesCompleted(habit: Habit, today: Date, zoneOff: n
     let message : string
 
     const adjustedDate = new Date(today)
-    const timezoneOffset = zoneOff / 60
-    adjustedDate.setHours(adjustedDate.getHours() - timezoneOffset)
+    console.log(zoneOff)
+    //const timezoneOffset = zoneOff / 60
+    //adjustedDate.setHours(adjustedDate.getHours() - timezoneOffset)
     //adjustedDate.setHours(timezoneOffset, 0, 0, 0)
     
     if(habit.completedDates.some(date => isSameDay(date, adjustedDate))){
