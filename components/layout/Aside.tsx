@@ -17,7 +17,7 @@ export default function Aside() {
 
     const {data : zenithPoints } = useQuery({
         queryKey: ['zenith-points'],
-        queryFn: () => getZenithPoints(getToday()),
+        queryFn: () => getZenithPoints(new Date().getTimezoneOffset()),
         placeholderData: 0,
         enabled: (pathName !== '/') && (pathName !== '/sign-up') && (pathName !== '/sign-in')
     })

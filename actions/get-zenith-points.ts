@@ -4,9 +4,12 @@ import prisma from "@/src/lib/prisma";
 import { getUser } from "./get-user";
 import { isSameDay } from "@/src/utils/isSameDay";
 
-export default async function getZenithPoints(today: Date){
+export default async function getZenithPoints(timezoneOffset : number){
     const user = await getUser()
     let userPoints = user.zenithPoints
+
+    const today = new Date()
+    today.setHours(today.getHours() - (timezoneOffset / 60))
 
     if(user.zenithPointsLastDepletionDate){
         if(!isSameDay(today, user.zenithPointsLastDepletionDate)){

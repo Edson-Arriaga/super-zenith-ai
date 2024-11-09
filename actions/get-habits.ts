@@ -28,12 +28,9 @@ export async function getHabits(today: Date, zoneOff: number) {
 
                 const startDate = new Date(today)
                 startDate.setDate(startDate.getDate() - 1)
-                //startDate.setHours(startDate.getHours() - timezoneOffset)
-                //startDate.setHours(timezoneOffset, 0, 0, 0)
-    
+ 
                 const endDate = new Date(habit.startDay)
                 endDate.setHours(endDate.getHours() - timezoneOffset)
-                //endDate.setHours(timezoneOffset, 0, 0, 0)
 
                 while (startDate >= endDate) {
                     const isPlanned = habit.frequency === 'DAILY' || (habit.frequency === 'WEEKLY' && habit.weeklyDays.includes(startDate.getDay()));
@@ -91,17 +88,17 @@ export async function getHabits(today: Date, zoneOff: number) {
         const isCompletedTodayA = a.completedDates.some(date => isSameDay(date, today))
         const isCompletedTodayB = b.completedDates.some(date => isSameDay(date, today))
 
+        if (!a.completed && b.completed) return -1
+        if (a.completed && !b.completed) return 1
+        
         if(!a.forcedRestart && b.forcedRestart) return -1
         if(a.forcedRestart && !b.forcedRestart) return 1
 
-        if (!a.completed && b.completed) return -1
-        if (a.completed && !b.completed) return 1
+        if (isPlannedTodayA && !isPlannedTodayB) return -1
+        if (!isPlannedTodayA && isPlannedTodayB) return 1
 
         if (!isCompletedTodayA && isCompletedTodayB) return -1
         if (isCompletedTodayA && !isCompletedTodayB) return 1
-
-        if (isPlannedTodayA && !isPlannedTodayB) return -1
-        if (!isPlannedTodayA && isPlannedTodayB) return 1
 
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     })
