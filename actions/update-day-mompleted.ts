@@ -13,7 +13,7 @@ export async function updateDatesCompleted(habit: Habit, today: Date, zoneOff: n
     const adjustedDate = new Date(today)
     const timezoneOffset = zoneOff / 60
     adjustedDate.setHours(adjustedDate.getHours() - timezoneOffset)
-    adjustedDate.setHours(timezoneOffset, 0, 0, 0)
+    //adjustedDate.setHours(timezoneOffset, 0, 0, 0)
     
     if(habit.completedDates.some(date => isSameDay(date, adjustedDate))){
         uppdatedDates = habit.completedDates.filter(date => !isSameDay(date, adjustedDate))
