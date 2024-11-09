@@ -38,7 +38,7 @@ export default function HabitsDisplay() {
                         ))}
                     </ul>
                 ) : (
-                    <p className="text-zenith-yellow font-bold text-center">No tienes hábitos planificados aún.</p>
+                    <p className="text-zenith-yellow font-bold text-center mt-5 text-lg">No tienes hábitos planificados aún.</p>
                 )}
             </section>
 

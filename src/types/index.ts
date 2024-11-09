@@ -4,7 +4,6 @@ export type Achievement = {
     id: number
     name: string
     description: string
-    color: string
 }
 
 export type NavItem = {
