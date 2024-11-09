@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 import NavAsideItem from "./NavAsideItem";
 import { navItems } from "@/src/data/navItems";
 import ZenithPointsButton from "./ZenithPointsButton";
-import GettingStartButton from "./GettingStartButton";
+import GettingStartedButton from "./GettingStartedButton";
 
 export default function Aside() {
     const pathName = usePathname()
@@ -49,7 +49,7 @@ export default function Aside() {
                     </div>
                 )}
                 
-                <GettingStartButton /> 
+                <GettingStartedButton /> 
             </aside>
         </SignedIn>
     )

@@ -10,7 +10,7 @@ import getZenithPoints from "@/actions/get-zenith-points";
 import NavHeaderItem from "./NavHeaderItem";
 import { navItems } from "@/src/data/navItems";
 import ZenithPointsButton from "./ZenithPointsButton";
-import GettingStartButton from "./GettingStartButton";
+import GettingStartedButton from "./GettingStartedButton";
 
 export default function Header() {
     
@@ -33,10 +33,10 @@ export default function Header() {
                 </div>
 
                 <section className="flex gap-5 justify-center">
-                    <div>
-                    <GettingStartButton/> 
+                    
+                    <GettingStartedButton/> 
+                    
 
-                    </div>
                     {zenithPoints !== undefined && (
                         <div>
                             <ZenithPointsButton zenithPoints={zenithPoints}/>

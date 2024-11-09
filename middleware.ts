@@ -6,8 +6,8 @@ const isPortectedRoute = createRouteMatcher([
   '/create-habit(.*)',
   '/plans(.*)',
   '/successful-payment(.*)',
-  '/completed-habits-history',
-  '/achievements'
+  '/completed-habits-history(.*)',
+  '/achievements(.*)'
 ])
 
 export default clerkMiddleware((auth, req) => {
