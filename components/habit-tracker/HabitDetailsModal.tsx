@@ -28,7 +28,6 @@ export default function HabitDetailsModal({isHabitDetailsModalOpen, setHabitDeta
                         </CircularProgressbarWithChildren>
                     </div>
                 </div>
-                <p className="text-sm -mt-4 ml-1 text-red-500 font-black">Si tienes un 5% de fallos cometidos, tu hábito tendrá que ser forzosamente reiniciado.</p>
                 <div className="flex justify-between bg-black/30 p-4 rounded-lg">
                     <h2 className="text-white capitalize">Racha máxima alcanzada: </h2>
                     <p className="font-black text-zenith-yellow">{habit.longestStreak}</p>

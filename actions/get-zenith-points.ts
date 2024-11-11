@@ -11,6 +11,7 @@ export default async function getZenithPoints(timezoneOffset : number){
     const today = new Date()
     today.setHours(today.getHours() - (timezoneOffset / 60))
 
+
     if(user.zenithPointsLastDepletionDate){
         if(!isSameDay(today, user.zenithPointsLastDepletionDate)){
             if(user.plan === 'PREMIUM'){
@@ -30,6 +31,7 @@ export default async function getZenithPoints(timezoneOffset : number){
             })
         }
     }
+    
 
     return userPoints
 }

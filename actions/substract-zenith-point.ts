@@ -17,7 +17,7 @@ export default async function substractZenithPoint(){
             },
             data: {
                 zenithPoints: newPoints,
-                zenithPointsLastDepletionDate: newPoints === 0 ? new Date() : null
+                zenithPointsLastDepletionDate: new Date()
             }
         })
     } else {
