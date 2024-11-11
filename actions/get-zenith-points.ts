@@ -7,13 +7,15 @@ import { isSameDay } from "@/src/utils/isSameDay";
 export default async function getZenithPoints(timezoneOffset : number){
     const user = await getUser()
     let userPoints = user.zenithPoints
+    const lastDepletionDate = user.zenithPointsLastDepletionDate
+    
+    if(lastDepletionDate){
+        const today = new Date()
+        today.setHours(today.getHours() - (timezoneOffset / 60))
 
-    const today = new Date()
-    today.setHours(today.getHours() - (timezoneOffset / 60))
+        lastDepletionDate.setHours(lastDepletionDate.getHours() - (timezoneOffset / 60))
 
-
-    if(user.zenithPointsLastDepletionDate){
-        if(!isSameDay(today, user.zenithPointsLastDepletionDate)){
+        if(!isSameDay(today, lastDepletionDate)){
             if(user.plan === 'PREMIUM'){
                 userPoints = 10
             } else {
@@ -31,7 +33,6 @@ export default async function getZenithPoints(timezoneOffset : number){
             })
         }
     }
-    
 
     return userPoints
 }
