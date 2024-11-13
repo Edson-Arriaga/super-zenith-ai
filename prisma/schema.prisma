@@ -7,6 +7,30 @@ datasource db {
   url = env("DATABASE_URL")
 }
 
+enum Plan {
+  FREE
+  PREMIUM
+}
+
+enum Frequency {
+  DAILY
+  WEEKLY
+}
+
+enum Category {
+  PHYSICAL_HEALTH
+  MENTAL_HEALTH
+  SPIRITUALITY
+  SOCIAL_RELATIONSHIPS
+  PRODUCTIVITY
+  CREATIVITY
+}
+
+enum SubscriptionPeriod {
+  MONTHLY
+  YEARLY
+}
+
 model User {
   id Int @id @default(autoincrement())
   clerkId String @unique
@@ -14,15 +38,25 @@ model User {
   habits Habit[]
   completedHabitsHistory CompletedHabitHistory[]
   zenithPoints Int @default(3)
-  zenithPointsLastDepletionDate DateTime?
+  zenithPointsLastUpdatedDate DateTime?
   lastAdvicePrompt Json?
   completedHabits Int @default(0)
   completedAchievements Int[]
   plan Plan @default(FREE)
+  subscription Subscription?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
-enum Plan {
-  FREE
-  PREMIUM
+
+model Subscription {
+  id Int @id @default(autoincrement())
+  period SubscriptionPeriod
+  startDate DateTime @default(now())
+  endDate DateTime
+  user User @relation(fields: [userId], references: [id])
+  userId Int @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Habit {
@@ -61,18 +95,4 @@ model CompletedHabitHistory {
   userId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-enum Frequency {
-  DAILY
-  WEEKLY
-}
-
-enum Category {
-  PHYSICAL_HEALTH
-  MENTAL_HEALTH
-  SPIRITUALITY
-  SOCIAL_RELATIONSHIPS
-  PRODUCTIVITY
-  CREATIVITY
 }
