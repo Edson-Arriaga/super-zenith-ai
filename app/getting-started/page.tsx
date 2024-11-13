@@ -1,7 +1,12 @@
+import AppButton from "@/components/ui/AppButton";
 import PageTitle from "@/components/ui/PageTitle";
+import { currentUser } from "@clerk/nextjs/server";
 import { SiListmonk } from "react-icons/si";
 
-export default function page() {
+export default async function GettingStartedPage() {
+
+    const clerkUser = await currentUser()
+
     return (
         <div className="mb-10 mx-2 mr-5">
             <PageTitle>Guía de inicio</PageTitle>
@@ -118,6 +123,51 @@ export default function page() {
                     </li>
                 </ul>
             </section>
+
+            <section className="mx-auto max-w-screen-sm mt-16">
+                <h2 className="text-2xl font-bold text-zenith-yellow uppercase mb-2">Planes: </h2>
+                <ul className="text-white space-y-5">
+                    <li className="flex gap-5">
+                        <div>
+                            <SiListmonk className="text-zenith-yellow mt-2" size={20}/>
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-black text-zenith-yellow">Plan Gratis: </h3>
+                            <ul>
+                                <li>- Crear hasta 2 hábitos. </li>
+                                <li>- Recibir 3 puntos zenith al día.</li>
+                                <li>- Solo hábitos con una duración de 45 días.</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li className="flex gap-5">
+                        <div>
+                            <SiListmonk className="text-zenith-yellow mt-2" size={20}/>
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-black text-zenith-yellow">Plan Premium: </h3>
+                            <ul>
+                                <li>- Crear hasta 10 hábitos. </li>
+                                <li>- Recibir 10 puntos zenith al día.</li>
+                                <li>- Crear hábitos con las 3 duraciones disponibles.</li>
+                                <li>- Acceso a niveles en los hábitos.</li>
+                                <li>- Historial de hábitos completos.</li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            {!clerkUser && (
+                <section className="mx-auto max-w-screen-sm text-justify mt-16">
+                    <h2 className="text-2xl font-bold text-zenith-yellow uppercase mb-2">Comienza Ahora:</h2>
+                    <div className="flex mt-3 max-w-52">
+                        <AppButton href="/sign-in">
+                            Iniciar Sesión
+                        </AppButton>
+                    </div>
+                </section>
+            )}
         </div>
     )
 }

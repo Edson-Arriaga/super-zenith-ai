@@ -22,7 +22,7 @@ export default function Header() {
         queryKey: ['zenith-points'],
         queryFn: () => getZenithPoints(new Date().getTimezoneOffset()),
         placeholderData: 0,
-        enabled: (pathName !== '/') && (pathName !== '/sign-up') && (pathName !== '/sign-in')
+        enabled: (pathName !== '/') && (pathName !== '/sign-up') && (pathName !== '/sign-in') && (pathName !== '/getting-started')
     })
 
     return (

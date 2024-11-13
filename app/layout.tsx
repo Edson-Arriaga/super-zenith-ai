@@ -8,11 +8,19 @@ import { esES } from '@clerk/localizations';
 import Header from "@/components/layout/Header";
 import QueryClientProvider from "@/components/providers/QueryClientProvider";
 import Aside from "@/components/layout/Aside";
+import { Viewport } from "next";
 
 const nunito = Nunito({
     weight: ['300', '500', '700'], 
     subsets: ['latin'],
 })
+
+export const viewport: Viewport = {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+}
 
 export const metadata: Metadata = {
     title: "Super Zenith AI - Mejora Un 1% Cada Día",
@@ -21,7 +29,6 @@ export const metadata: Metadata = {
         icon: '/images/zenith-logo.png',
     },
     keywords: 'Super Zenith AI, inteligencia artificial para hábitos, productividad, seguimiento de hábitos, gestión de metas, inteligencia artificial personalizada, hábitos saludables, mejora personal, app de productividad, asistente de productividad',
-    viewport: "width=device-width, initial-scale=1.0",
     applicationName: "Super Zenith AI",
     creator: 'Super Zenith AI Team',
     robots: {index: true, follow: true },
