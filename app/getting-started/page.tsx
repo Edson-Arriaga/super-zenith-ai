@@ -5,17 +5,53 @@ export default function page() {
     return (
         <div className="mb-10 mx-2 mr-5">
             <PageTitle>Guía de inicio</PageTitle>
+            
+            <section className="mx-auto max-w-screen-sm">
+                <h2 className="text-2xl font-bold text-zenith-yellow uppercase mb-2">Super zenith AI:</h2>
+                <ul className="text-white space-y-5">
+                    <li className="flex gap-5">
+                        <div>
+                            <SiListmonk className="text-zenith-yellow mt-2" size={20}/>
+                        </div>
+                        <p>
+                            <span className="font-bold text-zenith-yellow">Super Zenith AI</span> es una 
+                            herramienta poderosa que te ayudará a mejorar de forma
+                            significativa tu productividad a lo largo del día e incluso de tu vida a largo
+                            plazo, todo esto gracias a su gestor de hábitos o Habit Tracker el cuál te
+                            permitirá realizar un seguimiento de todos los hábitos que quieras comenzar
+                            a realizar en tu vida o de los que ya estés realizando en la actualidad. <br />
+                            Por si fuera poco, <span className="font-bold text-zenith-yellow">Super Zenith AI</span> 
+                            {' '}se encarga de leer y analizar tus hábitos mediante inteligencia artificial
+                            siendo capaz de generar por su cuenta consejos totalmente únicos y especialmente
+                            personalizados para ti acorde a cada uno de estos, además te brida sugerencias
+                            sobre como puedes relacionar cada uno de tus hábitos para que el realizarlos se
+                            te facilite aún más.  
+                        </p>
+                    </li>
+                </ul>
+            </section>
 
-            <section className="mx-auto max-w-screen-sm text-justify">
+            <section className="mx-auto max-w-screen-sm text-justify mt-16">
                 <h2 className="text-2xl font-bold text-zenith-yellow uppercase mb-2">Fallos:</h2>
                 <ul className="text-white space-y-5">
                     <li className="flex gap-5">
                         <div>
                             <SiListmonk className="text-zenith-yellow mt-2" size={20}/>
                         </div>
+                        <p>
+                            Para asegurar que verdaderamente estés cumpliendo tus hábitos, Super Zenith AI
+                            se encargará gracias a su algoritmo de detección de fallos de no poder seguir
+                            realizando todos aquellos hábitos que no hayas estado marcando como completados
+                            según los días planificados.
+                        </p>
+                    </li>
+                    <li className="flex gap-5">
+                        <div>
+                            <SiListmonk className="text-zenith-yellow mt-2" size={20}/>
+                        </div>
                         <div>
                             <p>
-                                Tus hábitos tienen un rango del 5% en fallos,así que se
+                                Tus hábitos tienen un rango del 5% en fallos, así que se
                                 reiniciarán de manera forzosa y automática si es qué lo
                                 sobrepasas, haciendo que lo vuelvas a comenzarlo desde 0.
                             </p>

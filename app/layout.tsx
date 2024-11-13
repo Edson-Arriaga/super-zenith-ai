@@ -15,11 +15,16 @@ const nunito = Nunito({
 })
 
 export const metadata: Metadata = {
-    title: "Super Zenith AI",
-    description: "La App que te ayudará a convertirte en tu mejor versión.",
+    title: "Super Zenith AI - Mejora Un 1% Cada Día",
+    description: "Super Zenith AI es una herramienta avanzada de inteligencia artificial diseñada para mejorar tu productividad y ayudarte a alcanzar tus objetivos personales mediante un seguimiento de hábitos personalizado. ¡Empieza tu viaje hacia una mejor versión de ti mismo hoy!",
     icons: {
-        icon: '/images/zenith-logo.png'
-    }
+        icon: '/images/zenith-logo.png',
+    },
+    keywords: 'Super Zenith AI, inteligencia artificial para hábitos, productividad, seguimiento de hábitos, gestión de metas, inteligencia artificial personalizada, hábitos saludables, mejora personal, app de productividad, asistente de productividad',
+    viewport: "width=device-width, initial-scale=1.0",
+    applicationName: "Super Zenith AI",
+    creator: 'Super Zenith AI Team',
+    robots: {index: true, follow: true },
 };
 
 export default function RootLayout({
