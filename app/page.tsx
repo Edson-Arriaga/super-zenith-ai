@@ -1,11 +1,8 @@
 import InitialRedirect from "@/components/initialPage/InitialRedirect";
-import prisma from "@/src/lib/prisma";
-import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
 
 export default async function InitialPage() {
-
     return (
         <>
             <InitialRedirect />
