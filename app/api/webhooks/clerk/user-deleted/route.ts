@@ -19,15 +19,16 @@ export async function POST(req : NextRequest){
 
         
         await prisma.habit.deleteMany({
-            where: { user: {
-                clerkId
-            }}
+            where: { 
+                user: {
+                    clerkId
+                }
+            }
         })
 
         await prisma.user.delete({
             where: { clerkId }
         })
-        
 
         return NextResponse.json({ message: "User deleted successfully" })
     } catch (error) {

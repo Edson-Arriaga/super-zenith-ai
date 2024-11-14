@@ -8,12 +8,13 @@ import { toast } from "react-toastify";
 import LittleLoading from "../ui/LittleLoading";
 import AIModal from "./AIModal";
 import substractZenithPoint from "@/actions/substract-zenith-point";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { storeLastAdvicePrompt } from "@/actions/store-last-advice-prompt";
 import NotificationIcon from "../ui/NotificationIcon";
 import LastPromptAdviceModal from "./LastPromptAdviceModal";
+import getHabitsLength from "@/actions/get-habits-length";
 
-export default function AIButton({habitsIsEmpty} : {habitsIsEmpty: boolean}) {
+export default function AIButton() {
 
     const [isLoading, setIsLoading] = useState(false)
     const [isAIModalOpen, setIsAIModalOpen] = useState(false)
@@ -45,13 +46,18 @@ export default function AIButton({habitsIsEmpty} : {habitsIsEmpty: boolean}) {
         }
         setIsLoading(false)
     }
+    
+    const {data : habitsLength} = useQuery({
+        queryFn: () => getHabitsLength(),
+        queryKey: ['habits-length']
+    })
 
-    return (
+    if (habitsLength !== undefined) return (
         <>
             <button 
                 className="col-span-3 flex justify-center transition-transform rounded-lg h-full relative disabled:opacity-40 disabled:cursor-not-allowed" 
                 onClick={handleClick} 
-                disabled={habitsIsEmpty}
+                disabled={habitsLength < 2}
             >
                 <div className="relative flex justify-center items-center hover:scale-105 transition-all duration-500 text-zenith-yellow hover:text-zenith-purple hover:bg-yellow-600 hover:bg-opacity-90 h-[20px] w-[20px] p-7 rounded-full border-2 border-dotted border-zenith-yellow hover:border-transparent">
                     {isLoading ? (

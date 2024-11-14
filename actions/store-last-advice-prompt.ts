@@ -2,16 +2,13 @@
 
 import prisma from "@/src/lib/prisma";
 import { HabitsAdvice } from "@/src/schema";
-import { currentUser } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 
 export async function storeLastAdvicePrompt(lastAdvicePrompt: HabitsAdvice){
-    const clerkUser = await currentUser()
-    if(!clerkUser) throw new Error('Clerk User Not Found')
+    const {userId} = auth()
 
     await prisma.user.update({
-        where: {
-            clerkId: clerkUser.id
-        },
+        where: { clerkId: userId! },
         data: {
             lastAdvicePrompt
         }

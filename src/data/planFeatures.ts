@@ -13,3 +13,10 @@ export const premiumPlanFeatures = [
     { id: 4, name: "Niveles en los hábitos", notIncluded: false  },
     { id: 5, name: "Historial de hábitos completos", notIncluded: false  },
 ]
+
+const plans = [
+    {
+        title: 'Gratis',
+        price: ''
+    }
+]

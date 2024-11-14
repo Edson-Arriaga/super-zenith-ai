@@ -33,8 +33,11 @@ enum SubscriptionPeriod {
 
 model User {
   id Int @id @default(autoincrement())
+  email String @unique
   clerkId String @unique
   stripeCustomerId String? @unique
+  plan Plan @default(FREE)
+  subscription Subscription?
   habits Habit[]
   completedHabitsHistory CompletedHabitHistory[]
   zenithPoints Int @default(3)
@@ -42,14 +45,13 @@ model User {
   lastAdvicePrompt Json?
   completedHabits Int @default(0)
   completedAchievements Int[]
-  plan Plan @default(FREE)
-  subscription Subscription?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Subscription {
   id Int @id @default(autoincrement())
+  plan Plan
   period SubscriptionPeriod
   startDate DateTime @default(now())
   endDate DateTime

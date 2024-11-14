@@ -12,17 +12,20 @@ export async function POST(req : Request){
         const payload = await req.json()
 
         if (!payload.data || !payload.data.id) {
-            return NextResponse.json({ error: "Invalid payload data" }, { status: 400 });
+            return NextResponse.json({ error: "Invalid payload data" }, { status: 400 })
         }
 
-        const clerkId = payload.data.id;
+        const clerkId = payload.data.id
+        const email = payload.data.clerkUser.email_addresses?.[0]?.email_address
 
         await prisma.user.create({
-            data: { clerkId }
+            data: { 
+                clerkId, email
+            }
         })
 
         return NextResponse.json({ message: "User created successfully" })
     } catch (error) {
-        console.error("Error processing webhook:", error);
+        console.error("Error processing webhook:", error)
     }
 }

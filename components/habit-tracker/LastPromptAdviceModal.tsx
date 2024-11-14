@@ -2,11 +2,11 @@ import { Dispatch, SetStateAction, useState } from "react"
 import Modal from "../ui/Modal"
 import AppButton from "../ui/AppButton"
 import AIModal from "./AIModal"
-import { getLastAdvicePrompt } from "@/actions/get-last-advice-prompt"
 import { IoWarningSharp } from "react-icons/io5";
 import { HabitsAdvice, HabitsAdviceSchema } from "@/src/schema"
 import { toast } from "react-toastify"
 import LittleLoading from "../ui/LittleLoading"
+import { getUser } from "@/actions/get-user"
 
 type LastPromptAdviceModalProps = {
     isLastPromptAdviceModalOpen: boolean
@@ -20,8 +20,8 @@ export default function LastPromptAdviceModal({isLastPromptAdviceModalOpen, setI
 
     async function handleClick(){
         setIsLoading(true)
-        const response = await getLastAdvicePrompt()
-        const lastPromptAdvice = HabitsAdviceSchema.safeParse(response)
+        const response = await getUser()
+        const lastPromptAdvice = HabitsAdviceSchema.safeParse(response.lastAdvicePrompt)
         setIsLoading(false)
         if(lastPromptAdvice.success){
             setIsLastPromptAdviceModalOpen(false)

@@ -1,13 +1,19 @@
 "use client"
 
-import { User } from "@prisma/client"
+import { getUser } from "@/actions/get-user"
+import { useQuery } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 
-export default function InitialRedirect({userPlan} : {userPlan: User['plan']}) {
+export default function InitialRedirect() {
     
     const router = useRouter()
 
-    if(userPlan === 'PREMIUM'){
+    const {data : user} = useQuery({
+        queryFn: getUser,
+        queryKey: ['user']
+    })
+
+    if(user?.plan === 'PREMIUM'){
         router.push('/habit-tracker')
     } else {
         router.push('/plans')

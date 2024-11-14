@@ -14,7 +14,7 @@ export async function getHabits(today: Date, zoneOff: number) {
         where: {
             userId: user.id
         }
-    })  
+    })
 
     let newAchievements : number[] = []
 
