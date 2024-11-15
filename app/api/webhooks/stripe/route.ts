@@ -1,9 +1,9 @@
 import prisma from "@/src/lib/prisma";
-import { User } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
 const secretKey = process.env.STRIPE_SECRET_KEY
+
 if(!secretKey) throw new Error('Invalid Stripe Secret Key')
 const stripe = new Stripe(secretKey)
 
@@ -15,7 +15,6 @@ export async function POST(request : NextRequest){
     }
 
     const rawBody = await request.text()
-
     let event
 
     try {
@@ -24,50 +23,102 @@ export async function POST(request : NextRequest){
         return NextResponse.json({ error: 'Webhook signature verification failed'}, { status: 400 })
     }
 
-    switch(event.type){
+    try {
+        switch(event.type){
+            case 'checkout.session.completed': 
+                const session = await stripe.checkout.sessions.retrieve(
+                    (event.data.object as Stripe.Checkout.Session).id, {
+                        expand: ["line_items"]
+                    }
+                )
+                const customerId = session.customer as string
+                const customersDetails = session.customer_details
+    
+                if(customersDetails?.email){
+                    const user = await prisma.user.findUnique({where: {email: customersDetails.email}})
+                    if(!user) throw new Error('User not found')
+    
+                    if(!user.stripeCustomerId){
+                        await prisma.user.update({
+                            where: {id: user.id},
+                            data: {stripeCustomerId: customerId}
+                        })
+                    }
+    
+                    const lineItems = session.line_items?.data || []
+    
+                    for(const item of lineItems){
+                        const priceId = item.price?.id
+    
+                        const isSubscription = item.price?.type === 'recurring'
+    
+                        if(isSubscription){
+                            let endDate = new Date()
+    
+                            if(priceId === process.env.STRIPE_YEARLY_PRICE_ID){
+                                endDate.setFullYear(endDate.getFullYear() + 1)
+                            } else if(priceId === process.env.STRIPE_MONTHLY_PRICE_ID)
+                                endDate.setMonth(endDate.getMonth() + 1)
+                            else {
+                                throw new Error('Invalid priceId')
+                            }
+    
+                            await prisma.subscription.upsert({
+                                where: {userId: user.id},
+                                create: {
+                                    userId: user.id,
+                                    startDate: new Date(),
+                                    endDate: endDate,
+                                    plan: 'PREMIUM',
+                                    period: priceId === process.env.STRIPE_YEARLY_PRICE_ID ? 'YEARLY' : 'MONTHLY'
+                                },
+                                update: {
+                                    startDate: new Date(),
+                                    endDate: endDate,
+                                    plan: 'PREMIUM',
+                                    period: priceId === process.env.STRIPE_YEARLY_PRICE_ID ? 'YEARLY' : 'MONTHLY'
+                                }
+                            })
+    
+                            await prisma.user.update({
+                                where: { id: user.id },
+                                data: { plan: 'PREMIUM', zenithPoints: 10 }
+                            })
+    
+                        } else {
+                            // One payment
+                        }
+                    }
+                } 
+                break
 
-        // case 'checkout.session.async_payment_succeeded'
+                case 'customer.subscription.deleted':
+                    const subscription = await stripe.subscriptions.retrieve((event.data.object as Stripe.Subscription).id)
+                    const user = await prisma.user.findUnique({
+                        where: { stripeCustomerId: subscription.customer as string}
+                    })
 
-        case 'payment_intent.succeeded':
-        case 'invoice.payment_succeeded':
-            await updatePlan('PREMIUM', event.data.object.customer)
-            break
+                    if(user){
+                        await prisma.user.update({
+                            where: {id: user.id},
+                            data: { plan: 'FREE', zenithPoints: 3}
+                        })
+                    }else{
+                        console.log('User not found for the subscription deleted event')
+                        throw new Error('User not found for the subscription deleted event')
+                    }
 
-        case 'customer.subscription.deleted':
-        case 'invoice.payment_failed':
-            await updatePlan('FREE', event.data.object.customer)
-            break
+                    break
+                
+    
+                default:
+                    console.log(`Unhandled event type ${event.type}`)
             
-        case 'checkout.session.completed': 
-            const session = event.data.object as Stripe.Checkout.Session;
-            const clerkId = session.metadata?.clerkId;
-            const stripeCustomerId = session.customer as string;
-
-            if (clerkId && stripeCustomerId) {
-                await prisma.user.update({
-                    where: { clerkId },
-                    data: { stripeCustomerId }
-                })
-            }
-            break
-        
-        default:
-            console.log(`Unhandled event type ${event.type}`)
+        }
+    } catch (error) {
+        console.log('Error handling event', error)
+        return new Response('Webhook error', {status: 400})
     }
 
-    return NextResponse.json({received: true});
-}
-
-
-async function updatePlan (newPlan: User['plan'], customer: string | Stripe.Customer | Stripe.DeletedCustomer | null){
-    const userInvoice = await prisma.user.findUnique({
-        where: { stripeCustomerId: customer as string },
-    })
-
-    if (userInvoice?.plan !== newPlan) {
-        await prisma.user.update({
-            where: { stripeCustomerId: customer as string },
-            data: { plan: newPlan}
-        })
-    }
+    return new Response('Webhook received', {status: 200})
 }

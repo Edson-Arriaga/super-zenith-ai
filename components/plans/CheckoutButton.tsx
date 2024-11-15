@@ -8,7 +8,6 @@ type CheckoutButtonProps = {
 }
 
 export default function CheckoutButton({priceId, planUser} : CheckoutButtonProps) {
-
     let paymentLink
     switch (priceId) {
         case process.env.STRIPE_MONTHLY_PRICE_ID:

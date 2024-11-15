@@ -8,6 +8,8 @@ export async function getStipePrices(){
     const prices = await stripe.prices.list({
         active: true
     })
+
+    const sortedPrices = prices.data.sort((a, b) => b.unit_amount! - a.unit_amount!)
     
-    return prices.data
+    return sortedPrices
 }

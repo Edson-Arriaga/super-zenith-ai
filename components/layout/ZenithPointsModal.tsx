@@ -1,22 +1,25 @@
 import { Dispatch, SetStateAction } from "react";
 import Modal from "../ui/Modal";
-import { User } from "@prisma/client";
 import { AiFillThunderbolt } from "react-icons/ai";
+import { useQuery } from "@tanstack/react-query";
+import { isUserPremium } from "@/actions/is-user-premium";
 
 type GettingStartModalProps = {
     isGettingStartModalOpen: boolean
     setIsGettingStartModalOpen: Dispatch<SetStateAction<boolean>>,
     zenithPoints: number
-    user: User
 }
 
-export default function ZenithPointsModal({isGettingStartModalOpen, setIsGettingStartModalOpen, zenithPoints, user} : GettingStartModalProps) {
+export default function ZenithPointsModal({isGettingStartModalOpen, setIsGettingStartModalOpen, zenithPoints} : GettingStartModalProps) {
     
-    const totalZenithPoints = user.plan === 'PREMIUM' ? 10 : 3
-
-    const totalZenithPointsArray = Array(totalZenithPoints)
-        .fill(false)
-        .map((_, index) => index < zenithPoints)
+    const {data : user} = useQuery({
+        queryKey: ['isUserPremium'],
+        queryFn: async () => isUserPremium()
+    })
+    
+    const totalZenithPoints = user?.isPremium ? 10 : 3
+    
+    const totalZenithPointsArray = Array(totalZenithPoints).fill(false).map((_, index) => index < zenithPoints)
 
     return (
         <Modal isModalOpen={isGettingStartModalOpen} setIsModalOpen={setIsGettingStartModalOpen}>
