@@ -13,12 +13,14 @@ export default async function PlansPage() {
     return (
         <div className='max-w-7xl mx-auto mb-10'>
 
-            <div className='flex items-center justify-between'>
+            <div className={`flex flex-col lg:flex-row items-center ${user.plan === 'FREE' ? 'justify-center' : 'justify-between'}`}>
                 <PageTitle>Planes</PageTitle>
 
-                <AppButton className='max-w-64' href={`${process.env.STRIPE_CUSTOMER_PORTAL}`} >
-                    Consultar Plan Actual
-                </AppButton>
+                {user.plan === 'PREMIUM' && (
+                    <AppButton className='max-w-64 mb-14 lg:mb-0' href={`${process.env.STRIPE_CUSTOMER_PORTAL}`} >
+                        Consultar Plan Actual
+                    </AppButton>
+                )}
             </div>
 
             <ul className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 text-center'>
