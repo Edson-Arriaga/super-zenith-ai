@@ -24,7 +24,7 @@ export default function Header() {
         placeholderData: 0
     })
 
-    return (
+    if(zenithPoints) return (
         <header className="flex items-center justify-between px-2 lg:hidden h-20 border-b-2 border-zenith-yellow shadow-sm shadow-zenith-yellow">
             <div className="shadow-inner p-1 shadow-black rounded-full grid"> 
                 <UserButton appearance={{elements: { rootBox: "w-14 h-14 pt-[1px]", avatarBox: "w-14 h-14"}}}/>

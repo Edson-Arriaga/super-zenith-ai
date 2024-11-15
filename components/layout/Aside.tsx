@@ -20,7 +20,7 @@ export default function Aside() {
         placeholderData: 0
     })
     
-    return (
+    if(zenithPoints) return (
         <aside 
             className="hidden lg:flex bg-zenith-dark-purple w-20 h-screen fixed flex-col items-center py-5 border-r-2 border-zenith-yellow shadow-md shadow-zenith-yellow z-10"
         >

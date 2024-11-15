@@ -70,7 +70,6 @@ export default function RootLayout({
                             </>
                         )}
 
-
                         <main className="flex-grow lg:ml-24 px-3 sm:px-10 md:px-5 lg:px-14 xl:px-10 h-full">
                             {children}
                         </main>
