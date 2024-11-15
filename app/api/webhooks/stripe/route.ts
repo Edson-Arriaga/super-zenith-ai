@@ -53,7 +53,7 @@ export async function POST(request : NextRequest){
                         const isSubscription = item.price?.type === 'recurring'
     
                         if(isSubscription){
-                            let endDate = new Date()
+                            const endDate = new Date()
     
                             if(priceId === process.env.STRIPE_YEARLY_PRICE_ID){
                                 endDate.setFullYear(endDate.getFullYear() + 1)
