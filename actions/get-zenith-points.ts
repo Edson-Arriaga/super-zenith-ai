@@ -6,6 +6,7 @@ import { isSameDay } from "@/src/utils/isSameDay";
 
 export default async function getZenithPoints(timezoneOffset : number){
     const user = await getUser()
+
     let userPoints = user.zenithPoints
     const lastUpdatedDate = user.zenithPointsLastUpdatedDate
     

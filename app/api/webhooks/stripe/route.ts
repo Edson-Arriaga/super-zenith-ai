@@ -24,13 +24,6 @@ export async function POST(request : NextRequest){
         return NextResponse.json({ error: 'Webhook signature verification failed'}, { status: 400 })
     }
 
-
-    try {
-        
-    } catch (error) {
-        
-    }
-
     switch(event.type){
 
         // case 'checkout.session.async_payment_succeeded'

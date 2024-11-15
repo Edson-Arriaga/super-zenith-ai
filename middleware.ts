@@ -1,5 +1,4 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
-import { redirect } from 'next/navigation';
 
 const isPortectedRoute = createRouteMatcher([
   '/habit-tracker(.*)',
@@ -11,13 +10,7 @@ const isPortectedRoute = createRouteMatcher([
 ])
 
 export default clerkMiddleware((auth, req) => {
-  if(isPortectedRoute(req)){
-    const user = auth()
-    if (!user) {
-      return redirect('/sign-in')
-    }
-    user.protect()
-  } 
+  if(isPortectedRoute(req)) auth().protect()
 })
 
 export const config = {

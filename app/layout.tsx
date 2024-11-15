@@ -9,6 +9,7 @@ import Header from "@/components/layout/Header";
 import QueryClientProvider from "@/components/providers/QueryClientProvider";
 import Aside from "@/components/layout/Aside";
 import { Viewport } from "next";
+import { auth } from "@clerk/nextjs/server";
 
 const nunito = Nunito({
     weight: ['300', '500', '700'], 
@@ -39,6 +40,9 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+
+    const {userId} = auth()
+    
     return (
         <html lang="en" className="overflow-x-hidden">
             <ClerkProvider localization={esES} appearance={{
@@ -58,9 +62,14 @@ export default function RootLayout({
             }}>
                 <QueryClientProvider>
                     <body className={`${nunito.className} antialiased flex flex-col lg:flex-row main-bg`}>
-                        <Header />
+                        {userId && (
+                            <>
+                                <Header />
+        
+                                <Aside />
+                            </>
+                        )}
 
-                        <Aside />
 
                         <main className="flex-grow lg:ml-24 px-3 sm:px-10 md:px-5 lg:px-14 xl:px-10 h-full">
                             {children}
