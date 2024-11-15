@@ -1,11 +1,7 @@
-import { getUser } from "@/actions/get-user";
-import InitialRedirect from "@/components/initialPage/InitialRedirect";
 import Image from "next/image";
 import Link from "next/link";
 
 export default async function InitialPage() {
-    //const user = await getUser()
-
     return (
         <>
             <main className="h-screen flex flex-col justify-center -mb-10 xl:p-10 lg:-ml-24">

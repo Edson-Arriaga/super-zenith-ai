@@ -1,6 +1,5 @@
 import prisma from "@/src/lib/prisma"
 import { WebhookEvent } from "@clerk/nextjs/server"
-import { NextResponse } from "next/server"
 import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 
