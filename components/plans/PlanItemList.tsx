@@ -5,11 +5,11 @@ import CheckoutButton from "./CheckoutButton";
 import { freePlanFeatures, premiumPlanFeatures } from "@/src/data/planFeatures";
 
 type PlanItemListProps = {
-    planUser: User['plan']
+    user: User
     price?: Stripe.Price
 }
 
-export default function PlanItemList({planUser, price} : PlanItemListProps) {
+export default function PlanItemList({user, price} : PlanItemListProps) {
 
     const features = price ? premiumPlanFeatures : freePlanFeatures
     const yearlyPlan = price?.id === process.env.STRIPE_YEARLY_PRICE_ID
@@ -30,7 +30,7 @@ export default function PlanItemList({planUser, price} : PlanItemListProps) {
                 </ul>
             ))}
             
-            <CheckoutButton priceId={price?.id} planUser={planUser}/>
+            <CheckoutButton priceId={price?.id} user={user}/>
 
             <div className="absolute top-10 left-0 w-24 h-24 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full opacity-20 blur-xl"/>
             <div className="absolute top-10 right-0 w-24 h-24 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full opacity-20 blur-xl"/>

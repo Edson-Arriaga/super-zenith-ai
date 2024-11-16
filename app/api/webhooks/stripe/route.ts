@@ -31,11 +31,14 @@ export async function POST(request : NextRequest){
                         expand: ["line_items"]
                     }
                 )
+
+                const metadata = session.metadata
+
                 const customerId = session.customer as string
                 const customersDetails = session.customer_details
     
                 if(customersDetails?.email){
-                    const user = await prisma.user.findUnique({where: {email: customersDetails.email}})
+                    const user = await prisma.user.findUnique({where: {id: +metadata?.userId!}})
                     if(!user) throw new Error('User not found')
     
                     if(!user.stripeCustomerId){
