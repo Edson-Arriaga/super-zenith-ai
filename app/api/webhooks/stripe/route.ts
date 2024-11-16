@@ -32,13 +32,14 @@ export async function POST(request : NextRequest){
                     }
                 )
 
-                const metadata = session.metadata
+                const {userId} = session.metadata as {userId: string}
+                if(userId) throw new Error('User not found')
 
                 const customerId = session.customer as string
                 const customersDetails = session.customer_details
     
                 if(customersDetails?.email){
-                    const user = await prisma.user.findUnique({where: {id: +metadata?.userId!}})
+                    const user = await prisma.user.findUnique({where: {id: +userId}})
                     if(!user) throw new Error('User not found')
     
                     if(!user.stripeCustomerId){
