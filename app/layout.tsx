@@ -64,9 +64,14 @@ export default function RootLayout({
                     <body className={`${nunito.className} antialiased flex flex-col lg:flex-row main-bg`}>
                         {userId && (
                             <>
-                                <Header />
-        
-                                <Aside />
+                                <div className="lg:hidden">
+                                    <Header />
+                                </div>
+
+                                <div className="hidden lg:block">
+                                    <Aside />
+                                </div>
+                                
                             </>
                         )}
 

@@ -33,12 +33,10 @@ export async function POST(request : NextRequest){
                 )
 
                 const {userId} = session.metadata as {userId: string}
-                if(userId) throw new Error('User not found')
 
                 const customerId = session.customer as string
-                const customersDetails = session.customer_details
     
-                if(customersDetails?.email){
+                if(userId){
                     const user = await prisma.user.findUnique({where: {id: +userId}})
                     if(!user) throw new Error('User not found')
     
@@ -53,45 +51,21 @@ export async function POST(request : NextRequest){
     
                     for(const item of lineItems){
                         const priceId = item.price?.id
-    
-                        const isSubscription = item.price?.type === 'recurring'
-    
-                        if(isSubscription){
-                            const endDate = new Date()
-    
-                            if(priceId === process.env.STRIPE_YEARLY_PRICE_ID){
-                                endDate.setFullYear(endDate.getFullYear() + 1)
-                            } else if(priceId === process.env.STRIPE_MONTHLY_PRICE_ID)
-                                endDate.setMonth(endDate.getMonth() + 1)
-                            else {
-                                throw new Error('Invalid priceId')
-                            }
-    
-                            await prisma.subscription.upsert({
-                                where: {userId: user.id},
-                                create: {
-                                    userId: user.id,
-                                    startDate: new Date(),
-                                    endDate: endDate,
-                                    plan: 'PREMIUM',
-                                    period: priceId === process.env.STRIPE_YEARLY_PRICE_ID ? 'YEARLY' : 'MONTHLY'
-                                },
-                                update: {
-                                    startDate: new Date(),
-                                    endDate: endDate,
-                                    plan: 'PREMIUM',
-                                    period: priceId === process.env.STRIPE_YEARLY_PRICE_ID ? 'YEARLY' : 'MONTHLY'
-                                }
-                            })
-    
-                            await prisma.user.update({
-                                where: { id: user.id },
-                                data: { plan: 'PREMIUM', zenithPoints: 10 }
-                            })
-    
-                        } else {
-                            // One payment
+
+                        const endDate = new Date()
+
+                        if(priceId === process.env.STRIPE_YEARLY_PRICE_ID){
+                            endDate.setFullYear(endDate.getFullYear() + 1)
+                        } else if(priceId === process.env.STRIPE_MONTHLY_PRICE_ID)
+                            endDate.setMonth(endDate.getMonth() + 1)
+                        else {
+                            throw new Error('Invalid priceId')
                         }
+
+                        await prisma.user.update({
+                            where: { id: user.id },
+                            data: { plan: 'PREMIUM', zenithPoints: 10 }
+                        })
                     }
                 } 
                 break
