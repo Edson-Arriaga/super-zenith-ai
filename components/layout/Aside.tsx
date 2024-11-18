@@ -1,23 +1,27 @@
 "use client"
 
 import { UserButton } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 import NavAsideItem from "./NavAsideItem";
 import { navItems } from "@/src/data/navItems";
 import ZenithPointsButton from "./ZenithPointsButton";
 import GettingStartedButton from "./GettingStartedButton";
 import usePointsAndRedirect from "@/src/hooks/usePointsAndRedirect";
+import { useQuery } from "@tanstack/react-query";
+import getZenithPoints from "@/actions/get-zenith-points";
 
 export default function Aside() {
     const pathName = usePathname()
     const [propOverActive, setPropOverActive] = useState(-1)
 
-    const {zenithPoints, refetchZenithPoints} = usePointsAndRedirect(pathName)
+    //usePointsAndRedirect(pathName)
 
-    useEffect(() => {
-        refetchZenithPoints()
-      }, [refetchZenithPoints])
+    const {data : zenithPoints } = useQuery({
+        queryKey: ['zenith-points'],
+        queryFn: async () => getZenithPoints(new Date().getTimezoneOffset()),
+        placeholderData: 0
+    })
     
     return (
         <aside 
