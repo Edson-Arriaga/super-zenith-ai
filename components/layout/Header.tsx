@@ -1,7 +1,7 @@
 "use client"
 
 import { AiOutlineMenu } from "react-icons/ai";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { UserButton } from "@clerk/nextjs";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
@@ -10,7 +10,6 @@ import { navItems } from "@/src/data/navItems";
 import ZenithPointsButton from "./ZenithPointsButton";
 import GettingStartedButton from "./GettingStartedButton";
 import usePointsAndRedirect from "@/src/hooks/usePointsAndRedirect";
-import { useQueryClient } from "@tanstack/react-query";
 
 export default function Header() {
     
