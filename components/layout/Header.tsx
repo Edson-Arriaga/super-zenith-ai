@@ -10,21 +10,14 @@ import { navItems } from "@/src/data/navItems";
 import ZenithPointsButton from "./ZenithPointsButton";
 import GettingStartedButton from "./GettingStartedButton";
 import usePointsAndRedirect from "@/src/hooks/usePointsAndRedirect";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function Header() {
     
     const [isMenuActive, setIsMenuActive] = useState(false)
     const pathName = usePathname()
 
-    const [zenithPoints, setZenithPoints] = useState(0)
-
-    const data = usePointsAndRedirect(pathName)
-
-    useEffect(() => {
-        if(data.zenithPoints){
-            setZenithPoints(data.zenithPoints)
-        }
-    }, [data.zenithPoints])
+    const {zenithPoints} = usePointsAndRedirect(pathName)
 
     return (
         <header className="flex items-center justify-between px-2 lg:hidden h-20 border-b-2 border-zenith-yellow shadow-sm shadow-zenith-yellow">
