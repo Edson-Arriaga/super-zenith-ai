@@ -19,12 +19,13 @@ export default function usePointsAndRedirect(pathName: string) {
         }
     }
 
-    const {data : zenithPoints } = useQuery({
+    const {data : zenithPoints, refetch } = useQuery({
         queryKey: ['zenith-points'],
         queryFn: async () => getZenithPoints(new Date().getTimezoneOffset())
     })
 
     return {
-        zenithPoints
+        zenithPoints,
+        refetchZenithPoints: refetch
     }
 }

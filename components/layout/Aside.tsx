@@ -1,7 +1,7 @@
 "use client"
 
 import { UserButton } from "@clerk/nextjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import NavAsideItem from "./NavAsideItem";
 import { navItems } from "@/src/data/navItems";
@@ -13,7 +13,11 @@ export default function Aside() {
     const pathName = usePathname()
     const [propOverActive, setPropOverActive] = useState(-1)
 
-    const {zenithPoints} = usePointsAndRedirect(pathName)
+    const {zenithPoints, refetchZenithPoints} = usePointsAndRedirect(pathName)
+
+    useEffect(() => {
+        refetchZenithPoints()
+      }, [refetchZenithPoints])
     
     return (
         <aside 

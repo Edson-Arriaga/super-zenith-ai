@@ -1,7 +1,7 @@
 "use client"
 
 import { AiOutlineMenu } from "react-icons/ai";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UserButton } from "@clerk/nextjs";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
@@ -16,7 +16,11 @@ export default function Header() {
     const [isMenuActive, setIsMenuActive] = useState(false)
     const pathName = usePathname()
 
-    const {zenithPoints} = usePointsAndRedirect(pathName)
+    const {zenithPoints, refetchZenithPoints} = usePointsAndRedirect(pathName)
+
+    useEffect(() => {
+        refetchZenithPoints()
+      }, [refetchZenithPoints])
 
     return (
         <header className="flex items-center justify-between px-2 lg:hidden h-20 border-b-2 border-zenith-yellow shadow-sm shadow-zenith-yellow">
