@@ -26,7 +26,7 @@ export default function AIButton() {
         setIsLoading(true)
         const points = await substractZenithPoint()
         queryClient.invalidateQueries({queryKey: ['zenith-points']})
-
+        
         if(points !== 0){
             const response = await generateHabitAdvice()
             const habitsAdviceData = JSON.parse(response)

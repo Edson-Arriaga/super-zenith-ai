@@ -47,5 +47,6 @@ export default async function generateHabitAdvice(){
     `
 
     const result = await model.generateContent(prompt)
-    return result.response.text()
+    
+    return result.response.text().replace(/```json|```/g, "").trim();
 }

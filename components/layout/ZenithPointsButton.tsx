@@ -6,15 +6,11 @@ export default function ZenithPointsButton({zenithPoints} : {zenithPoints: numbe
     
     const [isGettingStartModalOpen, setIsGettingStartModalOpen] = useState(false)
     
-    function handleClick(){
-        setIsGettingStartModalOpen(true)
-    }
-   
     return (
         <>
             <button
                 className={`border-[3px] border-yellow-500 rounded-full p-2 hover:bg-purple-500/10 hover:shadow-none hover:scale-105 duration-500 transition-all ${zenithPoints === 0 && 'border-opacity-40'}`}
-                onClick={handleClick}    
+                onClick={() => setIsGettingStartModalOpen(true)}    
             >
                 {zenithPoints !== 0 ? (
                     <AiFillThunderbolt size={40} className="text-zenith-yellow"/>
