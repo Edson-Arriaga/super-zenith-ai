@@ -21,7 +21,7 @@ export default function useHabitActions(habit: Habit) {
     const router = useRouter()
 
     const { mutate : updateDatesCompletedMutate, isPending : isPendingUpdate } = useMutation({
-        mutationFn: () => updateDatesCompleted(habit, today , new Date().getTimezoneOffset()),
+        mutationFn: () => updateDatesCompleted(habit, today),
         onSuccess: (data) => {
             queryClient.invalidateQueries({queryKey: ['habits']})
             toast.success(data.message, { icon: () => <NotificationIcon />})

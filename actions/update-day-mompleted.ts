@@ -6,12 +6,11 @@ import { isSameDay } from "@/src/utils/isSameDay"
 import { Habit } from "@prisma/client"
 import updateCompletedHabitHistory from "./update-completed-habit-history"
 
-export async function updateDatesCompleted(habit: Habit, today: Date, zoneOff: number){
+export async function updateDatesCompleted(habit: Habit, today: Date){
     let uppdatedDates : Habit['completedDates'] = []
     let message : string
 
     const adjustedDate = new Date(today)
-    console.log(zoneOff)
     
     if(habit.completedDates.some(date => isSameDay(date, adjustedDate))){
         uppdatedDates = habit.completedDates.filter(date => !isSameDay(date, adjustedDate))

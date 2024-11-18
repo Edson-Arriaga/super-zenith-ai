@@ -21,7 +21,7 @@ export default function usePointsAndRedirect(pathName: string) {
 
     const {data : zenithPoints } = useQuery({
         queryKey: ['zenith-points'],
-        queryFn: () => getZenithPoints(new Date().getTimezoneOffset()),
+        queryFn: async () => getZenithPoints(new Date().getTimezoneOffset()),
         placeholderData: 0
     })
 

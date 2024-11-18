@@ -42,9 +42,9 @@ export default function HabitCard({ habit } : {habit: Habit}) {
  
     const isTodayCompleted = habit.completedDates.some(date => isSameDay(date, today))
     const isPlannedToday = habit.frequency === 'DAILY' || habit.weeklyDays.includes(today.getDay())
-
+    
     if(isPending) return <Loading />
-
+        
     return (
         <>
             <div className={`
@@ -67,7 +67,7 @@ export default function HabitCard({ habit } : {habit: Habit}) {
                         <div className="grid grid-cols-2 gap-2 w-28">
                             <div className="text-end">
                                 <button
-                                    className="px-4 py-2 bg-white/15 hover:bg-white/25 transition-colors rounded-lg disabled:cursor-not-allowed "
+                                    className="px-4 py-2 bg-white/10 hover:bg-white/20 transition-colors rounded-lg disabled:cursor-not-allowed "
                                     onClick={() => updateDatesCompletedMutate()}
                                     disabled={!isPlannedToday || habit.completed}
                                 >
@@ -90,7 +90,7 @@ export default function HabitCard({ habit } : {habit: Habit}) {
 
                             <div className="col-start-2 text-end">
                                 <button
-                                    className="px-4 py-2 bg-white/15 hover:bg-white/25 transition-colors rounded-lg"
+                                    className="px-4 py-2 bg-white/10 hover:bg-white/20 transition-colors rounded-lg"
                                     onClick={() => setHabitDetailsModalOpen(true)}
                                 >
                                     <CgMenuGridO className="w-5 h-5"/>
@@ -107,7 +107,7 @@ export default function HabitCard({ habit } : {habit: Habit}) {
                         : habit.completedDates.length + habit.failedDates.length
                     }
                         maxValue={habit.plannedDays} 
-                        styles={buildStyles({pathColor: '#fcc919', trailColor: '#380e6a'})}
+                        styles={buildStyles({pathColor: '#fcc919', trailColor: 'rgb(255 255 255 / 0.10)'})}
                     >
                         <div className="relative w-10 h-10">
                             <Image fill src="/images/zenith-logo.png" alt="Logo Zenith" />
