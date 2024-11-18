@@ -7,21 +7,22 @@ import NavAsideItem from "./NavAsideItem";
 import { navItems } from "@/src/data/navItems";
 import ZenithPointsButton from "./ZenithPointsButton";
 import GettingStartedButton from "./GettingStartedButton";
-import usePointsAndRedirect from "@/src/hooks/usePointsAndRedirect";
 import { useQuery } from "@tanstack/react-query";
 import getZenithPoints from "@/actions/get-zenith-points";
+import useRedirect from "@/src/hooks/useRedirect";
 
 export default function Aside() {
     const pathName = usePathname()
     const [propOverActive, setPropOverActive] = useState(-1)
 
-    //usePointsAndRedirect(pathName)
-
+    
     const {data : zenithPoints } = useQuery({
         queryKey: ['zenith-points'],
         queryFn: async () => getZenithPoints(new Date().getTimezoneOffset()),
         placeholderData: 0
     })
+    
+    useRedirect(pathName)
     
     return (
         <aside 

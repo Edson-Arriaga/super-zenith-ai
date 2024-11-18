@@ -3,8 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-export default function usePointsAndRedirect(pathName: string) {
-    const router = useRouter();
+export default function useRedirect(pathName: string) {
+    const router = useRouter()
 
     const { data: userPremium, isFetched } = useQuery({
         queryKey: ["is-user-premium"],

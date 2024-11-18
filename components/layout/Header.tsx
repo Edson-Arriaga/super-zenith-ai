@@ -1,7 +1,7 @@
 "use client"
 
 import { AiOutlineMenu } from "react-icons/ai";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { UserButton } from "@clerk/nextjs";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
@@ -9,7 +9,7 @@ import NavHeaderItem from "./NavHeaderItem";
 import { navItems } from "@/src/data/navItems";
 import ZenithPointsButton from "./ZenithPointsButton";
 import GettingStartedButton from "./GettingStartedButton";
-import usePointsAndRedirect from "@/src/hooks/usePointsAndRedirect";
+import usePointsAndRedirect from "@/src/hooks/useRedirect";
 import { useQuery } from "@tanstack/react-query";
 import getZenithPoints from "@/actions/get-zenith-points";
 
@@ -17,7 +17,6 @@ export default function Header() {
     
     const [isMenuActive, setIsMenuActive] = useState(false)
     const pathName = usePathname()
-
     
     const {data : zenithPoints } = useQuery({
         queryKey: ['zenith-points'],
