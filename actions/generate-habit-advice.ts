@@ -5,7 +5,7 @@ import prisma from "@/src/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 
 export default async function generateHabitAdvice(){
-    const { userId } = auth()
+    const { userId } = await auth()
 
     const habits = await prisma.habit.findMany({
         where: {

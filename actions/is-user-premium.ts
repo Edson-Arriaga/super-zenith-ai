@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs/server"
 import prisma from "@/src/lib/prisma"
 
 export async function isUserPremium() {
-    const {userId} = auth()
+    const {userId} = await auth()
     if(!userId) return {success: 'false'}
     const user = await prisma.user.findUnique({
         where: { clerkId: userId },

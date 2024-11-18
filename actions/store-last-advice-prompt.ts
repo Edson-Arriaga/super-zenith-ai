@@ -5,7 +5,7 @@ import { HabitsAdvice } from "@/src/schema";
 import { auth } from "@clerk/nextjs/server";
 
 export async function storeLastAdvicePrompt(lastAdvicePrompt: HabitsAdvice){
-    const {userId} = auth()
+    const {userId} = await auth()
 
     await prisma.user.update({
         where: { clerkId: userId! },

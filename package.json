@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@clerk/localizations": "^3.0.4",
-    "@clerk/nextjs": "^5.5.3",
+    "@clerk/nextjs": "^6.4.0",
     "@google/generative-ai": "^0.21.0",
     "@prisma/client": "^5.19.1",
     "@tanstack/react-query": "^5.56.2",

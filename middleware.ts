@@ -10,7 +10,7 @@ const isPortectedRoute = createRouteMatcher([
 ])
 
 export default clerkMiddleware((auth, req) => {
-  if(isPortectedRoute(req)) auth().protect()
+  if(isPortectedRoute(req)) auth.protect()
 })
 
 export const config = {
