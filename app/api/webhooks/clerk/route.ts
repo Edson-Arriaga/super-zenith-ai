@@ -55,6 +55,18 @@ export async function POST(req : Request){
         })
     }
 
+    if(evt.type === 'user.updated'){
+        const {id, email_addresses} = evt.data
+
+        const user = await prisma.user.findUnique({ where: { clerkId : id } , select: {email: true}})
+        if(user?.email !== email_addresses[0].email_address){
+            await prisma.user.update({
+                where: { clerkId : id },
+                data: {email: email_addresses[0].email_address}
+            })
+        }
+    }
+
     if (evt.type === 'user.deleted'){
         const clerkId = payload.data.id
         

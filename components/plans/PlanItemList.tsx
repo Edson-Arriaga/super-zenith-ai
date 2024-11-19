@@ -9,8 +9,7 @@ type PlanItemListProps = {
     price?: Stripe.Price
 }
 
-export default function PlanItemList({user, price} : PlanItemListProps) {
-
+export default async function PlanItemList({user, price} : PlanItemListProps) {
     const features = price ? premiumPlanFeatures : freePlanFeatures
     const yearlyPlan = price?.id === process.env.STRIPE_YEARLY_PRICE_ID
 

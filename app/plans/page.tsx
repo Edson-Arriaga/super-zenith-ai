@@ -1,6 +1,7 @@
 import { getUser } from '@/actions/get-user';
 import { getStipePrices } from '@/actions/stripe/get-stripe-prices';
 import BillingPortalButton from '@/components/plans/BillingPortalButton';
+import DisplayPlans from '@/components/plans/DisplayPlans';
 import PlanItemList from '@/components/plans/PlanItemList';
 import PageTitle from '@/components/ui/PageTitle';
 import React from 'react'
@@ -21,13 +22,13 @@ export default async function PlansPage() {
                 )}
             </div>
 
-            <ul className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 text-center'>
+            <DisplayPlans>
                 <PlanItemList user={user}/>
 
                 {prices.map(price => (
                     <PlanItemList key={price.id} user={user} price={price}/>
                 ))}
-            </ul> 
+            </DisplayPlans>
         </div>
     )
 }

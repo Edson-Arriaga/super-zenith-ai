@@ -8,9 +8,9 @@ import { getHabits } from '@/actions/get-habits';
 import { useQuery } from '@tanstack/react-query';
 import AchievementModal from "./AchievementModal";
 import getToday from "@/src/utils/getToday";
+import { User } from "@prisma/client";
 
-export default function HabitsDisplay() {
-    
+export default function HabitsDisplay({user} : {user: User}) {
     const { data , isLoading, isError } = useQuery({    
         queryKey: ['habits'],
         queryFn: () => getHabits(getToday(), new Date().getTimezoneOffset())
@@ -34,6 +34,7 @@ export default function HabitsDisplay() {
                                 <HabitCard
                                     key={habit.id}
                                     habit={habit}
+                                    user={user}
                                 />
                             </motion.li>
                         ))}

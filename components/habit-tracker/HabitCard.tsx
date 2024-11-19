@@ -4,7 +4,7 @@ import { GoTrash } from "react-icons/go";
 import { RxCross2 } from "react-icons/rx";
 import { IoMdCheckmark } from "react-icons/io";
 import { CgMenuGridO } from "react-icons/cg";
-import { Habit } from "@prisma/client";
+import { Habit, User } from "@prisma/client";
 import MonthCalendar from "./MonthCalendar";
 import { useState } from "react";
 import { categories_ES } from "@/src/locales/categories";
@@ -23,7 +23,7 @@ import useHabitActions from "@/src/hooks/useHabitActions";
 import Image from "next/image";
 import getToday from "@/src/utils/getToday";
 
-export default function HabitCard({ habit } : {habit: Habit}) {
+export default function HabitCard({ habit, user } : {habit: Habit, user: User}) {
 
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
     const [isHabitDetailsModalOpen, setHabitDetailsModalOpen] = useState(false)
@@ -96,6 +96,14 @@ export default function HabitCard({ habit } : {habit: Habit}) {
                                     <CgMenuGridO className="w-5 h-5"/>
                                 </button>
                             </div>
+                            
+                            {user.plan === 'PREMIUM' && (
+                                <div className="row-start-2">
+                                    <div className="bg-black/10 mx-auto font-black flex justify-center items-center border-zenith-yellow border text-zenith-yellow rounded-lg">
+                                        Lv. {habit.level}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </article>
                 </section>

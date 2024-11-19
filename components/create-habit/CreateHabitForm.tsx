@@ -14,7 +14,11 @@ import { weeklyDaysCheckBoxes } from "@/src/dictionaries/weeklyDaysCheckBoxes"
 import AppButton from "../ui/AppButton"
 import { useMutation } from "@tanstack/react-query"
 
-export default function CreateHabitForm() {
+type CreateHabitFormProps = {
+    isUserPremium: boolean
+}
+
+export default function CreateHabitForm({isUserPremium} : CreateHabitFormProps) {
 
     const [frecuency, setFrecuency] = useState('')
     const { register, handleSubmit , formState: {errors}, setValue} = useForm<HabitFormData>()
@@ -152,9 +156,9 @@ export default function CreateHabitForm() {
                 })}
             >
                 <option className="bg-zenith-yellow text-zenith-purple" value="" disabled>-- Duración --</option>
-                <option className="bg-zenith-yellow text-zenith-purple" value="30">30 Días (Corta)</option>
+                <option className="bg-zenith-yellow text-zenith-purple disabled:bg-zenith-dark-yellow text-white" value="30" disabled={!isUserPremium}>30 Días (Corta)</option>
                 <option className="bg-zenith-yellow text-zenith-purple" value="45">45 Días (Intermedia)</option>
-                <option className="bg-zenith-yellow text-zenith-purple" value="66">66 Días (Definitiva)</option>
+                <option className="bg-zenith-yellow text-zenith-purple disabled:bg-zenith-dark-yellow text-white" value="66" disabled={!isUserPremium}>66 Días (Definitiva)</option>
             </select>
 
             {errors.plannedDays && (
