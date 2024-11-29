@@ -54,7 +54,7 @@ export default function AIButton() {
 
     if (habitsLength !== undefined) return (
         <>
-            <button 
+            <button
                 className="flex justify-center transition-transform rounded-lg h-full relative disabled:opacity-40 disabled:cursor-not-allowed" 
                 onClick={handleClick} 
                 disabled={habitsLength < 2}

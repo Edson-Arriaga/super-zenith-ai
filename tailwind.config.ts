@@ -21,7 +21,7 @@ const config: Config = {
       height: {
         "screen-without-header" : "calc(100svh - 5rem)"
       }
-    },
+    }
   },
   plugins: [
     
