@@ -14,13 +14,6 @@ import useRedirect from "@/src/hooks/useRedirect";
 export default function Aside() {
     const pathName = usePathname()
     const [propOverActive, setPropOverActive] = useState(-1)
-
-    
-    const {data : zenithPoints } = useQuery({
-        queryKey: ['zenith-points'],
-        queryFn: async () => getZenithPoints(new Date().getTimezoneOffset()),
-        placeholderData: 0
-    })
     
     useRedirect(pathName)
     
@@ -45,11 +38,11 @@ export default function Aside() {
                 ))}
             </nav>
 
-            {zenithPoints !== undefined && (
-                <div className="h-28"> 
-                    <ZenithPointsButton zenithPoints={zenithPoints}/>
-                </div>
-            )}
+            
+            <div className="h-28"> 
+                <ZenithPointsButton />
+            </div>
+          
             
             <GettingStartedButton /> 
         </aside>

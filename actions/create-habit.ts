@@ -7,7 +7,7 @@ import { getUser } from "./get-user"
 
 export async function createHabit(data : HabitFormData){
     const user = await getUser()
-
+    
     let completedAchievement
     let message
     if(!user.completedAchievements.includes(0)){
