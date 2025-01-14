@@ -7,8 +7,6 @@ import NavAsideItem from "./NavAsideItem";
 import { navItems } from "@/src/data/navItems";
 import ZenithPointsButton from "./ZenithPointsButton";
 import GettingStartedButton from "./GettingStartedButton";
-import { useQuery } from "@tanstack/react-query";
-import getZenithPoints from "@/actions/get-zenith-points";
 import useRedirect from "@/src/hooks/useRedirect";
 
 export default function Aside() {
