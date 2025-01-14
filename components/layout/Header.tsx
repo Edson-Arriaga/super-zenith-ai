@@ -9,20 +9,12 @@ import NavHeaderItem from "./NavHeaderItem";
 import { navItems } from "@/src/data/navItems";
 import ZenithPointsButton from "./ZenithPointsButton";
 import GettingStartedButton from "./GettingStartedButton";
-import usePointsAndRedirect from "@/src/hooks/useRedirect";
-import { useQuery } from "@tanstack/react-query";
-import getZenithPoints from "@/actions/get-zenith-points";
+import usePointsAndRedirect from "@/src/hooks/useRedirect"; 
 
 export default function Header() {
     
     const [isMenuActive, setIsMenuActive] = useState(false)
     const pathName = usePathname()
-    
-    const {data : zenithPoints } = useQuery({
-        queryKey: ['zenith-points'],
-        queryFn: async () => getZenithPoints(new Date().getTimezoneOffset()),
-        placeholderData: 0
-    })
     
     usePointsAndRedirect(pathName)
     
@@ -36,11 +28,10 @@ export default function Header() {
                 
                 <GettingStartedButton/> 
                 
-                {zenithPoints !== undefined && (
-                    <div>
-                        <ZenithPointsButton zenithPoints={zenithPoints}/>
-                    </div>
-                )}
+                
+                <ZenithPointsButton />
+                
+                
             </section>
 
             <button type="button" onClick={() => setIsMenuActive(true)}>
